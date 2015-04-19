@@ -93,11 +93,6 @@ fi
 chroot $R apt-get update
 chroot $R apt-get -y -u dist-upgrade
 
-# Add stuff needed to install ROS:
-update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-chroot $R echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list
-wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | apt-key add -
-
 # Install the RPi PPA
 chroot $R apt-get -y install software-properties-common ubuntu-keyring
 chroot $R apt-add-repository -y ppa:fo0bar/rpi2
@@ -110,6 +105,10 @@ chroot $R apt-get -y install ubuntu-standard initramfs-tools raspberrypi-bootloa
 chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Install ROS packages:
+chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
+chroot $R echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list
+chroot $R wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | apt-key add -
+chroot $R apt-get update
 chroot $R apt-get -y install ros-indigo-ros-base
 
 # Kernel installation
