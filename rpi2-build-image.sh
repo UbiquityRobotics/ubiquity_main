@@ -106,7 +106,7 @@ chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Install ROS packages:
 chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $BUILDDIR/etc/apt/sources.list.d/ros-latest.list
+echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
 wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
 chroot $R apt-get update
 chroot $R apt-get -y install ros-indigo-ros-base
