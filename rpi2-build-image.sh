@@ -3,6 +3,7 @@
 ########################################################################
 # rpi2-build-image
 # Copyright (C) 2015 Ryan Finnie <ryan@finnie.org>
+# Copyright (C) 2015 Wayne Gramlich <wayne@gramlich.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,7 +49,7 @@ R=${BUILDDIR}/chroot
 mkdir -p $R
 
 # Base debootstrap
-apt-get install -y ubuntu-keyring debootstrap
+apt-get -y install ubuntu-keyring debootstrap
 if [ -n "$LOCAL_MIRROR" ]; then
   debootstrap $RELEASE $R $LOCAL_MIRROR
 else
@@ -92,6 +93,11 @@ fi
 chroot $R apt-get update
 chroot $R apt-get -y -u dist-upgrade
 
+# Add stuff needed to install ROS:
+update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
+chroot $R echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list
+wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | apt-key add -
+
 # Install the RPi PPA
 chroot $R apt-get -y install software-properties-common ubuntu-keyring
 chroot $R apt-add-repository -y ppa:fo0bar/rpi2
@@ -102,6 +108,9 @@ chroot $R apt-get -y install ubuntu-standard initramfs-tools raspberrypi-bootloa
 
 # Add packages to enable "zeroconf" and the secures shell server:
 chroot $R apt-get -y install libnss-mdns openssh-server
+
+# Install ROS packages:
+chroot $R apt-get -y install ros-indigo-ros-base
 
 # Kernel installation
 # Install flash-kernel last so it doesn't try (and fail) to detect the
@@ -234,6 +243,15 @@ blacklist snd_soc_tas5713
 blacklist snd_soc_wm8804
 EOM
 
+# Do some more ROS installation stuff:
+chroot $R apt-get -y install python-rosdep
+chroot $R rosdep init
+# Execute `rosdep update` as user `ubuntu`:
+chroot $R su ubuntu -c "rosdep update"
+# Set up the ros enviroment for user `ubuntu`:
+chroot $R su ubuntu -c "echo source /opt/ros/indigo/setup.bash >> ~/.bashrc"
+chroot $R apt-get -y install python-rosinstall
+
 # Unmount mounted filesystems
 umount $R/proc
 umount $R/sys
@@ -279,7 +297,7 @@ losetup -d "$EXT4_LOOP"
 losetup -d "$VFAT_LOOP"
 
 # Always use bmaptool to save disk space:
-apt-get install -y bmap-tools
+apt-get -y install bmap-tools
 bmaptool create -o "$BASEDIR/${DATE}-ubuntu-${RELEASE}.bmap" "$BASEDIR/${DATE}-ubuntu-${RELEASE}.img"
 
 # Done!
