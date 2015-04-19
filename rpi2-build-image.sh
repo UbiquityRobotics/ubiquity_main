@@ -22,6 +22,12 @@
 set -e
 set -x
 
+# Verify that we are being run as root:
+if [[ $EUID -ne 0 ]] ; then
+  echo "This script must be run as root"
+  exit 1
+fi
+
 RELEASE=trusty
 BASEDIR=/srv/rpi2/${RELEASE}
 BUILDDIR=${BASEDIR}/build
@@ -42,7 +48,7 @@ R=${BUILDDIR}/chroot
 mkdir -p $R
 
 # Base debootstrap
-apt-get -y install ubuntu-keyring
+apt-get install -y ubuntu-keyring debootstrap
 if [ -n "$LOCAL_MIRROR" ]; then
   debootstrap $RELEASE $R $LOCAL_MIRROR
 else
@@ -93,6 +99,9 @@ chroot $R apt-get update
 
 # Standard packages
 chroot $R apt-get -y install ubuntu-standard initramfs-tools raspberrypi-bootloader-nokernel language-pack-en
+
+# Add packages to enable "zeroconf" and the secures shell server:
+chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Kernel installation
 # Install flash-kernel last so it doesn't try (and fail) to detect the
@@ -268,8 +277,9 @@ umount "$MOUNTDIR/boot/firmware"
 umount "$MOUNTDIR"
 losetup -d "$EXT4_LOOP"
 losetup -d "$VFAT_LOOP"
-if which bmaptool; then
-  bmaptool create -o "$BASEDIR/${DATE}-ubuntu-${RELEASE}.bmap" "$BASEDIR/${DATE}-ubuntu-${RELEASE}.img"
-fi
+
+# Always use bmaptool to save disk space:
+apt-get install -y bmap-tools
+bmaptool create -o "$BASEDIR/${DATE}-ubuntu-${RELEASE}.bmap" "$BASEDIR/${DATE}-ubuntu-${RELEASE}.img"
 
 # Done!
