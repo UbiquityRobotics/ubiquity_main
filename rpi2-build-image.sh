@@ -24,7 +24,7 @@ set -e
 set -x
 
 # Verify that we are being run as root:
-if [[ $EUID -ne 0 ]] ; then
+if [ $EUID -ne 0 ] ; then
   echo "This script must be run as root"
   exit 1
 fi
@@ -106,8 +106,8 @@ chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Install ROS packages:
 chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-chroot $R echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list
-chroot $R wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | apt-key add -
+echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $BUILDDIR/etc/apt/sources.list.d/ros-latest.list
+wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
 chroot $R apt-get update
 chroot $R apt-get -y install ros-indigo-ros-base
 
