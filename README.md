@@ -91,3 +91,14 @@ see a prompt that looks like:
 You are in.
 
      
+## `gscam` Notes
+
+The following commands:
+
+        sudo apt-get build-essential g++
+        cd ~
+        mkdir -p catkin_ws/src
+        cd catkin_ws
+        catkin_make
+        source devel/setup.bash
+        (cd src ;  git clone https://github.com/ros-drivers/gscam)
