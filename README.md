@@ -90,7 +90,26 @@ see a prompt that looks like:
 
 You are in.
 
-     
+
+If when you run the script, it fail with:
+
+        + umount /srv/rpi2/trusty/build/chroot/proc
+        umount: /srv/rpi2/trusty/build/chroot/proc: device is busy.
+                (In some cases useful info about processes that use
+                 the device is found by lsof(8) or fuser(1))
+
+do the following:
+
+1. Reboot the system to cause the /proc file system to unmount, and
+
+2. Resume the script using `cleanup.sh`:
+
+        sudo cleanup.sh
+
+   This "resumes" the script file to finish of the cleanup
+   operations.
+
+
 ## `gscam` Notes
 
 The following commands:
@@ -102,3 +121,4 @@ The following commands:
         catkin_make
         source devel/setup.bash
         (cd src ;  git clone https://github.com/ros-drivers/gscam)
+

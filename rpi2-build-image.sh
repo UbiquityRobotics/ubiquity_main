@@ -223,6 +223,10 @@ cat <<EOM >$R/boot/firmware/config.txt
 
 #uncomment to overclock the arm. 700 MHz is the default.
 #arm_freq=800
+
+# Enable camera port
+start_x=1
+gpu_mem=128
 EOM
 ln -sf firmware/config.txt $R/boot/config.txt
 echo 'dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait' > $R/boot/firmware/cmdline.txt
@@ -251,9 +255,23 @@ chroot $R su ubuntu -c "rosdep update"
 chroot $R su ubuntu -c "echo source /opt/ros/indigo/setup.bash >> ~/.bashrc"
 chroot $R apt-get -y install python-rosinstall
 
-# Unmount mounted filesystems
+# Create the raspberry pi camera module load script:
+chroot $R mkdir -p /etc/modules-load.d
+echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/raspi-camera-conf
+
+# Add Ubiquity repository:
+echo "deb http://packages.ubiquityrobotics.com/ v4 main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
+chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B2FA8835
+chroot $R apt-get update
+
+# Finish making the Rasperry Pi camera work:
+chroot $R apt-get install -y ubiquity-indigo-gscam linux-firmware
+
+# Unmount mounted filesystems (rsyslog must be halted to do this):
+service rsyslog stop
 umount $R/proc
 umount $R/sys
+service rsyslog start
 
 # Clean up files
 rm -f $R/etc/apt/sources.list.save
