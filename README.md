@@ -21,6 +21,17 @@ This shell script is run on the RasPi2 as follows:
 	cd {directory that contains rpi2-build-image.sh}
         sudo ./rpi2-build-image.sh
 
+As of now, this script fails when it trys to unmount
+`/srv/rpi2/trusty/build/chroot/proc`.  The work around
+is to reboot the machine:
+
+        sudo reboot
+
+Now finish everything off by running the remainder of the
+script that is now sitting in `.../cleanup.sh`.
+
+        sudo cleanup.sh
+
 The result show up in `/srv/rpi2/trusty/` as two files
 with suffixes that end in `.img` and `.bmap`.  There
 are two things that can be done:
@@ -88,26 +99,48 @@ see a prompt that looks like:
 
         ubuntu@ubuntu:~$
 
-You are in.
+You are in.  Now you need to do some additional steps.  These
+steps can be found in
+  [Raspberry Pi 2 ARM Ubuntu](https://wiki.ubuntu.com/ARM/RaspberryPi).
+The steps are repeated here:
 
+1. Expand the 2nd partion to the full size of the micro-SD card:
 
-If when you run the script, it fail with:
+        sudo fdisk /dev/mmcblk0
+        # Delete 2nd partition with (d,2)
+        # Recreate 2nd partition with (n,p,2,enter,enter)
+        # Write the new 2nd partition out (w)
+        #
+        # Now immediately reboot:
+        sudo reboot
 
-        + umount /srv/rpi2/trusty/build/chroot/proc
-        umount: /srv/rpi2/trusty/build/chroot/proc: device is busy.
-                (In some cases useful info about processes that use
-                 the device is found by lsof(8) or fuser(1))
+2. Resize the file system:
 
-do the following:
+        sudo resize2fs /dev/mmcblk0p2
 
-1. Reboot the system to cause the /proc file system to unmount, and
+3. Install a swap file:
 
-2. Resume the script using `cleanup.sh`:
+        sudo apt-get install dphys-swapfile
 
-        sudo cleanup.sh
+4. Make sure that you have the linux-firmware (should be already done).
 
-   This "resumes" the script file to finish of the cleanup
-   operations.
+        sudo apt-get install linux_firmware
+
+5. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
+
+        sudo -c echo '"bcm2835-v4l2 gst_v4l2src_is_broken=1"' > /etc/modules-load.d/raspi-camera.conf'
+
+6. Create a catkin workspace:
+
+        cd ~
+        mkdir -p catkin_ws/src
+        cd catkin_ws
+        catkin_make
+
+7. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
+
+        echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+        source ~/.bashrc
 
 
 ## `gscam` Notes

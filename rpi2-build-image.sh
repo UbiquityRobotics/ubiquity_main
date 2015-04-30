@@ -257,7 +257,7 @@ chroot $R apt-get -y install python-rosinstall
 
 # Create the raspberry pi camera module load script:
 chroot $R mkdir -p /etc/modules-load.d
-echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/raspi-camera-conf
+echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/etc/modules-load.d/raspi-camera.conf
 
 # Add Ubiquity repository:
 echo "deb http://packages.ubiquityrobotics.com/ v4 main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
