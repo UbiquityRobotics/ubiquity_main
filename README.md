@@ -128,7 +128,7 @@ The steps are repeated here:
 
 5. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
 
-        sudo -c echo '"bcm2835-v4l2 gst_v4l2src_is_broken=1"' > /etc/modules-load.d/raspi-camera.conf'
+        sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
 
 6. Create a catkin workspace:
 
