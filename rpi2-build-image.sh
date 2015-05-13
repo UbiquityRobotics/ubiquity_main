@@ -49,6 +49,7 @@ R=${BUILDDIR}/chroot
 mkdir -p $R
 
 # Base debootstrap
+apt-get update
 apt-get -y install ubuntu-keyring debootstrap
 if [ -n "$LOCAL_MIRROR" ]; then
   debootstrap $RELEASE $R $LOCAL_MIRROR
