@@ -268,10 +268,9 @@ chroot $R apt-get update
 chroot $R apt-get install -y ubiquity-indigo-gscam linux-firmware
 
 # Unmount mounted filesystems (rsyslog must be halted to do this):
-service rsyslog stop
+echo "build current fails on umount; reboot and run clean-up.sh to finish build"
 umount $R/proc
 umount $R/sys
-service rsyslog start
 
 # Clean up files
 rm -f $R/etc/apt/sources.list.save
@@ -286,20 +285,21 @@ rm -f $R/var/lib/urandom/random-seed
 rm -f $R/etc/machine-id
 
 # Build the image file
-# Currently hardcoded to a 1.75GiB image
+# Initial image was 1.75GiB: (Note 1792 = 1.75*1024; also 3536896=1792 * 2048)
+# New image is      3.00GiB: (Note 3072 = 3.00*1024; also 6291456=3072 * 2048)
 DATE="$(date +%Y-%m-%d)"
 dd if=/dev/zero of="$BASEDIR/${DATE}-ubuntu-${RELEASE}.img" bs=1M count=1
-dd if=/dev/zero of="$BASEDIR/${DATE}-ubuntu-${RELEASE}.img" bs=1M count=0 seek=1792
+dd if=/dev/zero of="$BASEDIR/${DATE}-ubuntu-${RELEASE}.img" bs=1M count=0 seek=3072
 sfdisk -f "$BASEDIR/${DATE}-ubuntu-${RELEASE}.img" <<EOM
 unit: sectors
 
 1 : start=     2048, size=   131072, Id= c, bootable
-2 : start=   133120, size=  3536896, Id=83
+2 : start=   133120, size=  6291456, Id=83
 3 : start=        0, size=        0, Id= 0
 4 : start=        0, size=        0, Id= 0
 EOM
 VFAT_LOOP="$(losetup -o 1M --sizelimit 64M -f --show $BASEDIR/${DATE}-ubuntu-${RELEASE}.img)"
-EXT4_LOOP="$(losetup -o 65M --sizelimit 1727M -f --show $BASEDIR/${DATE}-ubuntu-${RELEASE}.img)"
+EXT4_LOOP="$(losetup -o 65M --sizelimit 3072M -f --show $BASEDIR/${DATE}-ubuntu-${RELEASE}.img)"
 mkfs.vfat "$VFAT_LOOP"
 mkfs.ext4 "$EXT4_LOOP"
 MOUNTDIR="$BUILDDIR/mount"
