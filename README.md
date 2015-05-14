@@ -155,3 +155,21 @@ The following commands:
         source devel/setup.bash
         (cd src ;  git clone https://github.com/ros-drivers/gscam)
 
+## Random Notes
+
+	cd ~/catkin_ws/src
+	# Install fiducials:
+        git clone https://github.com/UbiquityRobotics/fiducials.git
+        sudo apt-get install ros-indigo-tf ros-indigo-tf2-geometry-msgs
+
+	# Install gscam
+        git clone https://github.com/ros-drivers/gscam
+        sudo apt-get install -y ros-indigo-image-common
+        sudo apt-get install -y gstreamer0.10-plugins-good
+        sudo apt-get install -y libgstreamer0.10-dev
+        sudo apt-get install -y libgstreamer-plugins-base0.10-dev
+
+	# Install joystick drivers and ROS Arduino Bridge:
+        git clone https://github.com/UbiquityRobotics/joystick_drivers.git
+        git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
+
