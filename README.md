@@ -394,5 +394,72 @@ The Raspberry Pi2 on chip UART does not support 9N1 mode;
 hence, the requirement for the bus_raspberry_pi module to
 convert between the two protocols.
 
+The bus architecture has gone through many many iterations:
 
+* [Robobricks](http://gramlich.net/projects/robobricks/index.html):
+  This version was built around PIC12 modules.  It actually
+  actually sold by Robot Store for a while back in the early
+  2000's back before Robot Store was acquire by Jameco.
+
+* [Robobricks2](http://gramlich.net/projects/rb2/index.html):
+  This verison is built around PIC16 modules.
+
+* [Robus/Makerbus](http://gramlich.net/projects/robus/index.html):
+  This version is built around NXP ARM Cortex 3 modules
+  (LPC17xx series.)  These boards are all surface mount.
+  There were two names that we played around with -- Makerbus
+  and Robus.  They both describe the same bus.
+
+The ubiquity modules are all simply called "bus" and are
+based around Atmel ATmega microcontrollers to be compatible
+with the Arduino<Sup>&tm;</Sup> community.  These modules
+are both electrically and software compatible with the
+Robus/Makerbus modules.
+
+Please read the
+  [MakerBus Specifications](http://gramlich.net/projects/robus/specifications.html)
+to get all of the electrical, software, and mechancal details.
+
+Associated with this project is a software tool to help
+configure the modules called
+  [configurator](http://gramlich.net/projects/configurator/index.html).
+Please note, that this is not the same thing that Rohan talks
+about when he says "configurator".  The MakerBus/Robus configurator
+is going to be depricated and switched over to use ROS configuration
+technology.
+
+The ultimate architecture is that each hardware module presents
+its functionality that is organized as a bunch of registers.
+Some registers are written to at start up time to perform
+configuration.  After configuration, registers are written
+to trigger actuators and read to read sensors.
+
+All of the register information for a hardware module is described
+in a single .xml file.  It lists each register, it type (Boolean,
+Byte, Short, Integer, Long, etc.), a textual desciption, the register
+index, etc.  A stand-alone batch processor reads the .xml file and
+generates a whole bunch of files needed by ROS to talk to the hardware
+module.  The initial code is currently living in the
+  [bus_slave](https://github.com/UbiquityRobotics/bus_slave)
+repository in the `bus_code_generatory.py` file.  This code is
+going to be expanded and likely moved to its own repository.
+
+The requirements of the bus software architecture are:
+
+* Easy edition of new modules.
+
+* Integration with ROS parameters and dynamic configuration.
+
+* Bus discovery whereby the bus is scanned to determine which
+  modules are on it.
+
+* Bus firmware update whereby the firemware can be updated from ROS.
+
+* Code generation where boiler plate code is generated to make
+  it easier to maintain code.
+
+* Documentation generation where documentation files are automatically
+  generated.
+
+* Testing support is generated so it is easy to test modules.
 
