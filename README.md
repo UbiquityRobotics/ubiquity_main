@@ -346,3 +346,53 @@ diagram is shown below:
 <Img Src="Ubiquity_Hardware_Software_Architecture.png"
 Alt="Ubiquity Hardware/Software Architecture">
 </BlockQuote>
+
+Each light blue rectangle corresponds to a hardware
+assembly.  I the diagram above, the following hardware
+assemblies exist:
+
+* Raspberry Pi 2: This is were ROS is run.  The ROSCore node
+  runs here.
+
+* bus_raspberry_pi: This is a module the interfaces the
+  Raspberry Pi 2 to the bus.
+
+* bus_sonar_10: This module can control up to 10 HC-SR04
+  sonar modules.  There are two of these modules on a Freya.
+
+* bus_bridge_encoders_sonar: This module has the electronics
+  to drive two motors and encoders.  (It also can drive two
+  HC-SR04 sonar modules, but that is not actually used.)
+
+* WiFi Access Point:  This module provides a wireless access
+  point so that the robot can communicate with the desktop/laptop.
+
+* Desktop/Laptop: This is the machine on which software is
+  developed and debugged.  While ROS runs on this machine as well,
+  it accesses the ROSCore node on the Raspberry Pi 2.
+
+The ovals correspond to ROS nodes.  There is a one-to-one
+relationship between the bus hardware boards and ros nodes.
+The `node_server` node is associated with the `bus_raspberry_pi`
+node.
+
+The bus_server_node is a traffic cop that multiplexs messges
+from other ROS nodes to the bus through the bus_raspberry_pi
+hardware module and back.
+
+There are two commuication protocols:
+
+* 8N1: The 8N1 protocol is 1 start bit, 8 data bits,
+  no parity and 1 stop bit.  The Raspberry Pi 2 UART
+  supports this protocol with an on chip UART.
+
+* 9N1: The 9N1 protocol is 1 start bit, 9 data bits,
+  no parity and 1 stop pit.  The all of the modules connected
+  to the hardwar bus talk 9N1 protocol.
+
+The Raspberry Pi2 on chip UART does not support 9N1 mode;
+hence, the requirement for the bus_raspberry_pi module to
+convert between the two protocols.
+
+
+
