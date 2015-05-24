@@ -343,6 +343,6 @@ The top level Ubiquity Hardareware/Software architecture
 diagram is shown below:
 
 <BlockQuote>
-<Img Src="Ubiquity_Hardware_Software_Architecture.svg"
+<Img Src="Ubiquity_Hardware_Software_Architecture.png"
 Alt="Ubiquity Hardware/Software Architecture">
 </BlockQuote>
