@@ -337,3 +337,12 @@ Sorting out linux images on ubuntu when networks get added:
   you have `eth0` now and if you had wifi and config in
   `/etc/network/interfaces` for `wlan0` you also have wifi now
 
+## Ubiquity Hardware/Software Architecture
+
+The top level Ubiquity Hardareware/Software architecture
+diagram is shown below:
+
+<BlockQuote>
+<Img Src="Ubiquity_Hardware_Software_Architecture.svg"
+Alt="Ubiquity Hardware/Software Architecture">
+</BlockQuote>
