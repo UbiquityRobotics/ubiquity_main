@@ -1,6 +1,36 @@
 # ubiquity-misc
 
-Miscellaneous Stuff Used by the Ubiquity Team
+This repository constains files used by the Ubiquity team
+that have no other obvious place to be put.  For now,
+this repository contains all othe documentation and shell
+files used to the Ubiqutiy/Ubuntu/ROS Kernel image.
+
+If you read this documentation and it does not work for
+you, please do the following:
+
+1. Make a clone of this repository on you local desktop/laptop.
+
+        cd /tmp           # Or someplace else of your choosing
+        git clone https://github.com/UbiquityRobotics/ubiquity-misc.git
+        cd ubiqutiy-misc
+
+2. Edit this file (`README.md`) using your favorite editor.
+   Insert you comments and/or questions directly into the file
+   using the following format:
+
+        > * ....
+        > ....
+        > .... -- {your_name} *
+
+   By way of explanation, lines start with `>` are indented
+   by the markdown processor.  The `*` causes the text to be
+   italicized.
+
+3. Stuff the question(s) back up to the repository:
+
+        git add README.md
+        git commit -m "Added some questions/comments."
+        git push
 
 ## Ubiquity/Ubuntu/ROS Kernel Image
 
@@ -107,7 +137,7 @@ is powered up.  Please do the following steps:
 13. Connect to the Raspberry Pi 2 from your laptop desktop:
 
         ssh ubuntu@ubuntu.local
-	# If you asked a yes/no questions, answer `yes`.
+        # If you asked a yes/no questions, answer `yes`.
         # Password is `ubuntu`
 
     You should see a prompt that looks like:
@@ -128,7 +158,7 @@ is powered up.  Please do the following steps:
 
 15. Login again and resize the file system:
 
-	# From you deskop/lapto:
+        # From you deskop/lapto:
 	ssh ubuntu@ubuntu.local
         sudo resize2fs /dev/mmcblk0p2
 
