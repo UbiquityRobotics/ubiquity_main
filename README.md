@@ -240,3 +240,70 @@ The following commands:
         git clone https://github.com/UbiquityRobotics/joystick_drivers.git
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
 
+## WiFi Networking Issues
+
+The problem is linux saves hard lan and wifi dongle macs and keeps
+adding devices so you end up with say `eth2` but your
+`/etc/network/interfaces` only has entry for `eth0`.
+
+Here are some notes for sorting this out.  Tthe last half of this
+set of cheet-sheet notes.
+
+
+[Linux Network Specific]( https://help.ubuntu.com/lts/serverguide/network-configuration.html)
+
+* `ifconfig   [eth0]`:
+  Shows network interface(s) that have been configured or
+  maybe partly configured (like WiFi that cannot find network)
+
+* `sudo ifconfig eth0 10.0.0.100 netmask 255.255.255.0` :
+  You can temp configure one till reboot.
+
+* `/etc/hostname`:
+  This is where system hostname is defined on reboot.
+  Also edit `/etc/hosts` if you do change host name!
+
+* `/etc/network/interfaces`:
+  Entries tie hardware like `eth0` and `wlan0` to be of a specific
+  network port type. KEY file, see other places in doc.
+
+* `/etc/resolv.conf`:
+  Holds DNS resolutions (ip addresses).  Best to use tool to do this
+  `dmesg | grep eth` Can show if eth0 or wlan0 was re-named due to
+  new flash image.  Come up with no net and edit `/etc/network/interfaces`
+
+* `/etc/udev/rules.d/70-persistent-net.rules`:
+  Edit this if you have left over `eth0` or `wlan0` from prior image
+  so you get nice clean `eth0` and `wlan0`.
+  This file has mac address to names like `wlan0`, `wlan1` and `eth0`
+  and so on. Clean it out to have fresh discovery.
+
+* `sudo ifup eth0`:
+  Manually enable newly added interface from recent
+  `/etc/network/interfaces`.  Can also use `sudo ifdown eth0`.
+
+Sorting out linux images on ubuntu when networks get added:
+
+* Boot up with hdmi monitor and usb keyboard usually (if no
+  network no ssh ability)
+
+* `sudo vi /etc/hosts` and `/etc/hostname` and set correct hostname
+  for your system.
+
+* `ifconfig` from here we want to see the eth0 and when wifi
+  dongle is in `wlan0`.
+
+* To hard-reset things, `sudo vi /etc/udev/rules.d/70-persistent-net.rules`
+
+  1. Remove all the lines below top 2 lines of general comments as it
+     is here that you may find your ethernet was nammed `eth2` or
+     something and `/etc/network/interfaces` does not match so you
+     get no network
+
+  2. `sudo vi /etc/network/interfaces` and have just the use of `eth0`
+     and `wlan0`, NOT higher numbers.
+
+* Reboot and again on hdmi monitor.  Do `ifconfig` and hopefully
+  you have `eth0` now and if you had wifi and config in
+  `/etc/network/interfaces` for `wlan0` you also have wifi now
+
