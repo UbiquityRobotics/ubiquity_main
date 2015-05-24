@@ -2,20 +2,174 @@
 
 Miscellaneous Stuff Used by the Ubiquity Team
 
-## `rpi2-build-image.sh`
+## Ubiquity/Ubuntu/ROS Kernel Image
 
-This shell script is used to build the Ubuntu 14.04LTS
-kernel image that is used by the Ubiquity team.  This shell
-script needs to be run on an Raspberry Pi 2 (hereafter shorted
-to RasPi2.)  This script can be run under any RasPi2 kernel
-that supports `apt-get`.  Thus, you can go to the
-  [Raspberry Pi Downloads](https://www.raspberrypi.org/downloads/)
-page, download Raspian on to a micro-SD card, and run this script
-under Raspian to generate Ubuntu 14.04LTS kernel image that runs
-on a RasPi2.  This script also runs fine on the generate Ubuntu
-14.04LTS kernel.  (Yes, it is recursive!)
+The Ubuquity/Ubuntu/ROS Kernel Image is a Ubuntu 14.04LTS
+Kernel for the ARM7 hard float architecture.  This image
+has many Ubuntu and ROS packages preinstalled along with
+a ROS catkin workspace.  The primary purpose of this image
+is to ensure that all of the Ubiquity robot platforms start
+from a common software base.
 
-This shell script is run on the RasPi2 as follows:
+This kernel image only works for Ubuntu 14.04LTS
+(i.e. "Trusty").
+
+### Download and Installing the Ubiquity/Ubuntu/ROS Kernal Image
+
+The most common way of install the image is to download
+the image and copy it onto a micro-SD card.  THe micro-SD
+card is plugged into a Raspberry Pi 2 and the Raspberry Pi 2
+is powered up.  Please do the following steps:
+
+1. Get a micro-SD card that is at least 4GB is size.  Frankly,
+   we recommend a minimum of 16GB.
+
+2. Get either a USB/micro-SD adapter or regular SD to micro-SD
+   card adaptor and plug your micro-SD card into it.
+
+3. On your laptop/desktop, run the following command on your
+   Ubuntu 14.04LTS kernel from the command line:
+
+        sudo blkid
+
+   This will print a bunch of stuff out.
+
+4. Insert your micro-SD adapter into your desktop and run
+   the same command again:
+
+        sudo blkid
+
+   Again, this will print a bunch of stuff out.
+
+5. For the `bmaptool copy` command further below, we are going
+   to need to type in the correct location to copy the
+   Ubiquity/Unbuntu/ROS kernel to.  This will have a form
+   of `/dev/XXXX`, where `XXXX` depends upon your system.
+
+   Now look through the two lists and visually search for the
+   new entries from the first and second invocations of `blkid`.
+
+   If see a one or two new lines show up that look like:
+
+        /dev/sdX#: UUID="..." TYPE="..."
+
+   The `X` will be a lower case letter (typically `a` or `b`)
+   and the `#` will be a digit like `0` or `1`.
+   The `/dev/XXXX` for the `bmaptool copy ...` command will be
+   `/dev/sdX` where `X` is the lower case letter.
+
+   Alternatively, if you see one or two lines that look like:
+
+        /dev/mmcblk@p# UUID="..." TYPE="..."
+
+   where both `@` and `#` are digits like `0` or `1`.
+   The `/dev/XXX` for the `bmaptool copy ...` will be `/dev/mmcblk@`
+   (i.e. no `p#`.)
+
+   Write down the /dev/XXXX value we have just determined, we are
+   going to need it later.
+
+6. Download the image using the following commands:
+
+        cd /tmp	       # Or someplace else if you choose...
+        wget http://gramlich.net/2015-04-30-ubuntu-trusty.zip
+
+7. Unpack the .zip file using the following command:
+
+        unzip *.zip
+
+   This should result in a *.img and *.bmap file.
+
+8. Copy the .img file onto the micro-SD card.  This is the
+   place where you will type in the value for `/dev/XXXX`
+   that was determined in step 5 above.  Run the following
+   commands:
+
+        sudo apt-get install -y bmap-tools
+        sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
+	sudo rsynch
+
+   Remember to replace `/dev/XXXX`.
+
+9. Remove the micro-SD card from the adaptor and plug it into
+   Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
+   of the Raspberry Pi 2.
+
+10. A RJ45 Ethernet cable between your Raspberry Pi 2 and
+    your router.
+
+11. Apply power to the Raspberry Pi 2 via the micro-USB
+    connector on the edge of the the Raspberry Pi 2.
+
+12. Wait about a minute.  The LED's on the Raspberry Pi 2
+    should stop blinking.
+
+13. Connect to the Raspberry Pi 2 from your laptop desktop:
+
+        ssh ubuntu@ubuntu.local
+	# If you asked a yes/no questions, answer `yes`.
+        # Password is `ubuntu`
+
+    You should see a prompt that looks like:
+
+        ubuntu@ubuntu:~$
+
+    You are in.  Now you need to do some additional steps.
+
+14. Expand the 2nd partion to the full size of the micro-SD card:
+
+        sudo fdisk /dev/mmcblk0
+        # Delete 2nd partition with (d,2)
+        # Recreate 2nd partition with (n,p,2,enter,enter)
+        # Write the new 2nd partition out (w)
+        #
+        # Now immediately reboot:
+        sudo reboot
+
+15. Login again and resize the file system:
+
+	# From you deskop/lapto:
+	ssh ubuntu@ubuntu.local
+        sudo resize2fs /dev/mmcblk0p2
+
+16. Install a swap file:
+
+        sudo apt-get install dphys-swapfile
+
+17. Make sure that you have the linux-firmware (should be already done).
+
+        sudo apt-get install linux_firmware
+
+18. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
+
+        sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
+
+19. Create a catkin workspace:
+
+        cd ~
+        mkdir -p catkin_ws/src
+        cd catkin_ws
+        catkin_make
+
+20. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
+
+        echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+        source ~/.bashrc
+
+### Constructing the Kernel Image from Scratch
+
+This Ubiquity/ROS/Ubuntu Kernel image is constructed with
+two scripts:
+
+* `rpi2-build-image.sh` which does most of the building,  and
+
+* `cleanup.sh` does the wrap-up work.
+
+It should be possible to run these scripts on a either
+Ubuntu 14.04LTS kernel running 64-bit x86 architecture
+or on a Raspberry Pi 2 (hereafter shorted to RasPi2.)
+
+This shell script is run as follows:
 
 	sudo rm -rf /srv
 	cd {directory that contains rpi2-build-image.sh}
@@ -47,101 +201,14 @@ are two things that can be done:
   a server.  Please feel free to change `rpi_kernel` to
   something with a bit more information.
 
-* The files can be copied directly onto a micro-SD card.
-  This can be done directly from the RasPi2 using a appropriate
-  USB to micro-SD adaptor.  The command looks as follows:
+* The files can be copied directly onto a micro-SD card
+  using the bmap-tools listed above:
 
         sudo apt-get install -y bmap-tools
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
 
   where XXXX is the appropriate raw device name for the
   micro-SD card.
-
-  The way you determine what XXXX is as follows:
-
-  1. Do the following command:
-
-        sudo blkid
-
-  2. Insert the USB to micro-SD adaptor into one of the RasPi2 ports
-     and repeat the command:
-
-        sudo blkid
-
-  3. Now visually commpare the results.
-
-     If see a one or two new lines show up that look like:
-
-        /dev/sdX#: UUID="..." TYPE="..."
-
-     The `X` will be a lower case letter (typically `a` or `b`)
-     and the `#` will be a digit like `0` or `1`.
-     The `/dev/XXX` for the `bmaptool copy ...` command will be
-     `/dev/sdX` where `X` is the lower case letter.
-
-     Alternativley, if you see one or two lines that look like:
-
-        /dev/mmcblk@p# UUID="..." TYPE="..."
-
-     where both `@` and `#` are digits like `0` or `1`.
-     The `/dev/XXX` for the `bmaptool copy ...` will be `/dev/mmcblk@`
-     (i.e. no `p#`.)
-    
-Once this micro-SD card is plugged into the RasPi2 and
-booted, you should be able to log into the RasPi2 over
-the Ethernet as:
-
-        ssh -l ubuntu ubuntu.local
-
-It will proably ask a question or two (answer `yes`) and
-then a `... password:`  The password is `ubuntu`.  You should
-see a prompt that looks like:
-
-        ubuntu@ubuntu:~$
-
-You are in.  Now you need to do some additional steps.  These
-steps can be found in
-  [Raspberry Pi 2 ARM Ubuntu](https://wiki.ubuntu.com/ARM/RaspberryPi).
-The steps are repeated here:
-
-1. Expand the 2nd partion to the full size of the micro-SD card:
-
-        sudo fdisk /dev/mmcblk0
-        # Delete 2nd partition with (d,2)
-        # Recreate 2nd partition with (n,p,2,enter,enter)
-        # Write the new 2nd partition out (w)
-        #
-        # Now immediately reboot:
-        sudo reboot
-
-2. Resize the file system:
-
-        sudo resize2fs /dev/mmcblk0p2
-
-3. Install a swap file:
-
-        sudo apt-get install dphys-swapfile
-
-4. Make sure that you have the linux-firmware (should be already done).
-
-        sudo apt-get install linux_firmware
-
-5. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
-
-        sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
-
-6. Create a catkin workspace:
-
-        cd ~
-        mkdir -p catkin_ws/src
-        cd catkin_ws
-        catkin_make
-
-7. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
-
-        echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
-        source ~/.bashrc
-
 
 ## `gscam` Notes
 
