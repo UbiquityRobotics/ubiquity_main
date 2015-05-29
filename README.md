@@ -463,3 +463,144 @@ The requirements of the bus software architecture are:
 
 * Testing support is generated so it is easy to test modules.
 
+## Software Tasks
+
+### General
+
+* identify robot operating modes (development, deployment,
+  trade-show, setup, etc.)
+
+### Networking
+
+We have a bunch of major issues to wrestle to the ground:
+
+* Each robot needs a unique hostname so that zeroconf can
+  give each robot a unique IP address.
+
+* Use some sort of `avahi-browse` functionality to find all robots.
+
+* Allow user to switch easily between robots.
+
+* Each robot needs to be able to log into a bunch of different
+  WiFi access points.
+
+* Key management.  SSH.  WiFi.
+
+* Time synchroniziation.  (What about mutliple robots?)
+
+* Wrestle the WiFi dongle issues to the ground.
+
+* Make sure we work with multiple SSID's and single replicated SSID's.
+
+* Need dongle that supports WiFi client and access point on RasPi2
+
+* How do we do multi-robot applications?
+
+### Robot Software Development
+
+* Software development needs to occur on desktop/laptop machines.
+  We need to make access to the robot easy.
+
+* Perhaps use NFS to mount a common `src` directory between
+  the laptop/desktop file system and the robot file system.
+  Allow catkin_make to build on both the robot (ARM7) and the
+  desktop/laptop (amd64) using same `src` directory.
+
+* Create an `rx` command that reads the ROS_MASTER_URI, extracts
+  the robot host name, and does `ssh user@ROBOT_HOSTNAME.local command`.
+
+* We need to start using branches for development (e.g. indigo-wayne,
+  indigo-mark, indigo-joe, indigo-kurt, indigo-rohan, etc.)
+
+* Debugging C++ Node.  Need to run a node under the debugger and use
+  a remote debugger UI.  Possibilities: gdb -tui, DDD, Kdevelop, etc.?
+
+* Debugging Python Node. Node to run a node with a debugger.
+
+* Document explaining developement is needed.
+
+* Need some multi repository tool -- multi_git_status, multi_commit
+
+* Support combine Arduino IDE and Arduino.Makefile development.
+
+* We need a coherent place to store configuration files, launch
+  files, etc.  We need a coherent .launch file strategy.
+
+### Setup
+
+* How does the user set things up?
+
+### ROS Stack
+
+* Find and fix bug with ARM7 `robot-state-publisher`
+
+* Get `range-sensor-layer` to work.
+
+* Bring fiducials, sonars, and encoders with navigation stack.
+
+* Merge in game controllers.
+
+* Get "Go To" application working.
+
+* Bring up arm.
+
+### Platforms
+
+* Loki
+
+  * Switch over to micro metal gearmotors and hall effect sensors.
+
+  * Bring up real time clock.
+
+  * Tune PID loops
+
+* Freya
+
+  * Refactor Loki Sonar code into Sonar10 modules.
+
+  * Get ROS Arduino Bridge working with Sonar 10 modules
+
+  * Tune PID loops
+
+### Bus Software
+
+* Write `.xml` regsiter definition files for `bus_sonar10`,
+  `bus_bridge_encoders_sonar`, and `bus_loki`.
+
+* Modify `bus_slave/bus_code_generator.py` to generate C++
+  code fragments that can be specialized.
+
+* Replace ROS Arduino Bridge.
+
+  * Get bus_server_server.py to talk to other modules.
+
+  * Get parameters to work.
+
+  * Create odometry topic publisher.
+
+  * Create sonar range topic publisher.
+
+  * Create cmd_vel topic subscriber.
+
+* Get dynamic reconfiguration working.
+
+* Rewrite bus_server_server.py in C++.
+
+* Rewrite topic publisher and subscribers in C++.
+
+* Get bus reset to work.
+
+* Get discovery to work.
+
+* Get over the wire firmware upgrade to work.
+
+### Bus Hardware
+
+* Bring up additional modules -- bus_battery, bus_dynabus, bus_grove12,
+  bus_servo32, bus_servo8, bus_shield, etc.
+
+### Build
+
+* Grind out weekly kernel images
+
+* Make all repositories have package manifests.
