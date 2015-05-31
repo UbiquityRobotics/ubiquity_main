@@ -242,33 +242,23 @@ are two things that can be done:
 
 ## `gscam` Notes
 
-The following commands:
+The following commands build gscam:
 
+
+        sudo modprobe bcm2835-v4l2 gst_v4l2src_is_broken=1
         sudo apt-get build-essential g++
         cd ~
         mkdir -p catkin_ws/src
         cd catkin_ws
         catkin_make
         source devel/setup.bash
-        (cd src ;  git clone https://github.com/ros-drivers/gscam)
-
-## Random Notes
-
-	cd ~/catkin_ws/src
-	# Install fiducials:
-        git clone https://github.com/UbiquityRobotics/fiducials.git
-        sudo apt-get install ros-indigo-tf ros-indigo-tf2-geometry-msgs
-
-	# Install gscam
-        git clone https://github.com/ros-drivers/gscam
-        sudo apt-get install -y ros-indigo-image-common
-        sudo apt-get install -y gstreamer0.10-plugins-good
-        sudo apt-get install -y libgstreamer0.10-dev
-        sudo apt-get install -y libgstreamer-plugins-base0.10-dev
-
-	# Install joystick drivers and ROS Arduino Bridge:
-        git clone https://github.com/UbiquityRobotics/joystick_drivers.git
-        git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
+        cd src
+        git clone https://github.com/ros-drivers/gscam.git
+        rosdep update
+        sudo apt-get install ros-indigo-image-common
+        catkin_make
+        roslaunch fiduicals_lib gscam.launch
+        rosrun image_view image_view image:=/camera/image_raw
 
 ## WiFi Networking Issues
 
@@ -628,4 +618,22 @@ Perform a commit for all repositories that have had files
 where a `git add` has been performed:
 
         mgit commit -m "..."
+
+## Random Notes
+
+	cd ~/catkin_ws/src
+	# Install fiducials:
+        git clone https://github.com/UbiquityRobotics/fiducials.git
+        sudo apt-get install ros-indigo-tf ros-indigo-tf2-geometry-msgs
+
+	# Install gscam
+        git clone https://github.com/ros-drivers/gscam
+        sudo apt-get install -y ros-indigo-image-common
+        sudo apt-get install -y gstreamer0.10-plugins-good
+        sudo apt-get install -y libgstreamer0.10-dev
+        sudo apt-get install -y libgstreamer-plugins-base0.10-dev
+
+	# Install joystick drivers and ROS Arduino Bridge:
+        git clone https://github.com/UbiquityRobotics/joystick_drivers.git
+        git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
 
