@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Copyright (c) 2015 by Wayne C. Gramlich.  All rights reserved.
+
+# The `mgit` script a shell script that executes the same git command
+# across all all `src` sub-directories in a `catkin_ws` directory.
+# It can be executed executed in the `catkin_ws` directory or any
+# of the sub-directories under `catkin_ws`.
+#
+# Examples:
+#   mgit status           # List the status of each repository
+#   mgit pull             # Pull the latest from all of the remote repositories
+#   mgit commit -m "..."  # Commit all repositories that have changes.
+
+# Find catkin_ws/src directory:
+src_dir=`pwd | sed s,catkin_ws.*,catkin_ws/src,g`
+if [ `echo $src_dir | sed s,.*/catkin_ws/src,OK,g` != "OK" ] ; then \
+    echo Current directory `pwd` is not in a catkin workspace. ; \
+    exit 1; \
+    fi
+
+# Find each directory under .../catkin_ws/src that has a .git sub_directory:
+git_dirs=`(cd $src_dir; ls -d */.git | sed s,/.git,,g)`
+
+# Now execute the command:
+for git_dir in $git_dirs ; do \
+    echo ====$git_dir==== ; \
+    (cd $src_dir/$git_dir; git "$@") ; \
+    done
+

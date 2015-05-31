@@ -604,3 +604,28 @@ We have a bunch of major issues to wrestle to the ground:
 * Grind out weekly kernel images
 
 * Make all repositories have package manifests.
+
+## Scripts
+
+### `mgit`
+
+The `mgit` script a shell script that executes the same git command
+across all all `src` sub-directories in a `catkin_ws` directory.
+It can be executed executed in the `catkin_ws` directory or any
+of the sub-directories under `catkin_ws`.
+
+Examples:
+
+List the status of each git repository the catkin workspace:
+
+        mgit status
+
+Pull the latest updates from all of the remote repositories:
+
+        mgit pull
+
+Perform a commit for all repositories that have had files
+where a `git add` has been performed:
+
+        mgit commit -m "..."
+
