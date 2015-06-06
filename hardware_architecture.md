@@ -1,5 +1,13 @@
 # Ubiquity Hardware/Software Architecture
 
+> *Mention that Ethernet, USB and Blue Tooth are hardware portals
+> to get into ROS instead of just serial. -Wayne*
+
+> *Mention that there can be mulitple serial ports are allowed. -Wayne*
+
+> *Provide more detail on hardware development API's vs
+> user development API's. -Wayne*
+
 The top level Ubiquity Hardareware/Software architecture
 diagram is shown below:
 
@@ -107,7 +115,7 @@ going to be expanded and likely moved to its own repository.
 
 The requirements of the bus software architecture are:
 
-* Easy edition of new modules.
+* Easy addition of new modules.
 
 * Integration with ROS parameters and dynamic configuration.
 
@@ -123,4 +131,41 @@ The requirements of the bus software architecture are:
   generated.
 
 * Testing support is generated so it is easy to test modules.
+
+Priorities:
+
+* Get bus_sonar10 working. (Prority: High)
+
+* Write `.xml` regsiter definition files for `bus_sonar10`,
+  `bus_bridge_encoders_sonar`, and `bus_loki`. (Priority: High)
+
+* Write .xml documentaiont. (Priority: High)
+
+* Modify `bus_slave/bus_code_generator.py` to generate C++
+  code fragments that can be specialized. (Priority: Medium)
+
+* Replace ROS Arduino Bridge. (Priority: Medium)
+
+  * Get bus_server_server.py to talk to other modules.
+
+  * Get parameters to work.
+
+  * Create odometry topic publisher.
+
+  * Create sonar range topic publisher.
+
+  * Create cmd_vel topic subscriber.
+
+* Get over the wire firmware upgrade to work. (Priority: Medium)
+
+* Get dynamic reconfiguration working. (Priority: Medium)
+
+* Rewrite bus_server_server.py in C++. (Priority: Low)
+
+* Rewrite topic publisher and subscribers in C++. (Priority: Low)
+
+* Get bus reset to work. (Priority: Low)
+
+* Get discovery to work. (Priority: Low)
+
 
