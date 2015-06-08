@@ -1,5 +1,51 @@
 # Ubiquity Hardware/Software Architecture
 
+The key insight with the Ubiquity hardware and software
+architecture is to support ROS -- Robot Operating System.
+Currently, ROS only runs under some Ubuntu base Linux
+distribution.
+The Indigo release runs will under the
+Ubuntu 14.04LTS Ubuntu release.
+
+A necessary consequence of ROS only running on a Ubuntu
+Linux release, is that is must run on some sort of significant
+SBC -- single board computer.
+This can be an x86 laptop, some sort mini/nano/pico/mobile-ITX
+motherboard, or some flavor of ARM SBC, like the Raspberry Pi,
+Banana Pro, Beagle Bone Black, etc.
+
+What is clear is that industry churns out a truly amazing
+number of new SBC's every year.
+A consequence of the annual SBC churn is that older SBC
+versions go out of production to make room for the new SBC
+computers.
+Thus, the hardware architecture must gracefully allow the
+SBC's to be replaced every 12 to 36 months.
+
+Given that we are using an SBC, there are really only a limited
+of number of connectors that make sense to connect to:
+
+* Serial port.
+  Serial ports are still provide in some flavor on most SBC's.
+  Some support RS-232 signaling levels and others use simpler
+  5/3.3/1.8 voltage signaling.
+
+* Parallel port.  Classic parallel ports are nearly extinct.
+  Most of the xxx
+
+  * I2C
+
+  * SPI
+
+* Ethernet
+
+* USB
+
+* CAN
+
+* MIPI CSI
+
+
 > *Mention that Ethernet, USB and Blue Tooth are hardware portals
 > to get into ROS instead of just serial. -Wayne*
 
