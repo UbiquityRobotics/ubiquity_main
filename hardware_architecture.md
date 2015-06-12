@@ -1,15 +1,27 @@
 # Ubiquity Hardware/Software Architecture
 
-The key insight with the Ubiquity hardware and software
-architecture is to support ROS -- Robot Operating System.
-Currently, ROS only runs under some Ubuntu base Linux
-distribution.
-The Indigo release runs will under the
-Ubuntu 14.04LTS Ubuntu release.
+The two key requirements of the Ubiquity hardware and software
+architecture are:
 
-A necessary consequence of ROS only running on a Ubuntu
-Linux release, is that is must run on some sort of significant
-SBC -- single board computer.
+* it *MUST* be totally ROS (Robot Operarting System) centric, and
+
+* it must support easy replacement of the main processor boad.
+
+At this point in time, ROS only runs under a Ubuntu release
+of Linux.
+The Indigo release runs will under the 14.04LTS Ubuntu release.
+
+Only two processor architectures that support Ubuntu releases
+are IA32/AMD64 processor archictecture and the ARM7 processor
+architecture. Thus, whatever main compuation board is used, must
+have one of these three processor architectures running on it.
+Realistically, most people are using AMD64 in preference to IA32
+these days, so the architectures are AMD64 and ARM7.
+
+For the AMD64 architecture, the standand de
+
+The standard form factors for main processor boards are laptops
+and SBC's (Single Board Computers.)  The IA32/AMD64
 This can be an x86 laptop, some sort mini/nano/pico/mobile-ITX
 motherboard, or some flavor of ARM SBC, like the Raspberry Pi,
 Banana Pro, Beagle Bone Black, etc.
