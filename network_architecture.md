@@ -74,6 +74,7 @@ Ubiquity Robotics plans are for support of only Internet Protocol version 4 to b
 For this reason, I beleive it would be sensible that our basic configurations and installations be limited to standing up a robot in an environment with an IPv4 stack. That is we do not need to ensure configuration and maintenance of IPv6 addressing.
 
 Please send a use case to my email for removing this constraint in a future release. 
+
 | Requirement | ID | Deliverable(s) | Priority   |
 | :------- | :----: | :---: | :---: |
 | Multicast support | 3 | **Base OS** | MUST[^1] |
@@ -170,5 +171,7 @@ We have a bunch of major issues to wrestle to the ground:
 
 ***
 Footnotes:
+
 [^1]: Many network infrastructures are setup to deny multicasting or zeroconf packets. 
+
 [^2]: This will be the default configuration for an "out-of-the-box" robot.
