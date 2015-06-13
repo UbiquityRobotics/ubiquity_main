@@ -22,6 +22,7 @@ The configuration utility must provide the ability to configure the robot to con
 
 > Utility will be able to make the mode setting persistent across poweroff/restart of the robot's operating system.
 
+
 ```flow
 st=>start: robot initial program load
 op_ap=>operation: Access Point
@@ -44,12 +45,13 @@ cond_connect(yes)->e
 cond_connect(no)->sub_ap
 ```
 
+
 ###Factory default state
 
 Ubiquity robots, out of the box, will ship with ubuntu 14.04 based on Wayne's ubiquity-misc script.  The OS will be configured with the following parameters affecting networking capabilities of the robot.
 
 Parameter/Variable | Allowed Values | Default Value
---- | ---
+--- | --- | ---
 hostname | [63 bytes text](https://tools.ietf.org/html/rfc1123#page-13) | "robot"
 Access Mode | access point \|\| client | client
 Service Set Identifier | up to 32 bytes | "robot"
