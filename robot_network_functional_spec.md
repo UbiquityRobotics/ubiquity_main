@@ -1,3 +1,5 @@
+<script src="bin/flowchart-1.4.0.js">
+
 Robot Network Configuration Functional Specification
 ===
 
