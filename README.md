@@ -158,9 +158,9 @@ is powered up.  Please do the following steps:
 
 15. Login again and resize the file system:
 
-        # From you deskop/lapto:
+        # From you deskop/laptop:
 	ssh ubuntu@ubuntu.local
-        sudo resize2fs /dev/mmcblk0p2
+	sudo resize2fs /dev/mmcblk0p2
 
 16. Install a swap file:
 
@@ -204,6 +204,13 @@ This shell script is run as follows:
 	sudo rm -rf /srv
 	cd {directory that contains rpi2-build-image.sh}
         sudo ./rpi2-build-image.sh
+
+> * When running rpi2-build-image.sh on an intel computer, if I use the
+> script as it stands, Very quickly get a failure in the script at the 
+> beginning .  I get the error
+>
+> "Couldn't download dists/trusty/main/binary-amd64/Packages"
+
 
 As of now, this script fails when it trys to unmount
 `/srv/rpi2/trusty/build/chroot/proc`.  The work around
