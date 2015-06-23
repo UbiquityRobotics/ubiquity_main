@@ -100,13 +100,15 @@ is powered up.  Please do the following steps:
    going to need it later.
 
 6. Download the image using the following commands:
-
+```
         cd /tmp	       # Or someplace else if you choose...
         wget http://gramlich.net/2015-04-30-ubuntu-trusty.zip
+```
 
 7. Unpack the .zip file using the following command:
-
+```
         unzip *.zip
+```
 
    This should result in a *.img and *.bmap file.
 
@@ -114,10 +116,11 @@ is powered up.  Please do the following steps:
    place where you will type in the value for `/dev/XXXX`
    that was determined in step 5 above.  Run the following
    commands:
-
+```
         sudo apt-get install -y bmap-tools
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
 	sudo rsynch
+```
 
    Remember to replace `/dev/XXXX`.
 
@@ -135,19 +138,21 @@ is powered up.  Please do the following steps:
     should stop blinking.
 
 13. Connect to the Raspberry Pi 2 from your laptop desktop:
-
+```
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
         # Password is `ubuntu`
+```
 
     You should see a prompt that looks like:
-
+```
         ubuntu@ubuntu:~$
+```
 
     You are in.  Now you need to do some additional steps.
 
 14. Expand the 2nd partion to the full size of the micro-SD card:
-
+```
         sudo fdisk /dev/mmcblk0
         # Delete 2nd partition with (d,2)
         # Recreate 2nd partition with (n,p,2,enter,enter)
@@ -155,36 +160,48 @@ is powered up.  Please do the following steps:
         #
         # Now immediately reboot:
         sudo reboot
+```
 
 15. Login again and resize the file system:
-
+```
         # From you deskop/laptop:
 	ssh ubuntu@ubuntu.local
 	sudo resize2fs /dev/mmcblk0p2
+```
 
 16. Install a swap file:
-
+```
         sudo apt-get install dphys-swapfile
+```
 
 17. Make sure that you have the linux-firmware (should be already done).
-
+```
         sudo apt-get install linux_firmware
+```
+
+> * Along the same lines, do you want to have the person stepping through
+> this process run an "sudo apt-get update" and "sudo apt-get upgrade" 
+> around this point?
+> -- {Kurt} *
 
 18. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
-
+```
         sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
+```
 
 19. Create a catkin workspace:
-
+```
         cd ~
         mkdir -p catkin_ws/src
         cd catkin_ws
         catkin_make
+```
 
 20. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
-
+```
         echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
         source ~/.bashrc
+```
 
 ### Constructing the Kernel Image from Scratch
 
@@ -200,16 +217,25 @@ Ubuntu 14.04LTS kernel running 64-bit x86 architecture
 or on a Raspberry Pi 2 (hereafter shorted to RasPi2.)
 
 This shell script is run as follows:
-
+```
 	sudo rm -rf /srv
 	cd {directory that contains rpi2-build-image.sh}
         sudo ./rpi2-build-image.sh
-
+```
 > * When running rpi2-build-image.sh on an intel computer, if I use the
 > script as it stands, Very quickly get a failure in the script at the 
 > beginning .  I get the error
 >
-> "Couldn't download dists/trusty/main/binary-amd64/Packages"
+> "Couldn't download dists/trusty/main/binary-amd64/Packages" that were 
+>   clearly not amd64 packages (i.e. raspberrypi-bootloader, etc.)
+> 
+> I also ran the script pointing to a local mirror.  In that case, 
+> I received an error that those particular files could not be authenticated.  
+> The apt-get in the script at line ~103 used the "-y" parameter without the 
+> "--force-yes" parameter so the script failed.  I ended up editing that line
+> to force the yes and the script ran fine.  I would note that ubuntu 
+> documentation states using "--force-yes" is somewhat dangerous.
+> -- {Kurt} *
 
 
 As of now, this script fails when it trys to unmount
