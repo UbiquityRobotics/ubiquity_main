@@ -117,7 +117,6 @@ is powered up.  Please do the following steps:
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
 	sudo rsynch
 
-
 9. Remove the micro-SD card from the adaptor and plug it into
    Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
    of the Raspberry Pi 2.
@@ -132,7 +131,6 @@ is powered up.  Please do the following steps:
     should stop blinking.
 
 13. Connect to the Raspberry Pi 2 from your laptop desktop:
-
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
         # Password is `ubuntu`
@@ -151,9 +149,9 @@ is powered up.  Please do the following steps:
 
 15. Login again and resize the file system:
 
-        # From you deskop/lapto:
+        # From you deskop/laptop:
 	ssh ubuntu@ubuntu.local
-        sudo resize2fs /dev/mmcblk0p2
+	sudo resize2fs /dev/mmcblk0p2
 
 16. Install a swap file:
 
@@ -163,9 +161,15 @@ is powered up.  Please do the following steps:
 
         sudo apt-get install linux_firmware
 
+> * Along the same lines, do you want to have the person stepping through
+> this process run an "sudo apt-get update" and "sudo apt-get upgrade" 
+> around this point?
+> -- {Kurt} *
+
 18. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
 
         sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
+
 
 19. Create a catkin workspace:
 
@@ -197,6 +201,22 @@ This shell script is run as follows:
 	sudo rm -rf /srv
 	cd {directory that contains rpi2-build-image.sh}
         sudo ./rpi2-build-image.sh
+
+> * When running rpi2-build-image.sh on an intel computer, if I use the
+> script as it stands, Very quickly get a failure in the script at the 
+> beginning .  I get the error
+>
+> "Couldn't download dists/trusty/main/binary-amd64/Packages" that were 
+>   clearly not amd64 packages (i.e. raspberrypi-bootloader, etc.)
+> 
+> I also ran the script pointing to a local mirror.  In that case, 
+> I received an error that those particular files could not be authenticated.  
+> The apt-get in the script at line ~103 used the "-y" parameter without the 
+> "--force-yes" parameter so the script failed.  I ended up editing that line
+> to force the yes and the script ran fine.  I would note that ubuntu 
+> documentation states using "--force-yes" is somewhat dangerous.
+> -- {Kurt} *
+
 
 As of now, this script fails when it trys to unmount
 `/srv/rpi2/trusty/build/chroot/proc`.  The work around
