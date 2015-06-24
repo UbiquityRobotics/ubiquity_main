@@ -104,22 +104,19 @@ is powered up.  Please do the following steps:
         cd /tmp	       # Or someplace else if you choose...
         wget http://gramlich.net/2015-04-30-ubuntu-trusty.zip
 
-7. Unpack the .zip file using the following command:
+7. Unpacking the zip file below should result in a *.img and *.bmap file.
 
         unzip *.zip
-
-   This should result in a *.img and *.bmap file.
 
 8. Copy the .img file onto the micro-SD card.  This is the
    place where you will type in the value for `/dev/XXXX`
    that was determined in step 5 above.  Run the following
-   commands:
+   commands (Remember to replace `/dev/XXXX`.):
 
         sudo apt-get install -y bmap-tools
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
 	sudo rsynch
 
-   Remember to replace `/dev/XXXX`.
 
 9. Remove the micro-SD card from the adaptor and plug it into
    Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
@@ -139,12 +136,8 @@ is powered up.  Please do the following steps:
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
         # Password is `ubuntu`
-
-    You should see a prompt that looks like:
-
+        # You should see a prompt that looks like:
         ubuntu@ubuntu:~$
-
-    You are in.  Now you need to do some additional steps.
 
 14. Expand the 2nd partion to the full size of the micro-SD card:
 
