@@ -15,10 +15,10 @@ Perform the following steps:
 1. Download some software that we need:
 
         sudo apt-get install build-essential gcc g++
-        sudo cmake cmake-qu-qui
+        sudo cmake cmake-qt-gui
         # More packages are needed here
         sudo apt-get install mesa-common-dev  # OpenGL
-        sudo apt-get install wx-common wx-gtk3.0-dev  # WxWidgets
+        sudo apt-get install wx-common wxgtk3.0-dev  # WxWidgets
         zlib1g-dev  # Zlib compresion library
         # Note: the lines above could have errors in them:
 

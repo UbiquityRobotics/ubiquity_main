@@ -1,0 +1,7 @@
+hostname: my_host_name
+
+wifis: {
+  wifi1: { ssid: "ssid1", password: "password1" },
+  wifi2: { ssid: "ssid2", password: "password2" },
+}
+
