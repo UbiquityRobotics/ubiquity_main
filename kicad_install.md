@@ -15,12 +15,15 @@ Perform the following steps:
 1. Download some software that we need:
 
         sudo apt-get install build-essential gcc g++
-        sudo cmake cmake-qu-qui
+        sudo apt-get install cmake-qu-qui
         # More packages are needed here
         sudo apt-get install mesa-common-dev  # OpenGL
         sudo apt-get install wx-common wx-gtk3.0-dev  # WxWidgets
-        zlib1g-dev  # Zlib compresion library
-        # Note: the lines above could have errors in them:
+        # if you don't have doxygen yet get it with supporting packages as follows
+        sudo apt-get -y install doxygen graphviz mscgen cppcheck
+        sudo apt-get install zlib1g-dev  # Zlib compresion library
+        # if not set yet you need to set name/email or make later will fail
+        bzr whoami 'Your Name <you@gmail.com>'
 
 2. Download the source code:
 
@@ -38,7 +41,7 @@ Perform the following steps:
         cmake-gui &
         # Fill in "Where is the source code:" as `.../kicad-source-mirror`
         # Fill in "Where to build the bianies:" as `.../kicad-source-mirror/build`
-        # Click on the [Configure] button
+        # Click on the [Configure] button and then finish button
         # Click on the [Generate] button
         # Exit cmake-gui
 
