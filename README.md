@@ -253,6 +253,56 @@ are two things that can be done:
   where XXXX is the appropriate raw device name for the
   micro-SD card.
 
+## Software Needed for UR Code
+
+This is a list of activities that are generally used after 
+a new kernel is placed on a flash card for use.
+
+* Simple checklist for setup on fresh kernel image
+
+  Unzip and load to disk via Win32DiskImager on win7 or use linux
+  Expand filesystem to use most of the 16Gb flash
+  Change hostname in /etc/hostname and /etc/hosts.  
+  Install r8188eu driver for TP-LINK WiFi 
+  Edit /etc/network/interfaces to add wlan0 WiFi
+  Form catkin_ws (see CatkinWs:)
+
+* Software that comes in handy
+
+  sudo apt-get install wpasupplicant 
+  sudo apt-get install minicom
+  sudo apt-get install setserial
+  sudo apt-get install mgetty
+  sudo apt-get install wireless-tools
+  sudo apt-get install --reinstall build-essential git
+
+* Packages needed to make Ubiquity Robotics Packages
+
+  sudo apt-get install ros-indigo-ros-tutorials            
+  sudo apt-get install ros-indigo-joystick-drivers
+  sudo apt-get install python-serial              
+  sudo apt-get install ros-indigo-serial
+  sudo apt-get install ros-indigo-navigation
+  sudo apt-get install ros-indigo-tf-conversions
+  sudo apt-get install ros-indigo-robot-model  
+  sudo apt-get install ros-indigo-tf2-geometry-msgs
+
+  cd to catkin_ws/src to pull code that will be compiled
+  git clone https://github.com/DLu/navigation_layers.git
+  git clone https://github.com/ros/robot_state_publisher.git
+  git clone https://github.com/bosch-ros-pkg/usb_cam.git   
+
+* Ubiquity Robotics Packages
+
+  git clone https://github.com/hbrobotics/ros_arduino_bridge.git
+  git clone https://github.com/UbiquityRobotics/joystick_input.git
+  git clone https://github.com/UbiquityRobotics/fiducials.git
+
+Warning: It will take a few passes of catkin_make to compile this as
+it is likely you will run out of memory if made in one pass
+
+
+
 ## `gscam` Notes
 
 The following commands build gscam:
