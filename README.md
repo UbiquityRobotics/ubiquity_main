@@ -102,7 +102,8 @@ is powered up.  Please do the following steps:
 6. Download the image using the following commands:
 
         cd /tmp	       # Or someplace else if you choose...
-        wget http://gramlich.net/2015-04-30-ubuntu-trusty.zip
+        wget http://kchristo.homeip.net/files/rpi2_kernel.zip
+        # This takes a while, it is ~570MB.
 
 7. Unpacking the zip file below should result in a *.img and *.bmap file.
 
@@ -150,8 +151,8 @@ is powered up.  Please do the following steps:
 15. Login again and resize the file system:
 
         # From you deskop/laptop:
-	ssh ubuntu@ubuntu.local
-	sudo resize2fs /dev/mmcblk0p2
+        ssh ubuntu@ubuntu.local
+        sudo resize2fs /dev/mmcblk0p2
 
 16. Install a swap file:
 
@@ -159,29 +160,84 @@ is powered up.  Please do the following steps:
 
 17. Make sure that you have the linux-firmware (should be already done).
 
-        sudo apt-get install linux_firmware
+        sudo apt-get install linux-firmware
 
-> * Along the same lines, do you want to have the person stepping through
-> this process run an "sudo apt-get update" and "sudo apt-get upgrade" 
-> around this point?
-> -- {Kurt} *
+18. Now is a good time to update your system:
 
-18. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
+        sudo apt-get update
+        sudo apt-get upgrade
 
+19. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
+
+        # This command is no longer needed; it has already been done
+        # with the standard image.
         sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
 
-
-19. Create a catkin workspace:
+20. Create a catkin workspace:
 
         cd ~
         mkdir -p catkin_ws/src
         cd catkin_ws
         catkin_make
 
-20. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
+21. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
 
         echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
         source ~/.bashrc
+
+## Software Needed for UR Code
+
+This is a list of activities that are generally used after 
+a new kernel is placed on a flash card for use.
+
+* Simple checklist for setup on fresh kernel image
+
+  Unzip and load to disk via Win32DiskImager on win7 or use linux
+  Expand filesystem to use most of the 16Gb flash
+  Change hostname in /etc/hostname and /etc/hosts.  
+  Install r8188eu driver for TP-LINK WiFi 
+  Edit /etc/network/interfaces to add wlan0 WiFi
+  Form catkin_ws (see CatkinWs:)
+
+* Software that comes in handy:
+
+        sudo apt-get install wpasupplicant 
+        sudo apt-get install minicom
+        sudo apt-get install setserial
+        sudo apt-get install mgetty
+        sudo apt-get install wireless-tools
+        sudo apt-get install --reinstall build-essential git
+
+* Install your favoriate editor:
+
+        sudo apt-get install vim     # For you vi folks
+        sudo apt-get install emacs   # For you emacs folks
+
+* Packages needed to make Ubiquity Robotics Packages:
+
+        sudo apt-get install ros-indigo-ros-tutorials            
+        sudo apt-get install ros-indigo-joystick-drivers
+        sudo apt-get install python-serial              
+        sudo apt-get install ros-indigo-serial
+        sudo apt-get install ros-indigo-navigation
+        sudo apt-get install ros-indigo-tf-conversions
+        sudo apt-get install ros-indigo-robot-model  
+        sudo apt-get install ros-indigo-tf2-geometry-msgs
+
+        cd ~/catkin_ws/src # to pull code that will be compiled
+        git clone https://github.com/DLu/navigation_layers.git
+        git clone https://github.com/ros/robot_state_publisher.git
+        git clone https://github.com/bosch-ros-pkg/usb_cam.git
+
+* Ubiquity Robotics Packages:
+
+        #git clone https://github.com/hbrobotics/ros_arduino_bridge.git
+        git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
+        git clone https://github.com/UbiquityRobotics/joystick_input.git
+        git clone https://github.com/UbiquityRobotics/fiducials.git
+
+Warning: It will take a few passes of catkin_make to compile this as
+it is likely you will run out of memory if made in one pass
 
 ### Constructing the Kernel Image from Scratch
 
@@ -194,12 +250,12 @@ two scripts:
 
 It should be possible to run these scripts on a either
 Ubuntu 14.04LTS kernel running 64-bit x86 architecture
-or on a Raspberry Pi 2 (hereafter shorted to RasPi2.)
+or on a Raspberry Pi 2 (hereafter shortened to RasPi2.)
 
 This shell script is run as follows:
 
-	sudo rm -rf /srv
-	cd {directory that contains rpi2-build-image.sh}
+        sudo rm -rf /srv
+        cd {directory that contains rpi2-build-image.sh}
         sudo ./rpi2-build-image.sh
 
 > * When running rpi2-build-image.sh on an intel computer, if I use the
@@ -253,57 +309,11 @@ are two things that can be done:
   where XXXX is the appropriate raw device name for the
   micro-SD card.
 
-## Software Needed for UR Code
-
-This is a list of activities that are generally used after 
-a new kernel is placed on a flash card for use.
-
-* Simple checklist for setup on fresh kernel image
-
-  Unzip and load to disk via Win32DiskImager on win7 or use linux
-  Expand filesystem to use most of the 16Gb flash
-  Change hostname in /etc/hostname and /etc/hosts.  
-  Install r8188eu driver for TP-LINK WiFi 
-  Edit /etc/network/interfaces to add wlan0 WiFi
-  Form catkin_ws (see CatkinWs:)
-
-* Software that comes in handy
-
-  sudo apt-get install wpasupplicant 
-  sudo apt-get install minicom
-  sudo apt-get install setserial
-  sudo apt-get install mgetty
-  sudo apt-get install wireless-tools
-  sudo apt-get install --reinstall build-essential git
-
-* Packages needed to make Ubiquity Robotics Packages
-
-  sudo apt-get install ros-indigo-ros-tutorials            
-  sudo apt-get install ros-indigo-joystick-drivers
-  sudo apt-get install python-serial              
-  sudo apt-get install ros-indigo-serial
-  sudo apt-get install ros-indigo-navigation
-  sudo apt-get install ros-indigo-tf-conversions
-  sudo apt-get install ros-indigo-robot-model  
-  sudo apt-get install ros-indigo-tf2-geometry-msgs
-
-  cd to catkin_ws/src to pull code that will be compiled
-  git clone https://github.com/DLu/navigation_layers.git
-  git clone https://github.com/ros/robot_state_publisher.git
-  git clone https://github.com/bosch-ros-pkg/usb_cam.git   
-
-* Ubiquity Robotics Packages
-
-  git clone https://github.com/hbrobotics/ros_arduino_bridge.git
-  git clone https://github.com/UbiquityRobotics/joystick_input.git
-  git clone https://github.com/UbiquityRobotics/fiducials.git
-
-Warning: It will take a few passes of catkin_make to compile this as
-it is likely you will run out of memory if made in one pass
-
-
-
 ## `gscam` Notes
+
+> It looks like gscam is already being built and installed
+> into the kernel image.
+> -Wayne
 
 The following commands build gscam:
 
