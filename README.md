@@ -294,7 +294,7 @@ a new kernel is placed on a flash card for use.
 
 * Ubiquity Robotics Packages
 
-  git clone https://github.com/hbrobotics/ros_arduino_bridge.git
+  git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
   git clone https://github.com/UbiquityRobotics/joystick_input.git
   git clone https://github.com/UbiquityRobotics/fiducials.git
 
