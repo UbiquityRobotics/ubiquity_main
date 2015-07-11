@@ -288,13 +288,15 @@ below and this list is meant to simply get and make the software.
         sudo apt-get install ros-indigo-tf-conversions
         sudo apt-get install ros-indigo-robot-model  
         sudo apt-get install ros-indigo-tf2-geometry-msgs
+        
+* Source needed to support UR software. 
 
-  cd to catkin_ws/src to pull code that will be compiled
+        cd to catkin_ws/src so the folders appear under src folder
         git clone https://github.com/DLu/navigation_layers.git
         git clone https://github.com/ros/robot_state_publisher.git
         git clone https://github.com/bosch-ros-pkg/usb_cam.git   
 
-* Ubiquity Robotics Packages
+* Ubiquity Robotics Packages pulled using git clone to src folder
 
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
         git clone https://github.com/UbiquityRobotics/joystick_input.git
