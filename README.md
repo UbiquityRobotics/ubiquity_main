@@ -400,6 +400,49 @@ Sorting out linux images on ubuntu when networks get added:
   you have `eth0` now and if you had wifi and config in
   `/etc/network/interfaces` for `wlan0` you also have wifi now
 
+## Bring 8188 WiFi Dongle Notes:
+
+WiFi with Kurts Kernel working for me today.
+
+One tiny change from your modprobe so when I was in 
+/lib/modules/3.18.0-24-rpi2 I used like you did and saw 
+he .ko so did this:
+
+        ln -s kernel/drivers/staging/rtl8188eu/rtl8188eu.ko
+
+Difference was I had to then use :
+
+        modprobe r8188eu
+        # you had said modprobe rtl8188eu which does not work for me.
+
+After above you should be able to see
+
+        iwconfig  show wlan0
+
+but it will still say unassociated because `/etc/network/interfaces`
+not set yet so I then put these EXACT lines at END of
+`/etc/network/interfaces` right from Kurt.
+
+        # WiFi dongle
+        allow-hotplug wlan0
+        auto wlan0
+        iface wlan0 inet dhcp
+          wpa-ssid "2WIRE270"
+          wpa-psk  "d4c33208f8fdc ... from wpa_passphrase 5aa32"
+
+After reboot you should NOT see `iwconfig` showing unassociated
+or similar word right after it says `wlan0`:
+
+Also, I do NOT see `/dev/wlan0` (I too am puzzled??)
+but with lsmod I see this line matching my modprobe argument:
+
+        r8188eu               408198  0
+
+
+`lsusb` gives me this:
+
+        Bus 001 Device 004: ID 0bda:8179 Realtek Semiconductor Corp.
+
 ## Software Tasks
 
 ### General
