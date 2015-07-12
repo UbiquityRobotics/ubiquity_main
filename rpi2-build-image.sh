@@ -107,10 +107,12 @@ chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Install ROS packages:
 chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
-wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
+#echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
+#wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
+echo "deb http://packages.namniart.com/repos/ros trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
+wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
 chroot $R apt-get update
-chroot $R apt-get -y install ros-indigo-ros-base
+chroot $R apt-get -y --force-yes install ros-indigo-ros-base
 
 # Kernel installation
 # Install flash-kernel last so it doesn't try (and fail) to detect the
@@ -248,13 +250,13 @@ blacklist snd_soc_wm8804
 EOM
 
 # Do some more ROS installation stuff:
-chroot $R apt-get -y install python-rosdep
+chroot $R apt-get -y --force-yes install python-rosdep
 chroot $R rosdep init
 # Execute `rosdep update` as user `ubuntu`:
 chroot $R su ubuntu -c "rosdep update"
 # Set up the ros enviroment for user `ubuntu`:
 chroot $R su ubuntu -c "echo source /opt/ros/indigo/setup.bash >> ~/.bashrc"
-chroot $R apt-get -y install python-rosinstall
+chroot $R apt-get -y --force-yes install python-rosinstall
 
 # Create the raspberry pi camera module load script:
 chroot $R mkdir -p /etc/modules-load.d
@@ -266,7 +268,7 @@ chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B2FA8835
 chroot $R apt-get update
 
 # Finish making the Rasperry Pi camera work:
-chroot $R apt-get install -y ubiquity-indigo-gscam linux-firmware
+chroot $R apt-get install -y --force-yes ubiquity-indigo-gscam linux-firmware
 
 # Unmount mounted filesystems (rsyslog must be halted to do this):
 echo "build current fails on umount; reboot and run clean-up.sh to finish build"

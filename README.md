@@ -102,7 +102,8 @@ is powered up.  Please do the following steps:
 6. Download the image using the following commands:
 
         cd /tmp	       # Or someplace else if you choose...
-        wget http://kchristo.homeip.net/files/rpi2_kernel.zip
+        #wget http://kchristo.homeip.net/files/rpi2_kernel.zip
+        wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
         # This takes a while, it is ~570MB.
 
 7. Unpacking the zip file below should result in a *.img and *.bmap file.
@@ -571,3 +572,13 @@ where a `git add` has been performed:
         git clone https://github.com/UbiquityRobotics/joystick_drivers.git
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
 
+## Random  Notes:
+
+        rosdep install --from-paths src -i y 
+
+        sudo update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
+
+        sudo sh -c 'echo "deb http://packages.namniart.com/repos/ros trusty main" > /etc/apt/sources.list.d/ros-latest.list'
+        wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
+        sudo apt-get update && sudo apt-get install build-essential ros-indigo-ros-base ros-indigo-common-msgs ros-indigo-tf ros-indigo-tf2 ros-indigo-tf2-ros
+        sudo rosdep init && rosdep update
