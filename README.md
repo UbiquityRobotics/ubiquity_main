@@ -184,6 +184,7 @@ is powered up.  Please do the following steps:
 21. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
 
         echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+        echo "export ROS_HOSTNAME=ubuntu.local" >> ~/.bashrc
         source ~/.bashrc
 
 ## Software Needed for UR Code
