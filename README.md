@@ -101,7 +101,7 @@ is powered up.  Please do the following steps:
 
 6. Download the image using the following commands:
 
-        cd /tmp	       # Or someplace else if you choose...
+        cd /tmp      # Or someplace else if you choose...
         #wget http://kchristo.homeip.net/files/rpi2_kernel.zip
         wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
         # This takes a while, it is ~570MB.
@@ -117,7 +117,7 @@ is powered up.  Please do the following steps:
 
         sudo apt-get install -y bmap-tools
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
-	sudo rsynch
+        sudo rsynch
 
 9. Remove the micro-SD card from the adaptor and plug it into
    Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
@@ -181,67 +181,135 @@ is powered up.  Please do the following steps:
         cd catkin_ws
         catkin_make
 
-21. Add `~/devel/setup.bash` to the end of `~/.bashrc`:
-
-        echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
-        echo "export ROS_HOSTNAME=ubuntu.local" >> ~/.bashrc
-        source ~/.bashrc
-
-## Software Needed for UR Code
-
-This is a list of activities that are generally used after 
-a new kernel is placed on a flash card for use.
-
-* Simple checklist for setup on fresh kernel image
-
-  Unzip and load to disk via Win32DiskImager on win7 or use linux
-  Expand filesystem to use most of the 16Gb flash
-  Change hostname in /etc/hostname and /etc/hosts.  
-  Install r8188eu driver for TP-LINK WiFi 
-  Edit /etc/network/interfaces to add wlan0 WiFi
-  Form catkin_ws (see CatkinWs:)
-
-* Software that comes in handy:
-
-        sudo apt-get install wpasupplicant 
-        sudo apt-get install minicom
-        sudo apt-get install setserial
-        sudo apt-get install mgetty
-        sudo apt-get install wireless-tools
-        sudo apt-get install --reinstall build-essential git
-
-* Install your favoriate editor:
+21 Install your one or more of you favorite editor(s):
 
         sudo apt-get install vim     # For you vi folks
         sudo apt-get install emacs   # For you emacs folks
 
-* Packages needed to make Ubiquity Robotics Packages:
+22. Edit `/etc/hostname` and change the hostname from `ubuntu` to something
+    else like `my_robot`, `funbot`, etc.
 
-        sudo apt-get install ros-indigo-ros-tutorials            
-        sudo apt-get install ros-indigo-joystick-drivers
-        sudo apt-get install python-serial              
-        sudo apt-get install ros-indigo-serial
-        sudo apt-get install ros-indigo-navigation
-        sudo apt-get install ros-indigo-tf-conversions
-        sudo apt-get install ros-indigo-robot-model  
-        sudo apt-get install ros-indigo-tf2-geometry-msgs
+23. Edit `/etc/hosts` and change the line `127.0.1.1 ubuntu` to:
+
+        127.0.1.1  new_hostname new_hostname.local
+
+
+24. Add the following lines to the end of `~/.bashrc`:
+
+        source ~/catkin_ws/devel/setup.bash
+        export ROS_HOSTNAME=`cat /etc/hostname`.local
+        export ROS_MASTER_URI=http://`cat /etc/hostname`.local:11311
+
+25. Rerun `~/bash.rc`:
+
+        source ~/.bashrc
+
+26. Using the `env | grep ROS` command verify that `ROS_HOSTNAME` is
+    `XXX.local` where `XXX` is the hostname you put into `/etc/hostname`.
+    Likewise, verify that `ROS_MASTER_URI` is `http://XXX.local:113111`
+    where `XXX` is the same hostname.
+
+27. Install some additional software:
+
+        sudo apt-get install wpasupplicant minicom setserial mgetty wireless-tools
+        sudo apt-get install --reinstall build-essential git
+
+28. Install some more ROS packages:
+        sudo apt-get install ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
+        sudo apt-get install ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
+        sudo apt-get install ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
 
         cd ~/catkin_ws/src # to pull code that will be compiled
         git clone https://github.com/DLu/navigation_layers.git
         git clone https://github.com/ros/robot_state_publisher.git
-        git clone https://github.com/bosch-ros-pkg/usb_cam.git
+        #git clone https://github.com/bosch-ros-pkg/usb_cam.git
 
-* Ubiquity Robotics Packages:
+29. Install some Ubiquity Robotics packages:
 
         #git clone https://github.com/hbrobotics/ros_arduino_bridge.git
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
         git clone https://github.com/UbiquityRobotics/joystick_input.git
         git clone https://github.com/UbiquityRobotics/fiducials.git
+        # Optional for Wayne's stuff right now:
+        git clone http://github.com/UbiquityRobotics/robot-configurations.git
+        (cd ~/catkin_ws ; caktin_make)
 
-Warning: It will take a few passes of catkin_make to compile this as
-it is likely you will run out of memory if made in one pass
+### Installing USB WiFi dongles:
 
-### Constructing the Kernel Image from Scratch
+The are two common USB WiFi dongles.  One is based on the Realtek 8192
+chip set and the other is based on the 8188 chips set.  The 8192
+seems to work rather well, but the 8188 seems to cause more problems.
+
+1. Remove the the persistent rules UDev rule:
+
+        sudo rm /etc/udev/rules.d/70-persistent-net.rules
+
+2. Install the 8188EU kernel module:
+
+	cd /lib/modules/`uname -r`
+        sudo ln -s kernel/drivers/staging/rtl8188eu/rtl8188eu.ko
+	sudo modprobe r8188eu
+
+3. Plug in your WiFi dongle and figure which kind you got:
+
+	lsmod | grep -i realtek
+
+   The 8188 gives:
+
+        Bus 001 Device 004: ID 0bda:8179 Realtek Semiconductor Corp.
+
+   and the 8192 gives:
+
+        Bus 001 Device 004: ID 0bda:8178 Realtek Semiconductor Corp. RTL8192CU 802.11n WLAN Adapter
+
+   You may get something else.
+
+4. Now create/edit `/etc/network/interfaces` and add the following
+   lines to your file:
+
+        # WiFi dongle
+        allow-hotplug wlan0
+        auto wlan0
+        iface wlan0 inet dhcp
+          wpa-ssid "SSID"     # Replace SSS with your network SSID
+          wpa-psk  "PWD"      # Replace PWD with your network password
+
+
+5. Reboot.
+
+        sudo reboot
+
+6. Run `ifconfig` to see if device `wlan0` shows up:
+
+        ifconfig
+
+   If `wlan0` does not show up, something did not go right.
+
+
+## `gscam` Notes
+
+> It looks like gscam is already being built and installed
+> into the kernel image.
+> -Wayne
+
+The following commands build gscam:
+
+        #sudo modprobe bcm2835-v4l2 gst_v4l2src_is_broken=1
+        sudo apt-get build-essential g++
+        cd catkin_ws/src
+        catkin_make
+        source devel/setup.bash
+        cd src
+        git clone https://github.com/ros-drivers/gscam.git
+        rosdep update
+        sudo apt-get install ros-indigo-image-common
+        sudo apt-get install libgstreamer-plugins-base0.10-dev
+	sudo apt-get isntall gstreamer0.10-plugins-good
+        catkin_make
+        roslaunch fiduicals_lib gscam.launch
+        rosrun image_view image_view image:=/camera/image_raw
+
+## Constructing the Kernel Image from Scratch
 
 This Ubiquity/ROS/Ubuntu Kernel image is constructed with
 two scripts:
@@ -318,7 +386,6 @@ are two things that can be done:
 > -Wayne
 
 The following commands build gscam:
-
 
         sudo modprobe bcm2835-v4l2 gst_v4l2src_is_broken=1
         sudo apt-get build-essential g++
@@ -557,19 +624,19 @@ where a `git add` has been performed:
 
 ## Random Notes
 
-	cd ~/catkin_ws/src
-	# Install fiducials:
+        cd ~/catkin_ws/src
+        # Install fiducials:
         git clone https://github.com/UbiquityRobotics/fiducials.git
         sudo apt-get install ros-indigo-tf ros-indigo-tf2-geometry-msgs
 
-	# Install gscam
+        # Install gscam
         git clone https://github.com/ros-drivers/gscam
         sudo apt-get install -y ros-indigo-image-common
         sudo apt-get install -y gstreamer0.10-plugins-good
         sudo apt-get install -y libgstreamer0.10-dev
         sudo apt-get install -y libgstreamer-plugins-base0.10-dev
 
-	# Install joystick drivers and ROS Arduino Bridge:
+        # Install joystick drivers and ROS Arduino Bridge:
         git clone https://github.com/UbiquityRobotics/joystick_drivers.git
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
 
