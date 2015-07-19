@@ -246,13 +246,13 @@ seems to work rather well, but the 8188 seems to cause more problems.
 
 2. Install the 8188EU kernel module:
 
-	cd /lib/modules/`uname -r`
+        cd /lib/modules/`uname -r`
         sudo ln -s kernel/drivers/staging/rtl8188eu/rtl8188eu.ko
-	sudo modprobe r8188eu
+        sudo modprobe r8188eu
 
 3. Plug in your WiFi dongle and figure which kind you got:
 
-	lsmod | grep -i realtek
+        lsmod | grep -i realtek
 
    The 8188 gives:
 
@@ -304,7 +304,7 @@ The following commands build gscam:
         rosdep update
         sudo apt-get install ros-indigo-image-common
         sudo apt-get install libgstreamer-plugins-base0.10-dev
-	sudo apt-get isntall gstreamer0.10-plugins-good
+        sudo apt-get isntall gstreamer0.10-plugins-good
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
