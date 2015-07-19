@@ -181,7 +181,7 @@ is powered up.  Please do the following steps:
         cd catkin_ws
         catkin_make
 
-21 Install your one or more of you favorite editor(s):
+21. Install your one or more of you favorite editor(s):
 
         sudo apt-get install vim     # For you vi folks
         sudo apt-get install emacs   # For you emacs folks
