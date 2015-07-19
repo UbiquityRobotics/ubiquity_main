@@ -107,10 +107,10 @@ chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Install ROS packages:
 chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-#echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
-#wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
-echo "deb http://packages.namniart.com/repos/ros trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
-wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
+echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
+wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
+#echo "deb http://packages.namniart.com/repos/ros trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
+#wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
 chroot $R apt-get update
 chroot $R apt-get -y --force-yes install ros-indigo-ros-base
 
@@ -269,6 +269,22 @@ chroot $R apt-get update
 
 # Finish making the Rasperry Pi camera work:
 chroot $R apt-get install -y --force-yes ubiquity-indigo-gscam linux-firmware
+
+# Remove persistent net rules from UDev:
+chroot $R rm -f /etc/udev/rules.d/70-persistent-net.rules
+
+# Install emacs and vim:
+chroot $R apt-get -y --force-yes install emacs
+chroot $R apt-get -y --force-yes install vim
+
+# Install some useful stuff:
+chroot $R apt-get install -y --force-yes wpasupplicant minicom setserial mgetty wireless-tools
+chroot $R apt-get install -y --force-yes ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial
+chroot $R apt-get install -y --force-yes ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
+chroot $R apt-get install -y --force-yes ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
+
+# Install the 8188 keneral module (* will expand to the corret directory name):
+chroot $R ln -s /lib/modules/*/kernel/drivers/staging/rtl8188eu/rtl8188eu.ko /lib/modules/*/rtl8188eu.ko
 
 # Unmount mounted filesystems (rsyslog must be halted to do this):
 echo "build current fails on umount; reboot and run clean-up.sh to finish build"
