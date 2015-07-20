@@ -184,7 +184,7 @@ is powered up.  Please do the following steps:
 
 21. Install your one or more of you favorite editor(s):
 
-	# This is in the latest kernel image:
+        # This has already been done in the latest kernel image:
         sudo apt-get install vim     # For you vi folks
         sudo apt-get install emacs   # For you emacs folks
 
@@ -213,13 +213,13 @@ is powered up.  Please do the following steps:
 
 27. Install some additional software:
 
-	# This is in the latest kernel image:
+        # This has already been done in the latest kernel image:
         sudo apt-get install wpasupplicant minicom setserial mgetty wireless-tools
         sudo apt-get install --reinstall build-essential git
 
 28. Install some more ROS packages:
 
-	# This is in the latest kernel image:
+        # This has already been done in the latest kernel image:
         sudo apt-get install ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
         sudo apt-get install ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
         sudo apt-get install ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
@@ -247,19 +247,19 @@ seems to work rather well, but the 8188 seems to cause more problems.
 
 1. Remove the the persistent rules UDev rule:
 
-	# This is done in the latest kernel image:
+        # This has already been done in the latest kernel image:
         sudo rm /etc/udev/rules.d/70-persistent-net.rules
 
 2. Install the 8188EU kernel module:
 
-	# This is done in the latest kernel image:
+        # This has already been done in the latest kernel image:
         cd /lib/modules/`uname -r`
         sudo ln -s kernel/drivers/staging/rtl8188eu/rtl8188eu.ko
         sudo modprobe r8188eu
 
 3. Plug in your WiFi dongle and figure which kind you got:
 
-        lsmod | grep -i realtek
+        lsusb | grep -i realtek
 
    The 8188 gives:
 
