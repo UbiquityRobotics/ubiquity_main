@@ -103,7 +103,8 @@ is powered up.  Please do the following steps:
 
         cd /tmp      # Or someplace else if you choose...
         #wget http://kchristo.homeip.net/files/rpi2_kernel.zip
-        wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
+        #wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
+        wget http://gramlich.net/2015-07-19-ubuntu-trusty.zip
         # This takes a while, it is ~570MB.
 
 7. Unpacking the zip file below should result in a *.img and *.bmap file.
@@ -415,7 +416,7 @@ The following commands build gscam:
         git clone https://github.com/ros-drivers/gscam.git
         rosdep update
         sudo apt-get install ros-indigo-image-common
-        sudo apt-get install gstreamer0.1-plugins-good
+        sudo apt-get install gstreamer0.10-plugins-good
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
