@@ -117,7 +117,7 @@ is powered up.  Please do the following steps:
 
         sudo apt-get install -y bmap-tools
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
-        sudo rsynch
+        sudo sync
 
 9. Remove the micro-SD card from the adaptor and plug it into
    Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
@@ -215,6 +215,7 @@ is powered up.  Please do the following steps:
         sudo apt-get install --reinstall build-essential git
 
 28. Install some more ROS packages:
+
         sudo apt-get install ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
         sudo apt-get install ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
         sudo apt-get install ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
@@ -232,7 +233,7 @@ is powered up.  Please do the following steps:
         git clone https://github.com/UbiquityRobotics/fiducials.git
         # Optional for Wayne's stuff right now:
         git clone http://github.com/UbiquityRobotics/robot-configurations.git
-        (cd ~/catkin_ws ; caktin_make)
+        (cd ~/catkin_ws ; catkin_make)
 
 ### Installing USB WiFi dongles:
 
@@ -286,6 +287,21 @@ seems to work rather well, but the 8188 seems to cause more problems.
    If `wlan0` does not show up, something did not go right.
 
 
+## Fiducials Software
+
+1. Make sure we have a `Tag_Heights.xml` file:
+
+        mkdir -p ~/.ros/fiducials
+        cp ~/catkin_ws/src/fiducials/fiducial_lib/Tag_Heights.xml ~/.ros/fiducials
+
+2. Start the `map.txt` file:
+
+        mkdir -p ~/.ros/slam
+        echo '41 0.0 0.0 0.0 180.0 -0.0 0.0 0.0 1' > ~/.ros/slam/map.txt
+
+   where `41` is replaced with the fiducial to use as origin.
+
+
 ## `gscam` Notes
 
 > It looks like gscam is already being built and installed
@@ -302,9 +318,10 @@ The following commands build gscam:
         cd src
         git clone https://github.com/ros-drivers/gscam.git
         rosdep update
-        sudo apt-get install ros-indigo-image-common
-        sudo apt-get install libgstreamer-plugins-base0.10-dev
-        sudo apt-get isntall gstreamer0.10-plugins-good
+        rosdep install --from-paths src -i -y 
+        #sudo apt-get install ros-indigo-image-common
+        #sudo apt-get install libgstreamer-plugins-base0.10-dev
+        #sudo apt-get isntall gstreamer0.10-plugins-good
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
@@ -398,6 +415,7 @@ The following commands build gscam:
         git clone https://github.com/ros-drivers/gscam.git
         rosdep update
         sudo apt-get install ros-indigo-image-common
+        sudo apt-get install gstreamer0.1-plugins-good
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
@@ -630,7 +648,7 @@ where a `git add` has been performed:
         sudo apt-get install ros-indigo-tf ros-indigo-tf2-geometry-msgs
 
         # Install gscam
-        git clone https://github.com/ros-drivers/gscam
+p        git clone https://github.com/ros-drivers/gscam
         sudo apt-get install -y ros-indigo-image-common
         sudo apt-get install -y gstreamer0.10-plugins-good
         sudo apt-get install -y libgstreamer0.10-dev
@@ -642,7 +660,7 @@ where a `git add` has been performed:
 
 ## Random  Notes:
 
-        rosdep install --from-paths src -i y 
+        rosdep install --from-paths src -i -y 
 
         sudo update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
 
