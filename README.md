@@ -195,7 +195,6 @@ is powered up.  Please do the following steps:
 
         127.0.1.1  new_hostname new_hostname.local
 
-
 24. Add the following lines to the end of `~/.bashrc`:
 
         source ~/catkin_ws/devel/setup.bash
@@ -239,6 +238,13 @@ is powered up.  Please do the following steps:
         git clone http://github.com/UbiquityRobotics/robot-configurations.git
         (cd ~/catkin_ws ; catkin_make)
 
+30. Set your git user name and E-mail address:
+
+        git config --global user.email "your.email@whatever"
+        git config --global user.name "First Last"
+
+    where you fill in the appropriate fields in the quotes.
+
 ### Installing USB WiFi dongles:
 
 The are two common USB WiFi dongles.  One is based on the Realtek 8192
@@ -280,7 +286,6 @@ seems to work rather well, but the 8188 seems to cause more problems.
         iface wlan0 inet dhcp
           wpa-ssid "SSID"     # Replace SSS with your network SSID
           wpa-psk  "PWD"      # Replace PWD with your network password
-
 
 5. Reboot.
 
@@ -324,10 +329,10 @@ The following commands build gscam:
         cd src
         git clone https://github.com/ros-drivers/gscam.git
         rosdep update
-        rosdep install --from-paths src -i -y 
-        #sudo apt-get install ros-indigo-image-common
-        #sudo apt-get install libgstreamer-plugins-base0.10-dev
-        #sudo apt-get isntall gstreamer0.10-plugins-good
+        rosdep install --from-paths . -i -y 
+        sudo apt-get install ros-indigo-image-common
+        sudo apt-get install libgstreamer-plugins-base0.10-dev
+        sudo apt-get isntall gstreamer0.10-plugins-good
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
