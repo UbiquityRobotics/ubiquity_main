@@ -245,6 +245,10 @@ is powered up.  Please do the following steps:
 
     where you fill in the appropriate fields in the quotes.
 
+### Wishlist for Future Kernel Images
+- Requested by MarkJ:  Into /etc/rc.local add this line
+      stty -F /dev/ttyAMA0  115200
+
 ### Installing USB WiFi dongles:
 
 The are two common USB WiFi dongles.  One is based on the Realtek 8192
