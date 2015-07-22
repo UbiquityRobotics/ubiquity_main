@@ -245,8 +245,9 @@ is powered up.  Please do the following steps:
 
     where you fill in the appropriate fields in the quotes.
 
-### Wishlist for Future Kernel Images
-- Requested by MarkJ:  Into /etc/rc.local add this line
+31. Setup the baud rate on the serial port by adding the stty line to rc.local
+
+      sudo vi /etc/rc.local 
       stty -F /dev/ttyAMA0  115200
 
 ### Installing USB WiFi dongles:
