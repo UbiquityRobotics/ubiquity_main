@@ -221,12 +221,15 @@ is powered up.  Please do the following steps:
         # This has already been done in the latest kernel image:
         sudo apt-get install ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
         sudo apt-get install ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
-        sudo apt-get install ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
+        sudo apt-get install ros-indigo-robot-model 
+        sudo apt-get install ros-indigo-tf2-geometry-msgs
 
         cd ~/catkin_ws/src # to pull code that will be compiled
         git clone https://github.com/DLu/navigation_layers.git
         git clone https://github.com/ros/robot_state_publisher.git
         #git clone https://github.com/bosch-ros-pkg/usb_cam.git
+
+        git clone https://github.com/ros/robot_model.git  # required for crash fix for now
 
 29. Install some Ubiquity Robotics packages:
 
