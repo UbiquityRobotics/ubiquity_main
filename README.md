@@ -158,11 +158,11 @@ is powered up.  Please do the following steps:
 
 16. Install a swap file:
 
-        sudo apt-get install dphys-swapfile
+        sudo apt-get install -y dphys-swapfile
 
 17. Make sure that you have the linux-firmware (should be already done).
 
-        sudo apt-get install linux-firmware
+        sudo apt-get install -y linux-firmware
 
 18. Now is a good time to update your system:
 
@@ -185,8 +185,8 @@ is powered up.  Please do the following steps:
 21. Install your one or more of you favorite editor(s):
 
         # This has already been done in the latest kernel image:
-        sudo apt-get install vim     # For you vi folks
-        sudo apt-get install emacs   # For you emacs folks
+        sudo apt-get install -y vim     # For you vi folks
+        sudo apt-get install -y emacs   # For you emacs folks
 
 22. Edit `/etc/hostname` and change the hostname from `ubuntu` to something
     else like `my_robot`, `funbot`, etc.
@@ -213,15 +213,15 @@ is powered up.  Please do the following steps:
 27. Install some additional software:
 
         # This has already been done in the latest kernel image:
-        sudo apt-get install wpasupplicant minicom setserial mgetty wireless-tools
-        sudo apt-get install --reinstall build-essential git
+        sudo apt-get install -y wpasupplicant minicom setserial mgetty wireless-tools
+        sudo apt-get install -y --reinstall build-essential git
 
 28. Install some more ROS packages:
 
         # This has already been done in the latest kernel image:
-        sudo apt-get install ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
-        sudo apt-get install ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
-        sudo apt-get install ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
+        sudo apt-get install -y ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
+        sudo apt-get install -y ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
+        sudo apt-get install -y ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
 
         cd ~/catkin_ws/src # to pull code that will be compiled
         git clone https://github.com/DLu/navigation_layers.git
@@ -330,9 +330,9 @@ The following commands build gscam:
         git clone https://github.com/ros-drivers/gscam.git
         rosdep update
         rosdep install --from-paths . -i -y 
-        sudo apt-get install ros-indigo-image-common
-        sudo apt-get install libgstreamer-plugins-base0.10-dev
-        sudo apt-get isntall gstreamer0.10-plugins-good
+        sudo apt-get install -y ros-indigo-image-common
+        sudo apt-get install -y libgstreamer-plugins-base0.10-dev
+        sudo apt-get isntall -y gstreamer0.10-plugins-good
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
@@ -406,6 +406,11 @@ are two things that can be done:
 
   where XXXX is the appropriate raw device name for the
   micro-SD card.
+
+
+## Older Stuff
+
+The stuff below is getting old and probably needs to be deleted...
 
 ## `gscam` Notes
 

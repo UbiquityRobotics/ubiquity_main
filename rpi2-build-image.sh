@@ -37,18 +37,18 @@ BUILDDIR=${BASEDIR}/build
 # http://ports.ubuntu.com/ is replaced at the end for distribution.
 #LOCAL_MIRROR=""
 
-# Don't clobber an old build
+# Don't clobber an old build:
 if [ -e "$BUILDDIR" ]; then
   echo "$BUILDDIR exists, not proceeding"
   exit 1
 fi
 
-# Set up environment
+# Set up environment:
 export TZ=UTC
 R=${BUILDDIR}/chroot
 mkdir -p $R
 
-# Base debootstrap
+# Base debootstrap:
 apt-get update
 apt-get -y install ubuntu-keyring debootstrap
 if [ -n "$LOCAL_MIRROR" ]; then
@@ -57,7 +57,7 @@ else
   debootstrap $RELEASE $R http://ports.ubuntu.com/
 fi
 
-# Mount required filesystems
+# Mount required filesystems:
 mount -t proc none $R/proc
 mount -t sysfs none $R/sys
 
@@ -94,12 +94,12 @@ fi
 chroot $R apt-get update
 chroot $R apt-get -y -u dist-upgrade
 
-# Install the RPi PPA
+# Install the RPi PPA:
 chroot $R apt-get -y install software-properties-common ubuntu-keyring
 chroot $R apt-add-repository -y ppa:fo0bar/rpi2
 chroot $R apt-get update
 
-# Standard packages
+# Standard packages:
 chroot $R apt-get -y install ubuntu-standard initramfs-tools raspberrypi-bootloader-nokernel language-pack-en
 
 # Add packages to enable "zeroconf" and the secures shell server:
@@ -114,23 +114,23 @@ wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroo
 chroot $R apt-get update
 chroot $R apt-get -y --force-yes install ros-indigo-ros-base
 
-# Kernel installation
+# Kernel installation:
 # Install flash-kernel last so it doesn't try (and fail) to detect the
-# platform in the chroot.
+# platform in the chroot:
 chroot $R apt-get -y --no-install-recommends install linux-image-rpi2
 chroot $R apt-get -y install flash-kernel
 VMLINUZ="$(ls -1 $R/boot/vmlinuz-* | sort | tail -n 1)"
 [ -z "$VMLINUZ" ] && exit 1
 cp $VMLINUZ $R/boot/firmware/kernel7.img
 
-# Set up fstab
+# Set up fstab:
 cat <<EOM >$R/etc/fstab
 proc            /proc           proc    defaults          0       0
 /dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
 /dev/mmcblk0p1  /boot/firmware  vfat    defaults          0       2
 EOM
 
-# Set up hosts
+# Set up hosts:
 echo ubuntu >$R/etc/hostname
 cat <<EOM >$R/etc/hosts
 127.0.0.1       localhost
@@ -141,11 +141,11 @@ ff02::2         ip6-allrouters
 127.0.1.1       ubuntu
 EOM
 
-# Set up default user
+# Set up default user:
 chroot $R adduser --gecos "Ubuntu user" --add_extra_groups --disabled-password ubuntu
 chroot $R usermod -a -G sudo,adm -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30NqsYKpGDoTAUV2mzmHEgP/1B7rV3vfsjZKnAWn6M2d.V2UsPuZ2nWHg1iqzIu/nF/' ubuntu
 
-# Restore standard sources.list if a local mirror was used
+# Restore standard sources.list if a local mirror was used:
 if [ -n "$LOCAL_MIRROR" ]; then
   cat <<EOM >$R/etc/apt/sources.list
 deb http://ports.ubuntu.com/ ${RELEASE} main restricted universe multiverse
@@ -163,10 +163,10 @@ EOM
 chroot $R apt-get update
 fi
 
-# Clean cached downloads
+# Clean cached downloads:
 chroot $R apt-get clean
 
-# Set up interfaces
+# Set up interfaces:
 cat <<EOM >$R/etc/network/interfaces
 # interfaces(5) file used by ifup(8) and ifdown(8)
 # Include files from /etc/network/interfaces.d:
@@ -181,7 +181,7 @@ allow-hotplug eth0
 iface eth0 inet dhcp
 EOM
 
-# Set up firmware config
+# Set up firmware config:
 cat <<EOM >$R/boot/firmware/config.txt
 # For more options and information see 
 # http://www.raspberrypi.org/documentation/configuration/config-txt.md
@@ -235,13 +235,13 @@ ln -sf firmware/config.txt $R/boot/config.txt
 echo 'dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait' > $R/boot/firmware/cmdline.txt
 ln -sf firmware/cmdline.txt $R/boot/cmdline.txt
 
-# Load sound module on boot
+# Load sound module on boot:
 cat <<EOM >$R/lib/modules-load.d/rpi2.conf
 snd_bcm2835
 bcm2708_rng
 EOM
 
-# Blacklist platform modules not applicable to the RPi2
+# Blacklist platform modules not applicable to the RPi2:
 cat <<EOM >$R/etc/modprobe.d/rpi2.conf
 blacklist snd_soc_pcm512x_i2c
 blacklist snd_soc_pcm512x
