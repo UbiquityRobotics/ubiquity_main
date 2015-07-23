@@ -228,6 +228,8 @@ is powered up.  Please do the following steps:
         git clone https://github.com/ros/robot_state_publisher.git
         #git clone https://github.com/bosch-ros-pkg/usb_cam.git
 
+        git clone https://github.com/ros/robot_model.git  # required for crash fix for now
+
 29. Install some Ubiquity Robotics packages:
 
         #git clone https://github.com/hbrobotics/ros_arduino_bridge.git
@@ -244,6 +246,11 @@ is powered up.  Please do the following steps:
         git config --global user.name "First Last"
 
     where you fill in the appropriate fields in the quotes.
+
+31. Setup the baud rate on the serial port by adding the stty line to rc.local.  Add the line at the end just before the exit 0.
+
+        sudo vi /etc/rc.local 
+        stty -F /dev/ttyAMA0  115200
 
 ### Installing USB WiFi dongles:
 
