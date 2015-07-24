@@ -683,6 +683,11 @@ p        git clone https://github.com/ros-drivers/gscam
 
 ## Random  Notes:
 
+        # Mike Ferguson says the command below solves all the rosdop problems:
+        rosdep install --from-paths src --ignore-src --rosdistro indigo -y
+
+        #rosdep install --from-paths . -i -y 
+
         rosdep install --from-paths src -i -y 
 
         sudo update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
