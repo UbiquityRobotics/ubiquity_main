@@ -124,7 +124,7 @@ is powered up.  Please do the following steps:
    Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
    of the Raspberry Pi 2.
 
-10. A RJ45 Ethernet cable between your Raspberry Pi 2 and
+10. Connect an RJ45 Ethernet cable between your Raspberry Pi 2 and
     your router.
 
 11. Apply power to the Raspberry Pi 2 via the micro-USB
@@ -134,6 +134,7 @@ is powered up.  Please do the following steps:
     should stop blinking.
 
 13. Connect to the Raspberry Pi 2 from your laptop desktop:
+
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
         # Password is `ubuntu`
@@ -169,7 +170,7 @@ is powered up.  Please do the following steps:
         sudo apt-get update
         sudo apt-get upgrade
 
-19. Make sure the file `/etc/modules-load.d/raspi-camera.conf`:
+19. Make sure the file `/etc/modules-load.d/raspi-camera.conf` exists:
 
         # This command is no longer needed; it has already been done
         # with the standard image.
@@ -177,6 +178,7 @@ is powered up.  Please do the following steps:
 
 20. Create a catkin workspace:
 
+        # This should already have been done in the kernel image:
         cd ~
         mkdir -p catkin_ws/src
         cd catkin_ws
@@ -189,14 +191,17 @@ is powered up.  Please do the following steps:
         sudo apt-get install -y emacs   # For you emacs folks
 
 22. Edit `/etc/hostname` and change the hostname from `ubuntu` to something
-    else like `my_robot`, `funbot`, etc.
+    else like `my_robot`, `funbot`, etc.  (This is step will be replaced
+    with Kurt's configuration stuff.)
 
 23. Edit `/etc/hosts` and change the line `127.0.1.1 ubuntu` to:
 
+        # Again, eventually Kurt's configuration code will do this:
         127.0.1.1  new_hostname new_hostname.local
 
 24. Add the following lines to the end of `~/.bashrc`:
 
+        # Again, Kurt's configuration code will eventually do this:
         source ~/catkin_ws/devel/setup.bash
         export ROS_HOSTNAME=`cat /etc/hostname`.local
         export ROS_MASTER_URI=http://`cat /etc/hostname`.local:11311
@@ -236,32 +241,37 @@ is powered up.  Please do the following steps:
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
         git clone https://github.com/UbiquityRobotics/joystick_input.git
         git clone https://github.com/UbiquityRobotics/fiducials.git
-        # Optional for Wayne's stuff right now:
+        # Optional for Wayne's experimental config file stuff right now:
         git clone http://github.com/UbiquityRobotics/robot-configurations.git
         (cd ~/catkin_ws ; catkin_make)
 
 30. Set your git user name and E-mail address:
 
+        # We should modify Kurt's configurations stuff to do this:
         git config --global user.email "your.email@whatever"
         git config --global user.name "First Last"
 
     where you fill in the appropriate fields in the quotes.
 
-31. Setup the baud rate on the serial port by adding the stty line to rc.local.  Add the line at the end just before the exit 0.
+31. Setup the baud rate on the serial port by adding the stty line to
+    `rc.local`.  Add the line at the end just before the `exit 0`.
 
+        # We still need to do this automagically:
         sudo vi /etc/rc.local 
         stty -F /dev/ttyAMA0  115200
 
-32. Remove delays if you want to avoid 2 minute bootup sleeps that are not really a RasPi issue.
+32. Remove delays if you want to avoid 2 minute bootup sleeps that
+    are not really a RasPi issue.
 
         sudo vi /etc/init/failsafe.conf
-        Now remove the 40 and 59 sec sleeps right after message 'Waiting for network configuration'
+        # Now remove the 40 and 59 sec sleeps right after message
+        # 'Waiting for network configuration'
 
 
 ### Installing USB WiFi dongles:
 
 The are two common USB WiFi dongles.  One is based on the Realtek 8192
-chip set and the other is based on the 8188 chips set.  The 8192
+chip set and the other is based on the Realtek 8188 chips set.  The 8192
 seems to work rather well, but the 8188 seems to cause more problems.
 
 1. Remove the the persistent rules UDev rule:
@@ -308,7 +318,7 @@ seems to work rather well, but the 8188 seems to cause more problems.
 
         ifconfig
 
-   If `wlan0` does not show up, something did not go right.
+   If `wlan0` does not show up, something did not go right.  Feel the pain.
 
 
 ## Fiducials Software
