@@ -252,6 +252,12 @@ is powered up.  Please do the following steps:
         sudo vi /etc/rc.local 
         stty -F /dev/ttyAMA0  115200
 
+32. Remove delays if you want to avoid 2 minute bootup sleeps that are not really a RasPi issue.
+
+        sudo vi /etc/init/failsafe.conf
+        Now remove the 40 and 59 sec sleeps right after message 'Waiting for network configuration'
+
+
 ### Installing USB WiFi dongles:
 
 The are two common USB WiFi dongles.  One is based on the Realtek 8192
