@@ -569,70 +569,68 @@ but with lsmod I see this line matching my modprobe argument:
 
         Bus 001 Device 004: ID 0bda:8179 Realtek Semiconductor Corp.
 
-## ROS on Ubuntu on VirtualBox Notes
+## Installing ROS on Ubuntu on VirtualBox
 
-* Download some flavor of Ubuntu 14.04LTS.  You need a file with
-  a suffix of .iso.  A .iso file is an image of a CD/DVD ROM.
-  You will need to feed this file to virtual box to set up your
-  machine.  There are several flavors of Ubuntu 14.04LTS to
-  download.  Most people download the "default" Gnome/GTK+ version:
+* Download Ubuntu 14.04LTS.  You need a file with
+  a suffix of .iso. (A .iso file is an image of a CD/DVD ROM.)
+  You will need to feed this file to VirtualBox to set up your
+  virtual machine.  There are several flavors of Ubuntu 14.04LTS that can be downloaded; most people download the "default" version, which uses the Unity desktop:
 
-    http://www.ubuntu.com/download/desktop
+    http://www.ubuntu.com/download/desktop        # choose the 64-bit version
 
-  I use kubunu instead:
+  Some use Kubuntu instead:
 
     http://www.kubuntu.org/getkubuntu
 
-* Download virtualbox for your 64-bit platform (amd64 is required):
+* Download and install VirtualBox for your 64-bit platform (amd64 is required):
 
     https://www.virtualbox.org/wiki/Downloads
 
-* Start up virtualbox and click on [New] to create a new virtual machine.
-  Give your new virtual machine a name (how about "yourname-ros")
-  and a password.  It is reasonble to defaulted pretty much everything
-  else.  Do not start your virtual machine yet.
+* Start up VirtualBox and click on **New** to create a new virtual machine.
+  Give your new virtual machine a Name (how about "yourname-ros"), Type (Linux), version (Ubuntu (64-bit)), 
+  and a password.  It is reasonble to default pretty much everything
+  else, except the virtual hard disk size, which should be at least 16 GB.  Do not start your virtual machine yet.
+  
+  Your new VM should appear in the list of virtual machines, and should be selected.
 
-* Click on the [Settings] button to bring up the settings panel.
+* Click on the **Settings** button to bring up the virtual machine settings panel.
 
-  * In the settings panel, click on the [System] tab and make sure
+  * In the settings panel, click on **System** and make sure
     that the boot order is set to try CD-ROM first and disk second.
-    Not that matters, but the floppy disk should be disabled.
+    Not that it matters, but the floppy disk should be disabled.
 
-  * In the settings panel, click on the [Display] tab.  Given
+  * In the settings panel, click on **Display**.  Given
     how intense `rviz` is with graphics, upping the video memory
     to 64MB seems prudent.  Enable 3D acceleration as well.
 
-  * In the setttings panel, click on the [Storage] tab.  You need
-    to find or make a CD/DVD drive.  Now it is important to attach
-    the Ubuntu .iso file to the drive.
+  * In the settings panel, click on **Storage**.  You need
+    to find or make an optical drive (which should be listed there).  It should show "empty".  Now click the word "empty", and attach
+    the Ubuntu .iso file to the drive. There is a small icon picturing an optical disk next to the optical drive name for doing this.
 
-  * In the settings panel, select the [Network] tab.  Select
-    bridged networking.
+  * In the settings panel, click on **Network**.  Select
+    the Bridged Adapter.
 
-  * Close the settings panel to save the settings.
+ * Now you can start your virtual machine by clicking on the
+  **Start** button. It will boot from the .iso file that you have loaded into the (virtual) optical drive. Choose the "Install Ubuntu" option. Do not download updates while installing. The remaining installation steps are self-explanatory. The virtual machine should close and restart automatically, but if it does not, close it (File/Close) and restart it. 
 
-* Now you can start your virtual machine by double clicking on the
-  tab that showed up for youin the virtual box window.  The screen
-  will show up in 640 x 480 mode no matter how you resize the larger
-  window.  The next steps fix the problem.
 
-* Log in with your password.
+* Upon restart, log in with your password.   The screen will show up in 640 x 480 mode no matter how you resize the larger
+  window.  Later steps fix this problem.
 
-* Find a terminal window.  In Kubuntu, it is found in the lower
-  left corner [K with Gear] => [Applications] => [System] => [Terminal].
+* Find a terminal window.  In Ubuntu, there is a Search icon at the top of the launcher (the column of icons on the left of the screen).  Search for "terminal"; this will find the terminal application.  In Kubuntu, it is found in the lower
+  left corner **K with Gear** => **Applications** => **System** => **Terminal**.
   It is possible to drag the terminal icon from the launcher to the
-  desktop.  For Gnome based Ubuntu, try reading:
+  desktop. Start the terminal.  If you need help, try reading:
 
     http://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it
 
 * From the terminal, update the software:
 
-        sudo apt-get update	# Takes about minute
-	sudo apt-get upgrade	# Takes between 1-10 minutes
+        sudo apt-get update	     # Takes about a minute
+        sudo apt-get upgrade     # Takes 1 to 10 minutes
 
-* Now that you have a terminal it is time to install the "Virtualbox
-  Guest Additions" to solve the small screen issues.  This URL is pretty
-  useful:
+* Now that you have a terminal, it is time to install the "VirtualBox
+  Guest Additions" to solve the small screen issues.  This URL is useful:
 
     http://www.binarytides.com/vbox-guest-additions-ubuntu-14-04/
 
@@ -641,23 +639,22 @@ but with lsmod I see this line matching my modprobe argument:
         sudo apt-get install build-essential module-assistant dkms
         sudo m-a prepare
 
-  * Now find the [Devices] tab on your virtual box window.
-    You want to select [Devices] => [Insert Guest Addtions CD Image].
-    Sometimes Ubuntu will automatically mount this on
+  * Now find the **Devices** submenu on your virtual box window.
+    Select **Devices** => **VirtualBoxGuestAddtions.iso disk**.
+    Sometimes Ubuntu will offer to run the disk image; let it do so. 
+
+  * Otherwise, Ubuntu will normally have mounted the contents of the .iso on
     `/media/USERNAME` where `USERNAME`is your user name.  If it
-    does not show up (i.e. try `ls /media/USERNAME`), try the
-    following:
+    does not show up (i.e. try `ls /media/USERNAME`), try the following:
+		sudo mkdir -p /cdrom
+		sudo mount /dev/cdrom /cdrom
+		ls /mnt
 
-	sudo mkdir -p /cdrom
-        sudo mounnt /dev/cdrom /cdrom
-	ls /mnt
+	Fire off the `VBoxLinuxAdditions.run` script:
+        cd /path..to/VBOXADDITIONS*          
+		sudo ./VBoxLinuxAdditions.run     # Takes a few minutes
 
-  * Fire off the `VBoxLinuxAdditions.run` script:
-
-        cd /cdrom/VBOXADDITIONS*
-	sudo ./VBoxLinuxAdditions.run	# Takes a few minutes
-
-  * Do the following and make sure the VERSION and LINUXVERSION
+  * Do the following and check that the VERSION and LINUXVERSION
     match what you have installed:
 
         # check loaded modules
@@ -676,30 +673,32 @@ but with lsmod I see this line matching my modprobe argument:
 
   * Reboot your virtual machine:
 
-        sudo restart
+        sudo reboot
 
-  * Now you get log in again and bring up a terminal window.  Now follow
-    the instructions for installing ROS indigo:
+  * Log in again and bring up a terminal window.  For convenience, lock the terminal application to the Launcher. At this point the VM console will be able to expand to fill the window provided for it by VirtualBox. In the **Devices** menu you will also be able to activate the shared clipboard, mouse integration, drag & drop, and shared folders (with the host).
+  
+  * Now follow the instructions for installing ROS indigo:
 
         http://wiki.ros.org/indigo/Installation/Ubuntu
 
   * Some notes on the installation instructions:
 
-    * If you are not using Gnome based Ubuntu, think about using
-      `synaptic` to configure the repositories:
+	  * If you are not using Ubuntu, think about using `synaptic` to configure the repositories:
 
-        sudo apt-get install synaptic
-        sudo synaptic
-        # Use [Settings] => [Repositories] and select the appropriate
-        # repositories.  Click [OK] followed by [Reload].  Kill synpatic.
+			sudo apt-get install synaptic
+			sudo synaptic
+			
+		Use **Settings** => **Repositories** and select the appropriate repositories.  Click **OK**, then **Reload**.  Kill synpatic.
 
-    * Right before you install the full desktop install:
+		Right before you install the full desktop install:
 
-        sudo apt-get update
-        # Now install the desktop
+			sudo apt-get update
+			
+	Now install the desktop
+		
         sudo apt-get install ros-indigo-desktop-full
 
-    * It makes sense to install some editors:
+* It makes sense to install some editors:
 
         sudo apt-get intall vim emacs
 
