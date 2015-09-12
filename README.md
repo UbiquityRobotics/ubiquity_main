@@ -833,6 +833,55 @@ p        git clone https://github.com/ros-drivers/gscam
         git clone https://github.com/UbiquityRobotics/joystick_drivers.git
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge
 
+## Joystick Notes:
+
+There are two broad categories of hand game controllers -- PS3 and Xbox.
+Some of these controllers have wire connections, but most of them
+are now wireless.  The PS3 wireless controllers are layered on top
+of the BlueTooth HID communication layer.  The XBox wireless is
+a proprietary communication protocol.
+
+In order to have one of these game controllers talk to ROS, it
+is necessary to have a dongle that plugs into a USB port.  There
+are game dongles that are compatible with both the XBox and PS3
+controllers.  In addition, for the PS3, (I think that) there are
+more generic Bluetooh HID USB dongles that can be used.
+
+These game controllers basically have three classes of inputs
+1) buttons, 2) joysticks, and 3) acceleratometers.
+
+The buttons are numbered from 0-16.  An image of the button assignms
+can be found near the end of the URL below:
+
+        http://wiki.ros.org/ps3joy
+
+Notice that the joysticks are also buttons that can be clicked
+by pushing down on the joystick (i.e. -Z axis direction).
+
+The last image shows the axis numbers for the joysticks and the
+accelerometers.  The axes are numbered 0-19 and are assigned
+as follows:
+
+* Axis 0: left joystick side to side.
+* Axis 1: left joystick forward and back.
+* Axis 2: right joystick side to side.
+* Axis 3: right joystick forward and back.
+* Axis 16: accellerometer side to side.
+* Axis 17: accellerometer forward and back
+* axis 18: accellerometer up and down.
+* Axis 19: accellerometer roll.
+
+
+In order to support this stuff it is necessary to install the
+following packages:
+
+        sudo apt-get joystick ros-indigo-joy ros-indigo-joystick-drivers
+        sudo apt-get ros-indigo-teleop-twist-joy
+        sudo apt-get ros-indigo-yocs-velocity-smoother
+	sudo apt-get turtlebot-teleop
+
+
+
 ## Random  Notes:
 
         # Mike Ferguson says the command below solves all the rosdop problems:
