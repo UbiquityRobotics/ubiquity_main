@@ -128,11 +128,24 @@ September 2015
 	Now install the desktop
 		
         sudo apt-get install ros-indigo-desktop-full
+		
+  * Environment Variables
+  
+		Two environment variables, ROS_MASTER_URI and ROS_HOSTNAME will have to be set.  ROS_HOSTNAME must have the name of this virtual machine, and ROS_MASTER_URI must be the IP address (or equivalent) of the robot, and must be the same on both your VM and on the robot. Of course, you cannot set this until your robot is up. But you can set ROS_HOSTNAME now.
+
+		env | grep ROS_HOSTNAME     # Show settings of env. var.
+		export ROS_HOSTNAME="yourname-ros"  # if that's what you named it.
 
 * It makes sense to install some editors:
 
         sudo apt-get intall vim emacs
 
 That kind of wraps it all up.
+
+
+
+
+
+
 
 
