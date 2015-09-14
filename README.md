@@ -267,6 +267,12 @@ is powered up.  Please do the following steps:
         # Now remove the 40 and 59 sec sleeps right after message
         # 'Waiting for network configuration'
 
+33. Pull in xacro for magni_robot tools
+
+        sudo apt-get install ros-indigo-xacro
+
+
+
 
 ### Installing USB WiFi dongles:
 
