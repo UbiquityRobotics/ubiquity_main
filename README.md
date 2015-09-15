@@ -746,6 +746,17 @@ following packages:
 	sudo apt-get turtlebot-teleop
 
 
+Getting a USB Dongle to work with a PS3 sixshock 3 game controller
+is a bunch of work:
+
+Visit http://www.pabr.org/sixlinux/sixlinux.en.html :
+        
+        sudo apt-get install libjack-dev
+        # Add "#include <unistd.h>" to file QtSixA-1.5.1/sixad/shared.h
+
+Visit:
+
+        https://github.com/rdepena/node-dualshock-controller/wiki/Pairing-The-Dual-shock-3-controller-in-Linux-(Ubuntu-Debian)
 
 ## Random  Notes:
 
