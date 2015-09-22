@@ -237,3 +237,11 @@ is powered up.  Please do the following steps:
 
         sudo apt-get install ros-indigo-xacro
 
+
+34. Pull in code to support joystick node rework of 9/2015
+
+        sudo apt-get install joystick ros-indigo-joy ros-indigo-joystick-drivers
+        sudo apt-get install ros-indigo-teleop-twist-joy
+        sudo apt-get install ros-indigo-yocs-velocity-smoother
+        sudo apt-get install turtlebot-teleop
+
