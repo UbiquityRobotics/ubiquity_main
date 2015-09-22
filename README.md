@@ -524,7 +524,7 @@ following packages:
         sudo apt-get joystick ros-indigo-joy ros-indigo-joystick-drivers
         sudo apt-get ros-indigo-teleop-twist-joy
         sudo apt-get ros-indigo-yocs-velocity-smoother
-	sudo apt-get turtlebot-teleop
+        sudo apt-get turtlebot-teleop
 
 
 Getting a USB Dongle to work with a PS3 sixshock 3 game controller
@@ -566,7 +566,7 @@ Visit:
         ################
         # Install required software:
         sudo apt-get install build-essential fakeroot devscripts equivs
-        sudo apt-get install python-bloom
+        sudo apt-get install python-bloom gdebi-core
         ################
         # Start in the correct directory:
         cd .../catkin_ws/src/YOUR_PACKAGE # YOUR_PACKAGE==name of your package
@@ -587,5 +587,5 @@ Visit:
         fakeroot debian/rules clean
         fakeroot debian/rules binary
         ################
-        # The package should be in `../*.deb`.  It can be installed:
-        dpkg -i ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
+        # The package should be in `../ros-indigo-*.deb`.  It can be installed:
+        gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
