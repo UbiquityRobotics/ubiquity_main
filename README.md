@@ -554,3 +554,31 @@ Visit:
         wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
         sudo apt-get update && sudo apt-get install build-essential ros-indigo-ros-base ros-indigo-common-msgs ros-indigo-tf ros-indigo-tf2 ros-indigo-tf2-ros
         sudo rosdep init && rosdep update
+
+## Building a .deb from scratch
+
+        # Read:
+        #  http://answers.ros.org/question/173804/generate-deb-from-ros-package/
+	# Browse:
+        #  https://wiki.debian.org/BuildingTutorial
+        #  http://answers.ros.org/question/11315/creating-private-deb-packages-for-distribution/
+	# Install required software:
+        sudo apt-get install build-essential fakeroot devscripts equivs
+	sudo apt-get install python-bloom
+        &nbsp;
+	# Start in the correct directory:
+	cd .../catkin_ws/src/YOUR_PACKAGE # YOUR_PACKAGE==name of your package
+        # Make sure that there is no `debian` directory
+        rm -rf debian
+        &nbsp;
+        # Run bloom to generate `debian` directory:
+        bloom-generate rosdebian --os-name ubuntu --os-version trusty --ros-distro indigo
+        # `rosdebian` install into /ros/indigo/...  Replace with `debian` to
+        # install to `/usr`.
+        &nbsp;
+        # Deal with dependencies:
+        sudo mk-build-deps -i -r
+        # Now build the package:
+        fakeroot debian/rules clean
+        fakeroot debian/rules binary
+        # The package should be in `../*.deb`.
