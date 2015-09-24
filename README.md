@@ -2,7 +2,7 @@
 
 This repository constains files used by the Ubiquity team
 that have no other obvious place to be put.  For now,
-this repository contains all othe documentation and shell
+this repository contains all of the documentation and shell
 files used to the Ubiqutiy/Ubuntu/ROS Kernel image.
 
 If you read this documentation and it does not work for
@@ -31,6 +31,21 @@ you, please do the following:
         git add README.md
         git commit -m "Added some questions/comments."
         git push
+
+## Other Files
+
+This document has become a little large and difficult
+to deal with.  So it is slowly being broken into smaller
+and more managable files.  Here is the list of some of them:
+
+* [Download/Install Ubiquity RasPi2 Kernal Image](Downloading_and_Installing_the_Ubiquity_Ubuntu_ROS_Kernel_Image.md):
+  This document explains how to obtains and install the Ubiquity
+  Ubuntu Kernel image onto a micro-SD card for a Raspberrry Pi 2.
+
+* [ROS Under VirtualBox](Installing_ROS_on_Ubuntu_on_VirtualBox.md):
+  This document explains how to install VirtualBox on a
+  a Windows or MacOS based laptop.  It furthe explains how to
+  install Ubunutu and ROS onto the VirtualBox virtual machine.
 
 ## Ubiquity/Ubuntu/ROS Kernel Image
 
