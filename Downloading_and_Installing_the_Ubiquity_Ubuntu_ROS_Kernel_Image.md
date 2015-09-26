@@ -1,29 +1,29 @@
 ### Download and Installing the Ubiquity-Ubuntu-ROS Kernel Image
 
 The Ubuquity/Ubuntu/ROS Kernel Image is a Ubuntu 14.04LTS
-Kernel for the ARM7 hard float architecture.  This image
-has many Ubuntu and ROS packages preinstalled along with
-a ROS catkin workspace.  The primary purpose of this image
+Kernel for the ARM7 hard float architecture.  The process described below
+installs or configures many Ubuntu and ROS packages along with
+a ROS catkin workspace.  The purpose
 is to ensure that all of the Ubiquity robot platforms start
 from a common software base.
 
-This kernel image only works for Ubuntu 14.04LTS
-(i.e. "Trusty").
+This image only works for Ubuntu 14.04LTS
+(i.e. "Trusty").  Furthermore, these instructions are written assuming that your laptop/desktop is running at least Ubuntu 14.04.
 
 
 The most common way of install the image is to download
-the image and copy it onto a micro-SD card.  THe micro-SD
+the image to your laptop/desktop and copy it onto a micro-SD card.  THe micro-SD
 card is plugged into a Raspberry Pi 2 and the Raspberry Pi 2
 is powered up.  Please do the following steps:
 
-1. Get a micro-SD card that is at least 4GB is size.  Frankly,
+1. Get a micro-SD card that is at least 8GB is size.  Frankly,
    we recommend a minimum of 16GB.
 
 2. Get either a USB/micro-SD adapter or regular SD to micro-SD
    card adaptor and plug your micro-SD card into it.
 
 3. On your laptop/desktop, run the following command on your
-   Ubuntu 14.04LTS kernel from the command line:
+   Ubuntu 14.04LTS system from the command line:
 
         sudo blkid
 
@@ -36,8 +36,7 @@ is powered up.  Please do the following steps:
 
    Again, this will print a bunch of stuff out.
 
-5. For the `bmaptool copy` command further below, we are going
-   to need to type in the correct location to copy the
+5. For the `bmaptool copy` command further below, we will need the correct location to copy the
    Ubiquity/Unbuntu/ROS kernel to.  This will have a form
    of `/dev/XXXX`, where `XXXX` depends upon your system.
 
@@ -149,9 +148,8 @@ is powered up.  Please do the following steps:
         cd catkin_ws
         catkin_make
 
-21. Install your one or more of you favorite editor(s):
+21. Install your one or more of your favorite editor(s):
 
-        # This has already been done in the latest kernel image:
         sudo apt-get install -y vim     # For you vi folks
         sudo apt-get install -y emacs   # For you emacs folks
 
@@ -206,7 +204,7 @@ is powered up.  Please do the following steps:
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
         git clone https://github.com/UbiquityRobotics/joystick_input.git
         git clone https://github.com/UbiquityRobotics/fiducials.git
-        # Optional for Wayne's experimental config file stuff right now:
+        # The next line is optional for Wayne's experimental config file stuff:
         git clone http://github.com/UbiquityRobotics/robot-configurations.git
 		# Then make the system by typing the following line, with the parentheses
         (cd ~/catkin_ws ; catkin_make)
