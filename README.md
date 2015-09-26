@@ -604,3 +604,11 @@ Visit:
         ################
         # The package should be in `../ros-indigo-*.deb`.  It can be installed:
         gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
+
+
+The Reprepro system is apparently used to deploy an apt-get repository
+using reprepro:
+
+        https://wiki.debian.org/SettingUpSignedAptRepositoryWithReprepro
+
+        https://www.digitalocean.com/community/tutorials/how-to-use-reprepro-for-a-secure-package-repository-on-ubuntu-14-04
