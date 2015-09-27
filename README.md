@@ -1,10 +1,27 @@
-# ubiquity-misc
+# Ubiquity_Main
 
-This repository constains files used by the Ubiquity team
+This repository serves as a starting place where documents are kept
+along with some of the shell scripts used by the Ubiquity team.
+
+This repository also constains files used by the Ubiquity team
 that have no other obvious place to be put.  For now,
 this repository contains all of the documentation and shell
 files used to the Ubiqutiy/Ubuntu/ROS Kernel image.
 
+## List of Key Documentation In This Repository
+
+The names of the files give a clue to the contents and each file is in itself a README 
+so feel free to browse and inspect these documents to learn more about
+the projects and processes of Ubiquity Robotics 
+
+        Doc_Installing_ROS_on_Ubuntu_on_VirtualBox.md
+        Doc_Downloading_and_Installing_the_Ubiquity_Ubuntu_ROS_Kernel_Image.md
+        Doc_Hardware_Architecture.md 
+        Doc_Network_Architecture.md
+        Doc_Robot_Launch_Repositories.md
+        
+
+## Modifications to This README
 If you read this documentation and it does not work for
 you, please do the following:
 
