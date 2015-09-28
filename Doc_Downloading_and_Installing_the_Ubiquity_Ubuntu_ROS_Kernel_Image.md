@@ -1,20 +1,20 @@
-### Download and Installing the Ubiquity-Ubuntu-ROS Kernel Image
+### Download and Installing the Ubiquity-Ubuntu-ROS System Image
 
-The Ubuquity/Ubuntu/ROS Kernel Image is a Ubuntu 14.04LTS
-Kernel for the ARM7 hard float architecture.  The process described below
-installs or configures many Ubuntu and ROS packages along with
-a ROS catkin workspace.  The purpose
-is to ensure that all of the Ubiquity robot platforms start
+The Ubuquity/Ubuntu/ROS System Image is a Ubuntu 14.04LTS
+System for the ARM7 hard float architecture.  The process
+described below installs or configures many Ubuntu and ROS
+packages along with a ROS catkin workspace.  The purpose is
+to ensure that all of the Ubiquity robot platforms start
 from a common software base.
 
-This image only works for Ubuntu 14.04LTS
-(i.e. "Trusty").  Furthermore, these instructions are written assuming that your laptop/desktop is running at least Ubuntu 14.04.
-
+This image only works for Ubuntu 14.04LTS (i.e. "Trusty").
+Furthermore, these instructions are written assuming that
+your laptop/desktop is running at least Ubuntu 14.04.
 
 The most common way of install the image is to download
-the image to your laptop/desktop and copy it onto a micro-SD card.  THe micro-SD
-card is plugged into a Raspberry Pi 2 and the Raspberry Pi 2
-is powered up.  Please do the following steps:
+the image to your laptop/desktop and copy it onto a micro-SD card.
+The micro-SD card is plugged into a Raspberry Pi 2 and the
+Raspberry Pi 2 is powered up.  Please do the following steps:
 
 1. Get a micro-SD card that is at least 8GB is size.  Frankly,
    we recommend a minimum of 16GB.
@@ -36,9 +36,9 @@ is powered up.  Please do the following steps:
 
    Again, this will print a bunch of stuff out.
 
-5. For the `bmaptool copy` command further below, we will need the correct location to copy the
-   Ubiquity/Unbuntu/ROS kernel to.  This will have a form
-   of `/dev/XXXX`, where `XXXX` depends upon your system.
+5. For the `bmaptool copy` command further below, we will need the
+   correct location to copy the Ubiquity/Unbuntu/ROS system to.
+   This will have a form of `/dev/XXXX`, where `XXXX` depends upon your system.
 
    Now look through the two lists and visually search for the
    new entries from the first and second invocations of `blkid`.
@@ -142,7 +142,7 @@ is powered up.  Please do the following steps:
 
 20. Create a catkin workspace:
 
-        # This should already have been done in the kernel image:
+        # This should already have been done in the system image:
         cd ~
         mkdir -p catkin_ws/src
         cd catkin_ws
@@ -180,13 +180,13 @@ is powered up.  Please do the following steps:
 
 27. Install some additional software:
 
-        # This has already been done in the latest kernel image:
+        # This has already been done in the latest system image:
         sudo apt-get install -y wpasupplicant minicom setserial mgetty wireless-tools
         sudo apt-get install -y --reinstall build-essential git
 
 28. Install some more ROS packages:
 
-        # This has already been done in the latest kernel image:
+        # This has already been done in the latest system image:
         sudo apt-get install -y ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
         sudo apt-get install -y ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
         sudo apt-get install -y ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
@@ -242,4 +242,74 @@ is powered up.  Please do the following steps:
         sudo apt-get install ros-indigo-teleop-twist-joy
         sudo apt-get install ros-indigo-yocs-velocity-smoother
         sudo apt-get install turtlebot-teleop
+
+## Constructing the System Image from Scratch
+
+This Ubiquity/ROS/Ubuntu System image is constructed with
+two scripts:
+
+* `rpi2-build-image.sh` which does most of the building,  and
+
+* `cleanup.sh` does the wrap-up work.
+
+It should be possible to run these scripts on a either
+Ubuntu 14.04LTS system running 64-bit x86 architecture
+or on a Raspberry Pi 2 (hereafter shortened to RasPi2.)
+
+This shell script is run as follows:
+
+        sudo rm -rf /srv
+        cd {directory that contains rpi2-build-image.sh}
+        sudo ./rpi2-build-image.sh
+
+> * When running rpi2-build-image.sh on an intel computer, if I use the
+> script as it stands, Very quickly get a failure in the script at the 
+> beginning .  I get the error
+>
+> "Couldn't download dists/trusty/main/binary-amd64/Packages" that were 
+>   clearly not amd64 packages (i.e. raspberrypi-bootloader, etc.)
+> 
+> I also ran the script pointing to a local mirror.  In that case, 
+> I received an error that those particular files could not be authenticated.  
+> The apt-get in the script at line ~103 used the "-y" parameter without the 
+> "--force-yes" parameter so the script failed.  I ended up editing that line
+> to force the yes and the script ran fine.  I would note that ubuntu 
+> documentation states using "--force-yes" is somewhat dangerous.
+> -- {Kurt} *
+
+As of now, this script fails when it trys to unmount
+`/srv/rpi2/trusty/build/chroot/proc`.  The work around
+is to reboot the machine:
+
+        sudo reboot
+
+Now finish everything off by running the remainder of the
+script that is now sitting in `.../cleanup.sh`.
+
+        sudo cleanup.sh
+
+The result show up in `/srv/rpi2/trusty/` as two files
+with suffixes that end in `.img` and `.bmap`.  There
+are two things that can be done:
+
+* The files can be compressed into a `.zip` file and put
+  on a internet so that other people can download and
+  install the image onto a micro-SD card.  Here is the
+  command that does it:
+
+        zip rpi2_kernel.zip *.img *.bmap
+
+  The resulting `rpi2_kernel.zip` file can be put up on
+  a server.  Please feel free to change `rpi_kernel` to
+  something with a bit more information.
+
+* The files can be copied directly onto a micro-SD card
+  using the bmap-tools listed above:
+
+        sudo apt-get install -y bmap-tools
+        sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
+
+  where XXXX is the appropriate raw device name for the
+  micro-SD card.
+
 

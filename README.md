@@ -14,14 +14,18 @@ The names of the files give a clue to the contents and each file is in itself a 
 so feel free to browse and inspect these documents to learn more about
 the projects and processes of Ubiquity Robotics 
 
-        Doc_Installing_ROS_on_Ubuntu_on_VirtualBox.md
-        Doc_Downloading_and_Installing_the_Ubiquity_Ubuntu_ROS_Kernel_Image.md
-        Doc_Hardware_Architecture.md 
-        Doc_Network_Architecture.md
-        Doc_Robot_Launch_Repositories.md
-        
+* [Doc_Installing_ROS_on_Ubuntu_on_VirtualBox.md](Doc_Installing_ROS_on_Ubuntu_on_VirtualBox.md)
+
+* [Doc_Downloading_and_Installing_the_Ubiquity_Ubuntu_ROS_Kernel_Image.md](Doc_Downloading_and_Installing_the_Ubiquity_Ubuntu_ROS_Kernel_Image.md)
+
+* [Doc_Hardware_Architecture.md](Doc_Hardware_Architecture.md)
+
+* [Doc_Network_Architecture.md](Doc_Network_Architecture.md)
+
+* [Doc_Robot_Launch_Repositories.md](Doc_Robot_Launch_Repositories.md)
 
 ## Modifications to This README
+
 If you read this documentation and it does not work for
 you, please do the following:
 
@@ -49,37 +53,50 @@ you, please do the following:
         git commit -m "Added some questions/comments."
         git push
 
-## Other Files
+## Manually Building a .deb from Scratch
 
-This document has become a little large and difficult
-to deal with.  So it is slowly being broken into smaller
-and more managable files.  Here is the list of some of them:
+The following commands show how to manually build a `.deb` from scratch:
 
-* [Download/Install Ubiquity RasPi2 Kernal Image](Downloading_and_Installing_the_Ubiquity_Ubuntu_ROS_Kernel_Image.md):
-  This document explains how to obtains and install the Ubiquity
-  Ubuntu Kernel image onto a micro-SD card for a Raspberrry Pi 2.
+        ################
+        # Read:
+        #  http://answers.ros.org/question/173804/generate-deb-from-ros-package/
+        # Browse:
+        #  https://wiki.debian.org/BuildingTutorial
+        #  http://answers.ros.org/question/11315/creating-private-deb-packages-for-distribution/
+        ################
+        # Install required software:
+        sudo apt-get install build-essential fakeroot devscripts equivs
+        sudo apt-get install python-bloom gdebi-core
+        ################
+        # Start in the correct directory:
+        cd .../catkin_ws/src/YOUR_PACKAGE # YOUR_PACKAGE==name of your package
+        ################
+        # Make sure that there is no `debian` directory
+        rm -rf debian
+        ################################################################
+        # Run bloom to generate `debian` directory.  The `rosdebian`
+        # argument will install files into /ros/indigo/...  In theory,
+        # replacing `rosdebian` with `debian` will install into `/usr`,
+        # but it does not seem to work that well:
+        bloom-generate rosdebian --os-name ubuntu --os-version trusty --ros-distro indigo
+        ################
+        # Deal with dependencies:
+        sudo mk-build-deps -i -r
+        ################
+        # Now build the package:
+        fakeroot debian/rules clean
+        fakeroot debian/rules binary
+        ################
+        # The package should be in `../ros-indigo-*.deb`.  It can be installed:
+        gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
 
-* [ROS Under VirtualBox](Installing_ROS_on_Ubuntu_on_VirtualBox.md):
-  This document explains how to install VirtualBox on a
-  a Windows or MacOS based laptop.  It furthe explains how to
-  install Ubunutu and ROS onto the VirtualBox virtual machine.
 
-## Ubiquity/Ubuntu/ROS Kernel Image
+The Reprepro system is apparently used to deploy an apt-get repository
+using reprepro:
 
-The Ubuquity/Ubuntu/ROS Kernel Image is a Ubuntu 14.04LTS
-Kernel for the ARM7 hard float architecture.  This image
-has many Ubuntu and ROS packages preinstalled along with
-a ROS catkin workspace.  The primary purpose of this image
-is to ensure that all of the Ubiquity robot platforms start
-from a common software base.
+* [https://wiki.debian.org/SettingUpSignedAptRepositoryWithReprepro](https://wiki.debian.org/SettingUpSignedAptRepositoryWithReprepro)
 
-This kernel image only works for Ubuntu 14.04LTS
-(i.e. "Trusty").
-
-Instructions are in the document "Download and Installing the Ubiquity-Ubuntu-ROS Kernel Image"
-
-
-
+* [https://www.digitalocean.com/community/tutorials/how-to-use-reprepro-for-a-secure-package-repository-on-ubuntu-14-04](https://www.digitalocean.com/community/tutorials/how-to-use-reprepro-for-a-secure-package-repository-on-ubuntu-14-04)
 
 ### Installing USB WiFi dongles:
 
@@ -172,77 +189,6 @@ The following commands build gscam:
         catkin_make
         roslaunch fiduicals_lib gscam.launch
         rosrun image_view image_view image:=/camera/image_raw
-
-## Constructing the Kernel Image from Scratch
-
-This Ubiquity/ROS/Ubuntu Kernel image is constructed with
-two scripts:
-
-* `rpi2-build-image.sh` which does most of the building,  and
-
-* `cleanup.sh` does the wrap-up work.
-
-It should be possible to run these scripts on a either
-Ubuntu 14.04LTS kernel running 64-bit x86 architecture
-or on a Raspberry Pi 2 (hereafter shortened to RasPi2.)
-
-This shell script is run as follows:
-
-        sudo rm -rf /srv
-        cd {directory that contains rpi2-build-image.sh}
-        sudo ./rpi2-build-image.sh
-
-> * When running rpi2-build-image.sh on an intel computer, if I use the
-> script as it stands, Very quickly get a failure in the script at the 
-> beginning .  I get the error
->
-> "Couldn't download dists/trusty/main/binary-amd64/Packages" that were 
->   clearly not amd64 packages (i.e. raspberrypi-bootloader, etc.)
-> 
-> I also ran the script pointing to a local mirror.  In that case, 
-> I received an error that those particular files could not be authenticated.  
-> The apt-get in the script at line ~103 used the "-y" parameter without the 
-> "--force-yes" parameter so the script failed.  I ended up editing that line
-> to force the yes and the script ran fine.  I would note that ubuntu 
-> documentation states using "--force-yes" is somewhat dangerous.
-> -- {Kurt} *
-
-
-As of now, this script fails when it trys to unmount
-`/srv/rpi2/trusty/build/chroot/proc`.  The work around
-is to reboot the machine:
-
-        sudo reboot
-
-Now finish everything off by running the remainder of the
-script that is now sitting in `.../cleanup.sh`.
-
-        sudo cleanup.sh
-
-The result show up in `/srv/rpi2/trusty/` as two files
-with suffixes that end in `.img` and `.bmap`.  There
-are two things that can be done:
-
-* The files can be compressed into a `.zip` file and put
-  on a internet so that other people can download and
-  install the image onto a micro-SD card.  Here is the
-  command that does it:
-
-        zip rpi2_kernel.zip *.img *.bmap
-
-  The resulting `rpi2_kernel.zip` file can be put up on
-  a server.  Please feel free to change `rpi_kernel` to
-  something with a bit more information.
-
-* The files can be copied directly onto a micro-SD card
-  using the bmap-tools listed above:
-
-        sudo apt-get install -y bmap-tools
-        sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
-
-  where XXXX is the appropriate raw device name for the
-  micro-SD card.
-
 
 ## Older Stuff
 
@@ -501,7 +447,7 @@ where a `git add` has been performed:
         sudo apt-get install ros-indigo-tf ros-indigo-tf2-geometry-msgs
 
         # Install gscam
-p        git clone https://github.com/ros-drivers/gscam
+        git clone https://github.com/ros-drivers/gscam
         sudo apt-get install -y ros-indigo-image-common
         sudo apt-get install -y gstreamer0.10-plugins-good
         sudo apt-get install -y libgstreamer0.10-dev
@@ -587,45 +533,3 @@ Visit:
         sudo apt-get update && sudo apt-get install build-essential ros-indigo-ros-base ros-indigo-common-msgs ros-indigo-tf ros-indigo-tf2 ros-indigo-tf2-ros
         sudo rosdep init && rosdep update
 
-## Building a .deb from scratch
-
-        ################
-        # Read:
-        #  http://answers.ros.org/question/173804/generate-deb-from-ros-package/
-        # Browse:
-        #  https://wiki.debian.org/BuildingTutorial
-        #  http://answers.ros.org/question/11315/creating-private-deb-packages-for-distribution/
-        ################
-        # Install required software:
-        sudo apt-get install build-essential fakeroot devscripts equivs
-        sudo apt-get install python-bloom gdebi-core
-        ################
-        # Start in the correct directory:
-        cd .../catkin_ws/src/YOUR_PACKAGE # YOUR_PACKAGE==name of your package
-        ################
-        # Make sure that there is no `debian` directory
-        rm -rf debian
-        ################################################################
-        # Run bloom to generate `debian` directory.  The `rosdebian`
-        # argument will install files into /ros/indigo/...  In theory,
-        # replacing `rosdebian` with `debian` will install into `/usr`,
-        # but it does not seem to work that well:
-        bloom-generate rosdebian --os-name ubuntu --os-version trusty --ros-distro indigo
-        ################
-        # Deal with dependencies:
-        sudo mk-build-deps -i -r
-        ################
-        # Now build the package:
-        fakeroot debian/rules clean
-        fakeroot debian/rules binary
-        ################
-        # The package should be in `../ros-indigo-*.deb`.  It can be installed:
-        gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
-
-
-The Reprepro system is apparently used to deploy an apt-get repository
-using reprepro:
-
-        https://wiki.debian.org/SettingUpSignedAptRepositoryWithReprepro
-
-        https://www.digitalocean.com/community/tutorials/how-to-use-reprepro-for-a-secure-package-repository-on-ubuntu-14-04
