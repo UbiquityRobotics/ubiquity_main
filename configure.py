@@ -5,17 +5,21 @@ import os.path
 import sys
 
 def main():
-    #root = "/tmp"
+
+    # For debugging only:
     root = ""
+    root = "/tmp"
     
-    print("here 1")
+    # Make sure we are root:
+    if os.geteuid() != 0:
+	exit("You should run this command as `sudo configure.py`")
+
     # Make sure that `*root*/etc/network/interfaces` exists:
     interfaces_file_name = "{0}/etc/network/interfaces".format(root)
     if not os.path.isfile(interfaces_file_name):
 	print("The file '{0}' does not exist".format(interfaces_file_name))
 	return 1
    
-    print("here 2") 
     # Make sure `*root*/etc/wpa_supplicant` directory exists:
     supplicant_directory_name = "{0}/etc/wpa_supplicant".format(root)
     if not os.path.exists(supplicant_directory_name):
@@ -27,7 +31,6 @@ def main():
 	    return 1
     assert os.path.exists(supplicant_directory_name)
 
-    print("here 3")
     # Read the hostname:
     hostname_file_name = "{0}/etc/hostname".format(root)
     if not os.path.isfile(hostname_file_name):
@@ -37,9 +40,8 @@ def main():
     old_hostname = hostname_file.read().strip()
     hostname_file.close()
     new_hostname = old_hostname
-    print("hostname='{0}'".format(old_hostname))
+    #print("hostname='{0}'".format(old_hostname))
 
-    print("here 4")
     # Read hosts file:
     hosts_file_name = "{0}/etc/hosts".format(root)
     if not os.path.isfile(hosts_file_name):
@@ -48,12 +50,14 @@ def main():
     hosts_file = open(hosts_file_name, "ra")
     hosts_lines = hosts_file.readlines()
     hosts_file.close()
-    for index in range(len(hosts_lines)):
-	hosts_line = hosts_lines[index].strip()
-	hosts_lines[index] = hosts_line
-	print("'{0}'".format(hosts_line))
 
-    print("here 5")
+    # For debugging only:
+    if False:
+	for index in range(len(hosts_lines)):
+	    hosts_line = hosts_lines[index].strip()
+	    hosts_lines[index] = hosts_line
+	    print("'{0}'".format(hosts_line))
+
     # Read in wpa_supplicant if it exists:
     conf_file_name = \
       "{0}/wpa_supplicant.conf".format(supplicant_directory_name)
@@ -64,7 +68,6 @@ def main():
 	conf_lines = conf_file.readlines()
 	conf_file.close()
 
-	print("7")
 	# Delete blank lines:
         while len(conf_lines) > 0 and len(conf_lines[0].strip()) == 0:
 	    del conf_lines[0]
@@ -77,7 +80,6 @@ def main():
 	    print("control_interface not found in {0}".format(conf_file_name))
 	    return 1
 
-	print("8")
 	# Match `update_config` field:
 	if len(conf_lines) > 0 and conf_lines[0].startswith("update_config=1"):
 	    del conf_lines[0]
@@ -96,13 +98,10 @@ def main():
 		if wifi != None:
 		    wifis.append(wifi)
 
-	print("9")
 	# We have the various network interfaces:
 	stdout = sys.stdout
 	for wifi in wifis:
 	    wifi.write(stdout)
-
-        print("here 10")
 
     # This is the user edit menu tree:
     while True:
@@ -292,7 +291,7 @@ def main():
 		    hosts_lines[index] = host_line
 		    print("new_host_line='{0}'".format(host_line))
 
-	    # Insert any missing bindings to `127.0.0.1`:
+	    # Insert any missing bindings to loopback interface `127.0.0.1`:
 	    if not have_localhost:
 		hosts_lines.insert(insert_index, "127.0.0.1 localhost")
                 insert_index += 1
@@ -313,6 +312,7 @@ def main():
 	    break
 	else:
 	    print("Invalid comand")
+    return 0
 
 def wifi_parse(lines):
     assert isinstance(lines, list)
