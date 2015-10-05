@@ -35,8 +35,13 @@ This repository is broken into some categories:
 
 * `rviz_*`: The `rviz_*` directories are used to launch the
   RViz program configured to view a corresponding robot program.
-  This launch files are typically executed on your laptop/desktop,
+  These launch files are typically executed on your laptop/desktop,
   since most robots do not have a display head.
+
+* `view_*`: The `view_*` directories are used to launch the
+  `rqt_image_view` program configured to view a specific image
+  topic.  These launch files are typically executed on your
+  laptop/desktop, since most robots do not have a display head.
 
 * others: Other directories contain miscellaneous launch files.
 
@@ -78,11 +83,11 @@ The `<arg>` tag has three forms:
 * `<arg name="required" />`: This specifies a launch file input name.
   Think of this as an argument variable for routine.
 
-* `<arg name="optional" default="value" />": This specifies a launch
+* `<arg name="optional" default="value" />`: This specifies a launch
   file input name with a default value that will be used if not
   is specified at "call" time.
 
-* `<arg name="foo" value="bar" />": This form has two different usages.
+* `<arg name="foo" value="bar" />`: This form has two different usages.
   When at the level immediately inside of a `<launch> ... </launch>`
   pair, this form defines a convenience value that can be used to
   improve overall legibility.  Think of this as a kind of a macro
@@ -91,7 +96,7 @@ The `<arg>` tag has three forms:
   into a routine call.
 
 Huh? What is going on here?  Let's do some examples!  Here is
-a chunk of python code that defines a routine:
+a chunk of Python code that defines a routine:
 
         def n_fiducial_slam(robot_base, fiducial_size=".150"):
           short = "a somewhat long string"
@@ -107,15 +112,15 @@ be used to reduce typing.  The corresponding launch file syntax is:
         <launch>
           <!-- Required arguments: -->
           <arg name="robot_base" />
-          &nbsp;
+          
           <!-- Optional arguments: -->
           <arg name="fiducial_size" default=".200" />
-          &nbsp;
+          
           <!-- Convenience arguments: -->
           <arg name="short value="a somewhat long string" />
-          &nbsp;
+          
           ...
-
+          
         </launch>
 
 The `<include> ... </include>` tag pair is how one launch
@@ -127,12 +132,12 @@ routine call.  In python, the following line:
 would be written in launch file syntax as:
 
         ...
-        &nbsp;
+        
         <include file=".../n_fiducial_detect.launch">
           <arg name="robot_base" value="loki" />
           <arg name="fiducial_size" value=".200" />
         </include>
-        &nbsp;
+        
         ...
 
 Now that you know how to set an argument, the only other
@@ -165,7 +170,7 @@ file as:
         <include file="$(find ubiquity_launches)/n_fiducial_detect.launch">
           <arg name="robot_base" value="magni" />
         </include>
-`
+
 Hopefully this explanation of the `<arg>` tag is a little
 more informative that the official ROS documentation.
 
@@ -363,8 +368,9 @@ There is not much to say here.  If you want to tweak things
 to experiment, you can use `git` to get a copy of the files,
 create a branch and modify things to your hearts content.
 If you can make a the case that you configuration works
-better you submit a pull request back to the master git
-repository.
+better that what is currently in the `ubiqutiy_launches`
+git repository, please submit a pull request back to the
+master `ubiquity_launches` git repository.
 
 ## Future Possibilities
 
