@@ -256,6 +256,16 @@ set of cheet-sheet notes.
   This file has mac address to names like `wlan0`, `wlan1` and `eth0`
   and so on. Clean it out to have fresh discovery.
 
+  (Random commnet: The `/etc/udev/rules.d/70-persistent-net.rules` is
+  generated from `/lib/udev/rules.d/75-persistent-net.rules`.  To
+  disble the generation of `70-persistent-net.rules`, the following
+  will do the trick:
+
+        sudo echo "# disable net-generator rules in /lib/udev" > /etc/udev/rules.d/75-persistent-net-generator.rules
+
+  This works because the rule file in `/etc/udev/rules.d` takes
+  precedence over the rule file in `/lib/udev/rules.d`.
+
 * `sudo ifup eth0`:
   Manually enable newly added interface from recent
   `/etc/network/interfaces`.  Can also use `sudo ifdown eth0`.
