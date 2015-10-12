@@ -119,7 +119,10 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
+        # Note the `p2` on the end of `/dev/mmcblk0p2`
         sudo resize2fs /dev/mmcblk0p2
+        # For fun, see how much space is available on `/dev/mmcblk0p2`
+        df -kh
 
 16. Install a swap file:
 
@@ -127,22 +130,22 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
 17. Make sure that you have the linux-firmware (should be already done).
 
+        # Skip this step, `linux-firmware` is already in the system image:
         sudo apt-get install -y linux-firmware
 
 18. Now is a good time to update your system:
 
         sudo apt-get update
-        sudo apt-get upgrade
+        sudo apt-get -y upgrade
 
 19. Make sure the file `/etc/modules-load.d/raspi-camera.conf` exists:
 
-        # This command is no longer needed; it has already been done
-        # with the standard image.
+        # Skip the command immediately below; it has already been done
+        # to the system image.
         sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
 
 20. Create a catkin workspace:
 
-        # This should already have been done in the system image:
         cd ~
         mkdir -p catkin_ws/src
         cd catkin_ws
@@ -150,24 +153,31 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
 21. Install your one or more of your favorite editor(s):
 
+        # Skip this step.  Both editors are installed in system image:
         sudo apt-get install -y vim     # For you vi folks
         sudo apt-get install -y emacs   # For you emacs folks
 
 22. Edit `/etc/hostname` and change the hostname from `ubuntu` to something
-    else like `my_robot`, `funbot`, etc.  (This is step will be replaced
-    with Kurt's configuration stuff.)
+    else like `my_robot`, `funbot`, etc.  (Soon, this step will be
+    replaced by running the `configure.py` program in the `ubiquity_main`
+    repository.  The new hostname will not show up until you reboot.
+    After you reboot, you will log onto `ubuntu@new_host.local`,
+    where `new_host` is the new hostname you picked.
 
-23. Edit `/etc/hosts` and change the line `127.0.1.1 ubuntu` to:
+23. Edit `/etc/hosts` and change the line `127.0.0.1 ubuntu` to:
 
-        # Again, eventually Kurt's configuration code will do this:
-        127.0.1.1  new_hostname new_hostname.local
+        127.0.0.1  new_hostname new_hostname.local
+
+    Again, this will be handled by `configure.py` in the near future.
 
 24. Add the following lines to the end of `~/.bashrc`:
+    Eventually, `configure.py` will do all of this:
 
-        # Again, Kurt's configuration code will eventually do this:
-        source ~/catkin_ws/devel/setup.bash
-        export ROS_HOSTNAME=`cat /etc/hostname`.local
-        export ROS_MASTER_URI=http://`cat /etc/hostname`.local:11311
+        # Support for ROS:
+        if [ -f ~/catkin_ws/devel/setup.bash ] ; then source ~/catkin_ws/devel/setup.bash ; fi
+        if [ -f ~/catkin_ws/src/ubiquity_launches/README.md ] ; then export PATH=$PATH:~/catkin_ws/src/ubiquity_launches/bin ; fi
+        export ROS_HOSTNAME=`hostname`.local
+        export ROS_MASTER_URI=http://`hostname`.local:11311
 
 25. Rerun `~/bash.rc`:
 
@@ -182,6 +192,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
         # This has already been done in the latest system image:
         sudo apt-get install -y wpasupplicant minicom setserial mgetty wireless-tools
+        # Why are we reinstalling the compilers?  This should be unnecessary:
         sudo apt-get install -y --reinstall build-essential git
 
 28. Install some more ROS packages:
@@ -191,6 +202,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get install -y ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
         sudo apt-get install -y ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
 
+        # Is this still necessary?  Will the OSRF mirrors fix this problem?
         cd ~/catkin_ws/src # to pull code that will be compiled
         git clone https://github.com/DLu/navigation_layers.git
         git clone https://github.com/ros/robot_state_publisher.git
@@ -198,18 +210,21 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
         git clone https://github.com/ros/robot_model.git  # required for crash fix for now
 
-29. Install some Ubiquity Robotics packages:
+29. Install some Ubiquity Robotics packages.  Eventually, these will be
+    `apt get install ...` from a ubiquity PPA:
 
         #git clone https://github.com/hbrobotics/ros_arduino_bridge.git
+        cd ~/catkin_ws/src
         git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
         git clone https://github.com/UbiquityRobotics/joystick_input.git
         git clone https://github.com/UbiquityRobotics/fiducials.git
         # The next line is optional for Wayne's experimental config file stuff:
         git clone http://github.com/UbiquityRobotics/robot-configurations.git
-		# Then make the system by typing the following line, with the parentheses
+        # Then make the system by typing the following line, with the parentheses
         (cd ~/catkin_ws ; catkin_make)
 
-30. Set your git user name and E-mail address:
+30. Set your git user name and E-mail address.  (Eventually this will
+    be done from `configure.py`):
 
         # We should modify Kurt's configurations stuff to do this:
         git config --global user.email "your.email@whatever"
@@ -222,7 +237,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
         # We still need to do this automagically:
         sudo vi /etc/rc.local 
-        stty -F /dev/ttyAMA0  115200
+        stty -F /dev/ttyAMA0 115200
 
 32. Remove delays if you want to avoid 2 minute bootup sleeps that
     are not really a RasPi issue.
@@ -231,17 +246,17 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # Now remove the 40 and 59 sec sleeps right after message
         # 'Waiting for network configuration'
 
-33. Pull in xacro for magni_robot tools
+33. Pull in xacro for magni_robot tools:
 
-        sudo apt-get install ros-indigo-xacro
+        sudo apt-get install -y ros-indigo-xacro
 
 
-34. Pull in code to support joystick node rework of 9/2015
+34. Pull in code to support joystick node:
 
-        sudo apt-get install joystick ros-indigo-joy ros-indigo-joystick-drivers
-        sudo apt-get install ros-indigo-teleop-twist-joy
-        sudo apt-get install ros-indigo-yocs-velocity-smoother
-        sudo apt-get install turtlebot-teleop
+        sudo apt-get install -y joystick ros-indigo-joy ros-indigo-joystick-drivers
+        sudo apt-get install -y ros-indigo-teleop-twist-joy
+        sudo apt-get install -y ros-indigo-yocs-velocity-smoother
+        sudo apt-get install -y ros-indigo-turtlebot-teleop
 
 ## Constructing the System Image from Scratch
 
