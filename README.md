@@ -65,8 +65,8 @@ The following commands show how to manually build a `.deb` from scratch:
         #  http://answers.ros.org/question/11315/creating-private-deb-packages-for-distribution/
         ################
         # Install required software:
-        sudo apt-get install build-essential fakeroot devscripts equivs
-        sudo apt-get install python-bloom gdebi-core
+        sudo apt-get install -y build-essential fakeroot devscripts equivs
+        sudo apt-get install -y python-bloom gdebi-core
         ################
         # Start in the correct directory:
         cd .../catkin_ws/src/YOUR_PACKAGE # YOUR_PACKAGE==name of your package
@@ -88,7 +88,7 @@ The following commands show how to manually build a `.deb` from scratch:
         fakeroot debian/rules binary
         ################
         # The package should be in `../ros-indigo-*.deb`.  It can be installed:
-        gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
+        sudo gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
 
 
 The Reprepro system is apparently used to deploy an apt-get repository
