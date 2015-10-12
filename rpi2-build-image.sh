@@ -102,15 +102,13 @@ chroot $R apt-get update
 # Standard packages:
 chroot $R apt-get -y install ubuntu-standard initramfs-tools raspberrypi-bootloader-nokernel language-pack-en
 
-# Add packages to enable "zeroconf" and the secures shell server:
+# Add packages to enable "zeroconf" and the secure shell server:
 chroot $R apt-get -y install libnss-mdns openssh-server
 
 # Install ROS packages:
 chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
 echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
 wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
-#echo "deb http://packages.namniart.com/repos/ros trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
-#wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
 chroot $R apt-get update
 chroot $R apt-get -y --force-yes install ros-indigo-ros-base
 
@@ -134,11 +132,11 @@ EOM
 echo ubuntu >$R/etc/hostname
 cat <<EOM >$R/etc/hosts
 127.0.0.1       localhost
+127.0.0.1       ubuntu
+127.0.0.1       ubuntu.local
 ::1             localhost ip6-localhost ip6-loopback
 ff02::1         ip6-allnodes
 ff02::2         ip6-allrouters
-
-127.0.1.1       ubuntu
 EOM
 
 # Set up default user:
@@ -228,19 +226,24 @@ cat <<EOM >$R/boot/firmware/config.txt
 #arm_freq=800
 
 # Enable camera port
+start_file=start_x.elf
+fixup_file=fixup_x.dat
 start_x=1
 gpu_mem=128
 EOM
+
 ln -sf firmware/config.txt $R/boot/config.txt
 echo 'dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait' > $R/boot/firmware/cmdline.txt
 ln -sf firmware/cmdline.txt $R/boot/cmdline.txt
 
+# Why are we doing this?
 # Load sound module on boot:
 cat <<EOM >$R/lib/modules-load.d/rpi2.conf
 snd_bcm2835
 bcm2708_rng
 EOM
 
+# If we don't load sound, we don' need to do this:
 # Blacklist platform modules not applicable to the RPi2:
 cat <<EOM >$R/etc/modprobe.d/rpi2.conf
 blacklist snd_soc_pcm512x_i2c
@@ -249,13 +252,27 @@ blacklist snd_soc_tas5713
 blacklist snd_soc_wm8804
 EOM
 
-# Do some more ROS installation stuff:
+# Fix up `/etc/init/failsafe.conf` to disable a couple of sleeps:
+sed -i "s/sleep 40/#sleep 40/" $R/etc/init/failsafe.conf
+sed -i "s/sleep 59/#sleep 59/" $R/etc/init/failsafe.conf
+
+# Insert `stty -F /dev/ttyAMA0 115200` at the beginning of `/etc/rc.local`:
+sed -i "1istty -F /dev/ttyAMA0 115200" $R/etc/rc.local 
+
+# Install the 8188 keneral module (* will expand to the corret directory name):
+chroot $R ln -s /lib/modules/*/kernel/drivers/staging/rtl8188eu/rtl8188eu.ko /lib/modules/*/rtl8188eu.ko
+
+# Install some more ROS stuff:
 chroot $R apt-get -y --force-yes install python-rosdep
 chroot $R rosdep init
 # Execute `rosdep update` as user `ubuntu`:
 chroot $R su ubuntu -c "rosdep update"
 # Set up the ros enviroment for user `ubuntu`:
 chroot $R su ubuntu -c "echo source /opt/ros/indigo/setup.bash >> ~/.bashrc"
+chroot $R su ubuntu -c "echo 'if [ -f ~/catkin_ws/devel/setup.bash ] ; then source ~/catkin_ws/devel/setup.bash ; fi' >> ~/.bashrc"
+chroot $R su ubuntu -c "echo 'if [ -f ~/catkin_ws/src/ubiquity_launches/README.md ] ; then export PATH=$PATH:~/catkin_ws/src/ubiquity_launches/bin ; fi' >> ~/.bashrc"
+chroot $R su ubuntu -c "echo 'export ROS_HOSTNAME=`hostname`.local' >> ~/.bashrc"
+chroot $R su ubuntu -c "echo 'export ROS_MASTER_URI=http://`hostname`.local:11311' >> ~/.bashrc"
 chroot $R apt-get -y --force-yes install python-rosinstall
 
 # Create the raspberry pi camera module load script:
@@ -263,28 +280,43 @@ chroot $R mkdir -p /etc/modules-load.d
 echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/etc/modules-load.d/raspi-camera.conf
 
 # Add Ubiquity repository:
-echo "deb http://packages.ubiquityrobotics.com/ v4 main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
-chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B2FA8835
+echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
+# It would be nice if we did a wget to get the B5A652C1...
+chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
 chroot $R apt-get update
 
 # Finish making the Rasperry Pi camera work:
-chroot $R apt-get install -y --force-yes ubiquity-indigo-gscam linux-firmware
+chroot $R apt-get install -y --force-yes linux-firmware
 
 # Remove persistent net rules from UDev:
 chroot $R rm -f /etc/udev/rules.d/70-persistent-net.rules
 
-# Install emacs and vim:
-chroot $R apt-get -y --force-yes install emacs
-chroot $R apt-get -y --force-yes install vim
+# Make sure that `/dev/vchiq` is accessible to user `ubuntu`:
+echo 'SUBSYSTEM=="vchiq",GROUP="video",MODE="0660"' > $R/etc/udev/rules.d/10-vchiq-permissions.rules
+chroot $R usermod -a -G video `whoami`
 
-# Install some useful stuff:
+# Install some more ROS stuff:
 chroot $R apt-get install -y --force-yes wpasupplicant minicom setserial mgetty wireless-tools
 chroot $R apt-get install -y --force-yes ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial
 chroot $R apt-get install -y --force-yes ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
 chroot $R apt-get install -y --force-yes ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
+chroot $R apt-get install -y --force-yes joystick ros-indigo-joy ros-indigo-joystick-drivers
+chroot $R apt-get install -y --force-yes ros-indigo-xacro  ros-indigo-teleop-twist-joy
+chroot $R apt-get install -y --force-yes ros-indigo-yocs-velocity-smoother ros-indigo-turtlebot-teleop
+chroot $R apt-get install -y --force-yes ros-indigo-compressed-image-transport
+chroot $R apt-get install -y --force-yes build-essential fakeroot devscripts equivs
+chroot $R apt-get install -y --force-yes python-bloom gdebi-core
+        
+# Install emacs and vim:
+chroot $R apt-get install -y --force-yes install emacs vim
 
-# Install the 8188 keneral module (* will expand to the corret directory name):
-chroot $R ln -s /lib/modules/*/kernel/drivers/staging/rtl8188eu/rtl8188eu.ko /lib/modules/*/rtl8188eu.ko
+# Build the catkin workspace, grab some repositories and build them:
+chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/DLu/navigation_layers.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_state_publisher.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_model.git)"
+# This line does not work:
+chroot $R su ubuntu -c "(cd ~/catkin_ws ; /opt/ros/indigo/bin/catkin_make)"
 
 # Unmount mounted filesystems (rsyslog must be halted to do this):
 echo "build current fails on umount; reboot and run clean-up.sh to finish build"
