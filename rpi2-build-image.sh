@@ -308,7 +308,7 @@ chroot $R apt-get install -y --force-yes build-essential fakeroot devscripts equ
 chroot $R apt-get install -y --force-yes python-bloom gdebi-core
         
 # Install emacs and vim:
-chroot $R apt-get install -y --force-yes install emacs vim
+chroot $R apt-get install -y --force-yes emacs vim
 
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
