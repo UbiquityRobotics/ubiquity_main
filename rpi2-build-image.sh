@@ -1,5 +1,21 @@
 #!/bin/sh
 
+# TO DO:
+# apt-get bmap_tools and zip [done]
+# apt-get curl [done]
+# Make sure hostname stuff is fixed [done]
+# clone raspicam [done]
+# Add if statements around hardware specifics [done]
+# Clone ubiquity_launches [done]
+# Clone ubiquity_main [done]
+# Clone userland [done]
+# Download and install rpi-update [done]
+# Build userland (do as root first to install) [done]
+# chown -r ubuntu userland [done]
+# build raspicam [done]
+# Run rpi-update [done]
+# Update /etc/network/interfaces to support multiple eth's [done]
+
 ########################################################################
 # rpi2-build-image
 # Copyright (C) 2015 Ryan Finnie <ryan@finnie.org>
@@ -42,6 +58,10 @@ if [ -e "$BUILDDIR" ]; then
   echo "$BUILDDIR exists, not proceeding"
   exit 1
 fi
+
+# Determine if we are running on an ARM architecture
+IS_ARM=false
+if [ "`uname -p | sed s/armv7.*/armv7/`" = "armv7" ] ; then IS_ARM=true ; fi
 
 # Set up environment:
 export TZ=UTC
@@ -170,13 +190,19 @@ cat <<EOM >$R/etc/network/interfaces
 # Include files from /etc/network/interfaces.d:
 source-directory /etc/network/interfaces.d
 
-# The loopback network interface
+# The loopback network interface:
 auto lo
 iface lo inet loopback
 
-# The primary network interface
+# The primary network interface(s):
 allow-hotplug eth0
 iface eth0 inet dhcp
+allow-hotplug eth1
+iface eth1 inet dhcp
+allow-hotplug eth2
+iface eth2 inet dhcp
+allow-hotplug eth3
+iface eth3 inet dhcp
 EOM
 
 # Set up firmware config:
@@ -271,8 +297,8 @@ chroot $R su ubuntu -c "rosdep update"
 chroot $R su ubuntu -c "echo source /opt/ros/indigo/setup.bash >> ~/.bashrc"
 chroot $R su ubuntu -c "echo 'if [ -f ~/catkin_ws/devel/setup.bash ] ; then source ~/catkin_ws/devel/setup.bash ; fi' >> ~/.bashrc"
 chroot $R su ubuntu -c "echo 'if [ -f ~/catkin_ws/src/ubiquity_launches/README.md ] ; then export PATH=$PATH:~/catkin_ws/src/ubiquity_launches/bin ; fi' >> ~/.bashrc"
-chroot $R su ubuntu -c "echo 'export ROS_HOSTNAME=`hostname`.local' >> ~/.bashrc"
-chroot $R su ubuntu -c "echo 'export ROS_MASTER_URI=http://`hostname`.local:11311' >> ~/.bashrc"
+chroot $R su ubuntu -c 'echo 'export ROS_HOSTNAME=`hostname`.local' >> ~/.bashrc'
+chroot $R su ubuntu -c 'echo 'export ROS_MASTER_URI=http://`hostname`.local:11311' >> ~/.bashrc'
 chroot $R apt-get -y --force-yes install python-rosinstall
 
 # Create the raspberry pi camera module load script:
@@ -296,27 +322,66 @@ echo 'SUBSYSTEM=="vchiq",GROUP="video",MODE="0660"' > $R/etc/udev/rules.d/10-vch
 chroot $R usermod -a -G video `whoami`
 
 # Install some more ROS stuff:
-chroot $R apt-get install -y --force-yes wpasupplicant minicom setserial mgetty wireless-tools
-chroot $R apt-get install -y --force-yes ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial
-chroot $R apt-get install -y --force-yes ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
-chroot $R apt-get install -y --force-yes ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
-chroot $R apt-get install -y --force-yes joystick ros-indigo-joy ros-indigo-joystick-drivers
-chroot $R apt-get install -y --force-yes ros-indigo-xacro  ros-indigo-teleop-twist-joy
-chroot $R apt-get install -y --force-yes ros-indigo-yocs-velocity-smoother ros-indigo-turtlebot-teleop
-chroot $R apt-get install -y --force-yes ros-indigo-compressed-image-transport
-chroot $R apt-get install -y --force-yes build-essential fakeroot devscripts equivs
-chroot $R apt-get install -y --force-yes python-bloom gdebi-core
+chroot $R apt-get install -y --force-yes	\
+  bmap-tools					\
+  build-essential				\
+  curl						\
+  devscripts					\
+  equivs					\
+  emacs						\
+  fakeroot					\
+  gdebi-core					\
+  joystick					\
+  mgetty					\
+  minicom					\
+  python-bloom					\
+  python-serial					\
+  ros-indigo-compressed-image-transport		\
+  ros-indigo-joy				\
+  ros-indigo-joystick-drivers			\
+  ros-indigo-joystick-drivers			\
+  ros-indigo-navigation				\
+  ros-indigo-robot-model			\
+  ros-indigo-ros-tutorials			\
+  ros-indigo-serial				\
+  ros-indigo-teleop-twist-joy			\
+  ros-indigo-tf-conversions			\
+  ros-indigo-tf2-geometry-msgs 			\
+  ros-indigo-turtlebot-teleop			\
+  ros-indigo-xacro				\
+  ros-indigo-yocs-velocity-smoother		\
+  setserial					\
+  vim						\
+  wireless-tools				\
+  wpasupplicant					\
+  zip
         
-# Install emacs and vim:
-chroot $R apt-get install -y --force-yes emacs vim
-
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/DLu/navigation_layers.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_state_publisher.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_model.git)"
-# This line does not work:
-chroot $R su ubuntu -c "(cd ~/catkin_ws ; /opt/ros/indigo/bin/catkin_make)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/raspicam_node.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_state_publisher.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_launches.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_main.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/raspberrypi/userland.git)"
+
+# ARM specific stuff:
+if $IS_ARM ; then								\
+  # Compile and install userland as super user:					\
+  chroot $R su root -c "(cd /home/ubuntu/catkin_ws/src/userland; ./buildme)" ;	\
+  # Now change ownership and group to be `ubuntu`:   				\
+  chown -R ubuntu $R/home/ubuntu/catkin_ws/src/userland ;			\
+  chgrp -R ubuntu $R/home/ubuntu/catkin_ws/src/userland ;			\
+  	   	  								\
+  # Now build everything: ;			      				\
+  chroot $R su ubuntu -c "(cd ~/catkin_ws ; /opt/ros/indigo/bin/catkin_make)" ;	\
+  	       	      	      		    				        \
+  # Install rpi-update and update the Raspberry Pi firmware: ;		      	\
+  chroot $R sudo curl -L --output /usr/bin/rpi-update https://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update ; \
+  chroot $R sudo chmod +x /usr/bin/rpi-update ;	      				\
+  chroot $R sudo /usr/bin/rpi-update ;			      			\
+fi
 
 # Unmount mounted filesystems (rsyslog must be halted to do this):
 echo "build current fails on umount; reboot and run clean-up.sh to finish build"
