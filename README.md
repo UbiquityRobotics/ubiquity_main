@@ -89,6 +89,9 @@ The following commands show how to manually build a `.deb` from scratch:
         ################
         # The package should be in `../ros-indigo-*.deb`.  It can be installed:
         sudo gdebi ../ros-indigo-YOUR-PACKAGE # Where YOUR-PACKAGE has '-', not '_'
+	################
+        # To totally remove, purge, and expunge:
+        sudo apt-get purge ../ros-indigo-YOUR-PACKAGE
 
 
 The Reprepro system is apparently used to deploy an apt-get repository

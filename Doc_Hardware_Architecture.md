@@ -8,55 +8,55 @@ architecture are:
 * it must support easy replacement of the main processor boad.
 
 At this point in time, ROS only runs under a Ubuntu release
-of Linux.
-The Indigo release runs will under the 14.04LTS Ubuntu release.
+of Linux.  The Indigo release runs will under the 14.04LTS
+Ubuntu release.
 
 Only two processor architectures that support Ubuntu releases
 are IA32/AMD64 processor archictecture and the ARM7 processor
 architecture. Thus, whatever main compuation board is used, must
 have one of these three processor architectures running on it.
 Realistically, most people are using AMD64 in preference to IA32
-these days, so the architectures are AMD64 and ARM7.
+these days, so the architecture choices are AMD64 and ARM7.
 
-For the AMD64 architecture, the standand de
-
-The standard form factors for main processor boards are laptops
-and SBC's (Single Board Computers.)  The IA32/AMD64
-This can be an x86 laptop, some sort mini/nano/pico/mobile-ITX
-motherboard, or some flavor of ARM SBC, like the Raspberry Pi,
+For the AMD64 architecture, the standand form factors for main
+processor boards are some sort of x86 laptop, some sort
+mini/nano/pico/mobile-ITX motherboard.  For the ARM7 architecture,
+there are plenty of single board computers, like the Raspberry Pi,
 Banana Pro, Beagle Bone Black, etc.
 
-What is clear is that industry churns out a truly amazing
-number of new SBC's every year.
-A consequence of the annual SBC churn is that older SBC
-versions go out of production to make room for the new SBC
-computers.
-Thus, the hardware architecture must gracefully allow the
-SBC's to be replaced every 12 to 36 months.
+What is clear is that industry churns out a truly amazing number
+of new SBC's every year.  A consequence of the annual SBC churn
+is that older SBC versions go out of production to make room for
+the new SBC computers.  Thus, the hardware architecture must
+gracefully allow the SBC's to be replaced every 12 to 36 months.
 
 Given that we are using an SBC, there are really only a limited
 of number of connectors that make sense to connect to:
 
-* Serial port.
+* Serial port:
   Serial ports are still provide in some flavor on most SBC's.
   Some support RS-232 signaling levels and others use simpler
   5/3.3/1.8 voltage signaling.
 
-* Parallel port.  Classic parallel ports are nearly extinct.
-  Most of the xxx
+* Parallel port:  Classic parallel ports are nearly extinct.
 
-  * I2C
+* Ethernet: Ethernet is well defined, but requires a fairly
+  large embedded microcontroller to support an Ethernet software
+  stack.
 
-  * SPI
+* USB: USB is going strong.  USB slaves have lots of support.
 
-* Ethernet
+* I2C: I2C runs at either 100kbps or 400 kbps.  It is an
+  open collector bus with separate clock and data lines.
+  While many SBC's have the ability to talk to the I2C bus,
+  it is not a forgone conclusion that user level programs
+  can access the I2C bus.  Worse than that 
 
-* USB
+* SPI: ..
 
-* CAN
+* CAN ..
 
-* MIPI CSI
-
+* MIPI CSI: ...
 
 > *Mention that Ethernet, USB and Blue Tooth are hardware portals
 > to get into ROS instead of just serial. -Wayne*
@@ -75,7 +75,7 @@ Alt="Ubiquity Hardware/Software Architecture">
 </BlockQuote>
 
 Each light blue rectangle corresponds to a hardware
-assembly.  I the diagram above, the following hardware
+assembly.  In the diagram above, the following hardware
 assemblies exist:
 
 * Raspberry Pi 2: This is were ROS is run.  The ROSCore node
@@ -175,7 +175,7 @@ The requirements of the bus software architecture are:
 
 * Easy addition of new modules.
 
-* Integration with ROS parameters and dynamic configuration.
+* Integration with ROS static parameters and dynamic configuration.
 
 * Bus discovery whereby the bus is scanned to determine which
   modules are on it.
@@ -191,8 +191,6 @@ The requirements of the bus software architecture are:
 * Testing support is generated so it is easy to test modules.
 
 Priorities:
-
-* Get bus_sonar10 working. (Prority: High)
 
 * Write `.xml` regsiter definition files for `bus_sonar10`,
   `bus_bridge_encoders_sonar`, and `bus_loki`. (Priority: High)
