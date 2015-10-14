@@ -139,104 +139,21 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         cd ~/catkin_ws/src/ubiquity_main
         # Update the code (it changes):
         git pull
-        ./configure.py
+        sudo ./configure.py
         # Follow the menu to change the host name an optionally configure
         # the WiFi.
         sudo reboot
         # Note, use the new host name when you log back in.
         ssh ubuntu@new_host_name.local
 
-24. Add the following lines to the end of `~/.bashrc`:
-    Eventually, `configure.py` will do all of this:
-
-        # Support for ROS:
-        if [ -f ~/catkin_ws/devel/setup.bash ] ; then source ~/catkin_ws/devel/setup.bash ; fi
-        if [ -f ~/catkin_ws/src/ubiquity_launches/README.md ] ; then export PATH=$PATH:~/catkin_ws/src/ubiquity_launches/bin ; fi
-        export ROS_HOSTNAME=`hostname`.local
-        export ROS_MASTER_URI=http://`hostname`.local:11311
-
-25. Rerun `~/bash.rc`:
-
-        source ~/.bashrc
-
-26. Using the `env | grep ROS` command verify that `ROS_HOSTNAME` is
-    `XXX.local` where `XXX` is the hostname you put into `/etc/hostname`.
-    Likewise, verify that `ROS_MASTER_URI` is `http://XXX.local:113111`
-    where `XXX` is the same hostname.
-
-27. Install some additional software:
-
-        # This has already been done in the latest system image:
-        sudo apt-get install -y wpasupplicant minicom setserial mgetty wireless-tools
-        # Why are we reinstalling the compilers?  This should be unnecessary:
-        sudo apt-get install -y --reinstall build-essential git
-
-28. Install some more ROS packages:
-
-        # This has already been done in the latest system image:
-        sudo apt-get install -y ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
-        sudo apt-get install -y ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
-        sudo apt-get install -y ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
-
-        # Is this still necessary?  Will the OSRF mirrors fix this problem?
-        cd ~/catkin_ws/src # to pull code that will be compiled
-        git clone https://github.com/DLu/navigation_layers.git
-        git clone https://github.com/ros/robot_state_publisher.git
-        #git clone https://github.com/bosch-ros-pkg/usb_cam.git
-
-        git clone https://github.com/ros/robot_model.git  # required for crash fix for now
-
-29. Install some Ubiquity Robotics packages.  Eventually, these will be
-    `apt get install ...` from a ubiquity PPA:
-
-        #git clone https://github.com/hbrobotics/ros_arduino_bridge.git
-        cd ~/catkin_ws/src
-        git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
-        git clone https://github.com/UbiquityRobotics/joystick_input.git
-        git clone https://github.com/UbiquityRobotics/fiducials.git
-        # The next line is optional for Wayne's experimental config file stuff:
-        git clone http://github.com/UbiquityRobotics/robot-configurations.git
-        # Then make the system by typing the following line, with the parentheses
-        (cd ~/catkin_ws ; catkin_make)
-
-30. Set your git user name and E-mail address.  (Eventually this will
+19. Set your git user name and E-mail address.  (Eventually this will
     be done from `configure.py`):
 
-        # We should modify Kurt's configurations stuff to do this:
+        # We should modify `configure.py` stuff to do this:
         git config --global user.email "your.email@whatever"
         git config --global user.name "First Last"
 
     where you fill in the appropriate fields in the quotes.
-
-31. Setup the baud rate on the serial port by adding the stty line to
-    `rc.local`.  Add the line at the end just before the `exit 0`.
-
-        # We still need to do this automagically:
-        sudo vi /etc/rc.local 
-        stty -F /dev/ttyAMA0 115200
-
-32. Remove delays if you want to avoid 2 minute bootup sleeps that
-    are not really a RasPi issue.
-
-        sudo vi /etc/init/failsafe.conf
-        # Now remove the 40 and 59 sec sleeps right after message
-        # 'Waiting for network configuration'
-
-33. Pull in xacro for magni_robot tools:
-
-        sudo apt-get install -y ros-indigo-xacro
-
-
-34. Pull in code to support joystick node:
-
-        sudo apt-get install -y joystick ros-indigo-joy ros-indigo-joystick-drivers
-        sudo apt-get install -y ros-indigo-teleop-twist-joy
-        sudo apt-get install -y ros-indigo-yocs-velocity-smoother
-        sudo apt-get install -y ros-indigo-turtlebot-teleop
-
-35. Add in bmap-tools and zip:
-
-        sudo apt-get install -y bmap-tools zip
 
 ## Constructing the System Image from Scratch
 

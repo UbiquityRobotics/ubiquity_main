@@ -268,7 +268,7 @@ def main():
 		hosts_line = hosts_lines[index]
 		if hosts_line.startswith("127.0.0.1"):
 		    # We have a loopback address:
-		    print("old_host_line='{0}'".format(hosts_line))
+		    #print("old_host_line='{0}'".format(hosts_line))
 		    old_names = hosts_line.split()[1:]
 		    new_names = []
 		    for old_name in old_names:
@@ -289,7 +289,7 @@ def main():
 			new_names.append(new_name)
 		    host_line = ' '.join(["127.0.0.1"] + new_names)
 		    hosts_lines[index] = host_line
-		    print("new_host_line='{0}'".format(host_line))
+		    #print("new_host_line='{0}'".format(host_line))
 
 	    # Insert any missing bindings to loopback interface `127.0.0.1`:
 	    if not have_localhost:
