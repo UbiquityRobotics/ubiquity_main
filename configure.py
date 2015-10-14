@@ -8,7 +8,7 @@ def main():
 
     # For debugging only:
     root = ""
-    root = "/tmp"
+    #root = "/tmp"
     
     # Make sure we are root:
     if os.geteuid() != 0:

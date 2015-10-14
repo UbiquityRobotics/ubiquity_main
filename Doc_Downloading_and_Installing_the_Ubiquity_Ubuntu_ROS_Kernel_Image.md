@@ -68,8 +68,9 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         cd /tmp      # Or someplace else if you choose...
         #wget http://kchristo.homeip.net/files/rpi2_kernel.zip
         #wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
-        wget http://gramlich.net/2015-07-19-ubuntu-trusty.zip
-        # This takes a while, it is ~570MB.
+        #wget http://gramlich.net/2015-07-19-ubuntu-trusty.zip
+        wget http://gramlich.net/2015-10-14-ubuntu-trusty.zip
+        # This takes a while, it is ~1.2GB.
 
 7. Unpacking the zip file below should result in a *.img and *.bmap file.
 
@@ -128,47 +129,22 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
         sudo apt-get install -y dphys-swapfile
 
-17. Make sure that you have the linux-firmware (should be already done).
-
-        # Skip this step, `linux-firmware` is already in the system image:
-        sudo apt-get install -y linux-firmware
-
-18. Now is a good time to update your system:
+17. Now is a good time to update your system:
 
         sudo apt-get update
         sudo apt-get -y upgrade
 
-19. Make sure the file `/etc/modules-load.d/raspi-camera.conf` exists:
+18. Change the hostname and set up the WiFi:
 
-        # Skip the command immediately below; it has already been done
-        # to the system image.
-        sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
-
-20. Create a catkin workspace:
-
-        cd ~
-        mkdir -p catkin_ws/src
-        cd catkin_ws
-        catkin_make
-
-21. Install your one or more of your favorite editor(s):
-
-        # Skip this step.  Both editors are installed in system image:
-        sudo apt-get install -y vim     # For you vi folks
-        sudo apt-get install -y emacs   # For you emacs folks
-
-22. Edit `/etc/hostname` and change the hostname from `ubuntu` to something
-    else like `my_robot`, `funbot`, etc.  (Soon, this step will be
-    replaced by running the `configure.py` program in the `ubiquity_main`
-    repository.  The new hostname will not show up until you reboot.
-    After you reboot, you will log onto `ubuntu@new_host.local`,
-    where `new_host` is the new hostname you picked.
-
-23. Edit `/etc/hosts` and change the line `127.0.0.1 ubuntu` to:
-
-        127.0.0.1  new_hostname new_hostname.local
-
-    Again, this will be handled by `configure.py` in the near future.
+        cd ~/catkin_ws/src/ubiquity_main
+        # Update the code (it changes):
+        git pull
+        ./configure.py
+        # Follow the menu to change the host name an optionally configure
+        # the WiFi.
+        sudo reboot
+        # Note, use the new host name when you log back in.
+        ssh ubuntu@new_host_name.local
 
 24. Add the following lines to the end of `~/.bashrc`:
     Eventually, `configure.py` will do all of this:
