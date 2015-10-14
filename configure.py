@@ -18,7 +18,7 @@ def main():
 
     # For debugging only:
     root = ""
-    root = "/tmp"
+    #root = "/tmp"
     
     # Make sure we are root:
     if os.geteuid() != 0:
@@ -266,9 +266,8 @@ def main():
 		  "allow-hotplug wlan{0}\n".format(index))
 		interfaces_file.write(
 		  "iface wlan{0} inet manual\n".format(index))
-
-	    interfaces_file.write(
-	      "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
+	        interfaces_file.write(
+	          "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
 
 	    interfaces_file.write(
 	      "# Get internet address via DHCP:\n")
