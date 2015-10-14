@@ -258,7 +258,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get install -y ros-indigo-yocs-velocity-smoother
         sudo apt-get install -y ros-indigo-turtlebot-teleop
 
-35. Add in bmap-tools:
+35. Add in bmap-tools and zip:
 
         sudo apt-get install -y bmap-tools zip
 
