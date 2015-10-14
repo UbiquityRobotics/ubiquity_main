@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+# Copyright (c) 2015 by Wayne C. Gramlich.  All rights reserved.
+
+# This program is used to configure a robot system.
+#
+# Currently, this program permits the following:
+#
+# * Changing the host name.
+#
+# * Configuring WiFi
+
 import os
 import os.path
 import sys
@@ -8,7 +18,7 @@ def main():
 
     # For debugging only:
     root = ""
-    #root = "/tmp"
+    root = "/tmp"
     
     # Make sure we are root:
     if os.geteuid() != 0:
@@ -235,21 +245,33 @@ def main():
 	    interfaces_file.write(
 	      "iface lo inet loopback\n\n")
 
+
+	    eth_count = 6
 	    interfaces_file.write(
-	      "# The primary network interface\n")
+	      "# Wired interface(s). {0} for 70-persistent-rules-net.rules\n".
+	      format(eth_count))
+	    for index in range(eth_count):
+		interfaces_file.write(
+		  "allow-hotplug eth{0}\n".format(index))
+		interfaces_file.write(
+		  "iface eth{0} inet dhcp\n".format(index))
+	    interfaces_file.write("\n")
+
+	    wlan_count = 6
 	    interfaces_file.write(
-	      "allow-hotplug eth0\n")
-	    interfaces_file.write(
-	      "iface eth0 inet dhcp\n\n")
+	      "# WiFi Settings.  {0} for 70-persistent-rules-net.rules\n".
+	      format(wlan_count))
+	    for index in range(wlan_count):
+		interfaces_file.write(
+		  "allow-hotplug wlan{0}\n".format(index))
+		interfaces_file.write(
+		  "iface wlan{0} inet manual\n".format(index))
 
 	    interfaces_file.write(
-	      "# WiFi Settings\n")
+	      "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
+
 	    interfaces_file.write(
-	      "allow-hotplug wlan0\n")
-	    interfaces_file.write(
-	      "iface wlan0 inet manual\n")
-	    interfaces_file.write(
-	      "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n")
+	      "# Get internet address via DHCP:\n")
 	    interfaces_file.write(
 	      "iface default inet dhcp\n\n")
 	    interfaces_file.close()
@@ -263,7 +285,7 @@ def main():
 	    have_localhost = False
 	    have_hostname = False
 	    have_zero_conf = False
-	    inesrt_index = 0
+	    insert_index = 0
 	    for index in range(len(hosts_lines)):
 		hosts_line = hosts_lines[index]
 		if hosts_line.startswith("127.0.0.1"):
