@@ -1,0 +1,28 @@
+
+# Only `source /opt/ros/indigo/setup.bash` if we have not already done so.
+# We assume that this script does not change very often:
+if [ -d "/opt/ros/indigo/bin" ] ; then
+    case ":$PATH:" in
+    *:/opt/ros/indigo/bin:*) ;;
+    *) source /opt/ros/indigo/setup.bash ;;
+    esac
+fi
+
+# Only `source ~/catkin_ws/devel/setup` if it exists:
+if [ -f ~/catkin_ws/devel/setup.sh ] ; then
+    source ~/catkin_ws/devel/setup.bash ;
+fi
+
+# Put `.../ubiquity_launches/bin` in the path if it exists:
+if [ -d ~/catkin_ws/src/ubiquity_launches/bin ] ; then
+    case ":$PATH:" in
+    *:/home/`whoami`/catkin_ws/src/ubiquity_launches/bin:*) ;;
+    *) export PATH=$PATH:/home/`whoami`/catkin_ws/src/ubiquity_launches/bin ;;
+    esac
+fi
+
+# Define some ROS environment variables:
+export ROS_CATKIN_WS=~/catkin_ws
+export ROS_HOSTNAME=`hostname`.local
+export ROS_MASTER_URI=http://`hostname`.local:11311
+

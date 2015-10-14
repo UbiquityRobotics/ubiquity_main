@@ -293,13 +293,9 @@ chroot $R apt-get -y --force-yes install python-rosdep
 chroot $R rosdep init
 # Execute `rosdep update` as user `ubuntu`:
 chroot $R su ubuntu -c "rosdep update"
-# Set up the ros enviroment for user `ubuntu`:
-chroot $R su ubuntu -c "echo source /opt/ros/indigo/setup.bash >> ~/.bashrc"
-chroot $R su ubuntu -c "echo 'if [ -f ~/catkin_ws/devel/setup.bash ] ; then source ~/catkin_ws/devel/setup.bash ; fi' >> ~/.bashrc"
-chroot $R su ubuntu -c "echo 'if [ -f ~/catkin_ws/src/ubiquity_launches/README.md ] ; then export PATH=$PATH:~/catkin_ws/src/ubiquity_launches/bin ; fi' >> ~/.bashrc"
-chroot $R su ubuntu -c 'echo 'export ROS_HOSTNAME=`hostname`.local' >> ~/.bashrc'
-chroot $R su ubuntu -c 'echo 'export ROS_MASTER_URI=http://`hostname`.local:11311' >> ~/.bashrc'
-chroot $R apt-get -y --force-yes install python-rosinstall
+
+# Set up the ROS enviroment for user `ubuntu`:
+cat bashrc_tail >> $R/home/ubuntu/.bashrc
 
 # Create the raspberry pi camera module load script:
 chroot $R mkdir -p /etc/modules-load.d
