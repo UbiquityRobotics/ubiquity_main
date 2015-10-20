@@ -82,8 +82,9 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
    commands (Remember to replace `/dev/XXXX`.):
 
         sudo apt-get install -y bmap-tools
-        # Ralph Hipps says that he had to mount `/dev/sdb1`, to
-        # to get this to work with a USB to micro-SD adaptor:
+        # Ralph Hipps says that he had to unmount USB to micro-SD
+        # cards first.  Do this for `/dev/sdXXXX` devices only:
+        sudo umount /dev/XXXX
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
         sudo sync
 
