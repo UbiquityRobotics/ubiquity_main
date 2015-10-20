@@ -82,6 +82,8 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
    commands (Remember to replace `/dev/XXXX`.):
 
         sudo apt-get install -y bmap-tools
+        # Ralph Hipps says that he had to mount `/dev/sdb1`, to
+        # to get this to work with a USB to micro-SD adaptor:
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
         sudo sync
 
@@ -154,6 +156,13 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         git config --global user.name "First Last"
 
     where you fill in the appropriate fields in the quotes.
+
+20. This is where add packages to install that did not make
+    it into the latest system image.  Please add the following
+    packages:
+
+        sudo apt-get install chrony
+
 
 ## Constructing the System Image from Scratch
 
