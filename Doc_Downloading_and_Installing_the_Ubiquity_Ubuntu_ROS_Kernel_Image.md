@@ -78,7 +78,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
    that was determined in step 5 above.  Run the following
    commands (Remember to replace `/dev/XXXX`.):
 
-	# In the same directory as the previous step:
+        # In the same directory as the previous step:
         sudo apt-get install -y bmap-tools
         # Ralph Hipps says that he had to unmount USB to micro-SD
         # cards first.  Do this for `/dev/sdXXXX` devices only:
