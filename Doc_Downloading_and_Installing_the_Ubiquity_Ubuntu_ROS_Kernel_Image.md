@@ -66,9 +66,6 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 6. Download the image using the following commands:
 
         cd /tmp      # Or someplace else if you choose...
-        #wget http://kchristo.homeip.net/files/rpi2_kernel.zip
-        #wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
-        #wget http://gramlich.net/2015-07-19-ubuntu-trusty.zip
         wget http://gramlich.net/2015-10-14-ubuntu-trusty.zip
         # This takes a while, it is ~1.2GB.
 
@@ -81,6 +78,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
    that was determined in step 5 above.  Run the following
    commands (Remember to replace `/dev/XXXX`.):
 
+	# In the same directory as the previous step:
         sudo apt-get install -y bmap-tools
         # Ralph Hipps says that he had to unmount USB to micro-SD
         # cards first.  Do this for `/dev/sdXXXX` devices only:
@@ -131,9 +129,14 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 16. Install a swap file:
 
         sudo apt-get install -y dphys-swapfile
+        # Now immediately reboot:
+        sudo reboot
 
 17. Now is a good time to update your system:
 
+        # From you deskop/laptop:
+        ssh ubuntu@ubuntu.local
+	# Now update and upgrade:
         sudo apt-get update
         sudo apt-get -y upgrade
 
@@ -163,6 +166,8 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
     packages:
 
         sudo apt-get install chrony
+	sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
+	sudo apt-get install ros-indigo-joy-input
 
 
 ## Constructing the System Image from Scratch
