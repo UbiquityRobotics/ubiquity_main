@@ -137,7 +137,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
-	# Now update and upgrade:
+        # Now update and upgrade:
         sudo apt-get update
         sudo apt-get -y upgrade
 
@@ -167,8 +167,8 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
     packages:
 
         sudo apt-get install chrony
-	sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
-	sudo apt-get install ros-indigo-joy-input
+        sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
+        sudo apt-get install ros-indigo-joy-input
 
 
 ## Constructing the System Image from Scratch
