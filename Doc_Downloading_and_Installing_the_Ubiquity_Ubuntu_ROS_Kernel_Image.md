@@ -1,4 +1,4 @@
-### Download and Installing the Ubiquity-Ubuntu-ROS System Image
+# Download and Installing the Ubiquity-Ubuntu-ROS System Image
 
 The Ubuquity/Ubuntu/ROS System Image is a Ubuntu 14.04LTS
 System for the ARM7 hard float architecture.  The process
