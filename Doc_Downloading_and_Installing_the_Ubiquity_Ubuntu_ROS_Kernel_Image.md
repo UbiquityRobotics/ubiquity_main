@@ -94,13 +94,26 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 10. Connect an RJ45 Ethernet cable between your Raspberry Pi 2 and
     your router.
 
-11. Apply power to the Raspberry Pi 2 via the micro-USB
+11. You need to bring up "zeroconf".  "zeroconf" is system of
+    software tools that will allow you to access the Raspberry Pi 2
+    using the name `ubuntu.local` rather than an internet addess
+    (e.g. 192.168.1.123 .)  On you desktop/laptop do the following:
+
+        # Install the `avahi` Linux "zeroconf" server:
+        sudo apt-get install libnss-mdns
+        # To ensure that it installed correctly (note the use of back quotes
+        # around `hostname`:
+        ping -c 5 `hostname`.local
+        # You should get 5 ping responses.  If not, "zeroconf" is
+        # not working.
+
+12. Apply power to the Raspberry Pi 2 via the micro-USB
     connector on the edge of the the Raspberry Pi 2.
 
-12. Wait about a minute.  The LED's on the Raspberry Pi 2
+13. Wait about a minute.  The LED's on the Raspberry Pi 2
     should stop blinking.
 
-13. Connect to the Raspberry Pi 2 from your laptop desktop:
+14. Connect to the Raspberry Pi 2 from your laptop desktop:
 
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
@@ -108,7 +121,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # You should see a prompt that looks like:
         ubuntu@ubuntu:~$
 
-14. Expand the 2nd partion to the full size of the micro-SD card:
+15. Expand the 2nd partion to the full size of the micro-SD card:
 
         sudo fdisk /dev/mmcblk0
         # Delete 2nd partition with (d,2)
@@ -118,7 +131,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # Now immediately reboot:
         sudo reboot
 
-15. Login again and resize the file system:
+16. Login again and resize the file system:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
@@ -127,13 +140,13 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # For fun, see how much space is available on `/dev/mmcblk0p2`
         df -kh
 
-16. Install a swap file:
+17. Install a swap file:
 
         sudo apt-get install -y dphys-swapfile
         # Now immediately reboot:
         sudo reboot
 
-17. Now is a good time to update your system:
+18. Now is a good time to update your system:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
@@ -141,7 +154,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get update
         sudo apt-get -y upgrade
 
-18. Change the hostname and set up the WiFi:
+19. Change the hostname and set up the WiFi:
 
         cd ~/catkin_ws/src/ubiquity_main
         # Update the code (it changes):
@@ -153,7 +166,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # Note, use the new host name when you log back in.
         ssh ubuntu@new_host_name.local
 
-19. Set your git user name and E-mail address.  (Eventually this will
+20. Set your git user name and E-mail address.  (Eventually this will
     be done from `configure.py`):
 
         # We should modify `configure.py` stuff to do this:
@@ -162,14 +175,13 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
     where you fill in the appropriate fields in the quotes.
 
-20. This is where add packages to install that did not make
+21. This is where add packages to install that did not make
     it into the latest system image.  Please add the following
     packages:
 
         sudo apt-get install chrony
         sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
         sudo apt-get install ros-indigo-joy-input
-
 
 ## Constructing the System Image from Scratch
 
