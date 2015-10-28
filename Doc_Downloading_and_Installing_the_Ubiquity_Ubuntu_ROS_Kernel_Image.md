@@ -1,4 +1,4 @@
-### Download and Installing the Ubiquity-Ubuntu-ROS System Image
+# Download and Installing the Ubiquity-Ubuntu-ROS System Image
 
 The Ubuquity/Ubuntu/ROS System Image is a Ubuntu 14.04LTS
 System for the ARM7 hard float architecture.  The process
@@ -66,10 +66,8 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 6. Download the image using the following commands:
 
         cd /tmp      # Or someplace else if you choose...
-        #wget http://kchristo.homeip.net/files/rpi2_kernel.zip
-        #wget http://gramlich.net/2015-07-12-ubuntu-trusty.zip
-        wget http://gramlich.net/2015-07-19-ubuntu-trusty.zip
-        # This takes a while, it is ~570MB.
+        wget http://gramlich.net/2015-10-14-ubuntu-trusty.zip
+        # This takes a while, it is ~1.2GB.
 
 7. Unpacking the zip file below should result in a *.img and *.bmap file.
 
@@ -80,7 +78,12 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
    that was determined in step 5 above.  Run the following
    commands (Remember to replace `/dev/XXXX`.):
 
+        # In the same directory as the previous step:
         sudo apt-get install -y bmap-tools
+        # Ralph Hipps says that he had to unmount USB to micro-SD
+        # cards first.  Do this for `/dev/sdXXXX` devices only!
+        # Do *NOT* attempt to unmount a `/dev/mmcblk` device:
+        sudo umount /dev/XXXX
         sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
         sudo sync
 
@@ -91,13 +94,26 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 10. Connect an RJ45 Ethernet cable between your Raspberry Pi 2 and
     your router.
 
-11. Apply power to the Raspberry Pi 2 via the micro-USB
+11. You need to bring up "zeroconf".  "zeroconf" is system of
+    software tools that will allow you to access the Raspberry Pi 2
+    using the name `ubuntu.local` rather than an internet addess
+    (e.g. 192.168.1.123 .)  On you desktop/laptop do the following:
+
+        # Install the `avahi` Linux "zeroconf" server:
+        sudo apt-get install libnss-mdns
+        # To ensure that it installed correctly (note the use of back quotes
+        # around `hostname`:
+        ping -c 5 `hostname`.local
+        # You should get 5 ping responses.  If not, "zeroconf" is
+        # not working.
+
+12. Apply power to the Raspberry Pi 2 via the micro-USB
     connector on the edge of the the Raspberry Pi 2.
 
-12. Wait about a minute.  The LED's on the Raspberry Pi 2
+13. Wait about a minute.  The LED's on the Raspberry Pi 2
     should stop blinking.
 
-13. Connect to the Raspberry Pi 2 from your laptop desktop:
+14. Connect to the Raspberry Pi 2 from your laptop desktop:
 
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
@@ -105,7 +121,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # You should see a prompt that looks like:
         ubuntu@ubuntu:~$
 
-14. Expand the 2nd partion to the full size of the micro-SD card:
+15. Expand the 2nd partion to the full size of the micro-SD card:
 
         sudo fdisk /dev/mmcblk0
         # Delete 2nd partition with (d,2)
@@ -115,7 +131,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # Now immediately reboot:
         sudo reboot
 
-15. Login again and resize the file system:
+16. Login again and resize the file system:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
@@ -124,143 +140,48 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # For fun, see how much space is available on `/dev/mmcblk0p2`
         df -kh
 
-16. Install a swap file:
+17. Install a swap file:
 
         sudo apt-get install -y dphys-swapfile
-
-17. Make sure that you have the linux-firmware (should be already done).
-
-        # Skip this step, `linux-firmware` is already in the system image:
-        sudo apt-get install -y linux-firmware
+        # Now immediately reboot:
+        sudo reboot
 
 18. Now is a good time to update your system:
 
+        # From you deskop/laptop:
+        ssh ubuntu@ubuntu.local
+        # Now update and upgrade:
         sudo apt-get update
         sudo apt-get -y upgrade
 
-19. Make sure the file `/etc/modules-load.d/raspi-camera.conf` exists:
+19. Change the hostname and set up the WiFi:
 
-        # Skip the command immediately below; it has already been done
-        # to the system image.
-        sudo sh -c 'echo "bcm2835-v4l2 gst_v4l2src_is_broken=1" > /etc/modules-load.d/raspi-camera.conf'
+        cd ~/catkin_ws/src/ubiquity_main
+        # Update the code (it changes):
+        git pull
+        sudo ./configure.py
+        # Follow the menu to change the host name an optionally configure
+        # the WiFi.
+        sudo reboot
+        # Note, use the new host name when you log back in.
+        ssh ubuntu@new_host_name.local
 
-20. Create a catkin workspace:
-
-        cd ~
-        mkdir -p catkin_ws/src
-        cd catkin_ws
-        catkin_make
-
-21. Install your one or more of your favorite editor(s):
-
-        # Skip this step.  Both editors are installed in system image:
-        sudo apt-get install -y vim     # For you vi folks
-        sudo apt-get install -y emacs   # For you emacs folks
-
-22. Edit `/etc/hostname` and change the hostname from `ubuntu` to something
-    else like `my_robot`, `funbot`, etc.  (Soon, this step will be
-    replaced by running the `configure.py` program in the `ubiquity_main`
-    repository.  The new hostname will not show up until you reboot.
-    After you reboot, you will log onto `ubuntu@new_host.local`,
-    where `new_host` is the new hostname you picked.
-
-23. Edit `/etc/hosts` and change the line `127.0.0.1 ubuntu` to:
-
-        127.0.0.1  new_hostname new_hostname.local
-
-    Again, this will be handled by `configure.py` in the near future.
-
-24. Add the following lines to the end of `~/.bashrc`:
-    Eventually, `configure.py` will do all of this:
-
-        # Support for ROS:
-        if [ -f ~/catkin_ws/devel/setup.bash ] ; then source ~/catkin_ws/devel/setup.bash ; fi
-        if [ -f ~/catkin_ws/src/ubiquity_launches/README.md ] ; then export PATH=$PATH:~/catkin_ws/src/ubiquity_launches/bin ; fi
-        export ROS_HOSTNAME=`hostname`.local
-        export ROS_MASTER_URI=http://`hostname`.local:11311
-
-25. Rerun `~/bash.rc`:
-
-        source ~/.bashrc
-
-26. Using the `env | grep ROS` command verify that `ROS_HOSTNAME` is
-    `XXX.local` where `XXX` is the hostname you put into `/etc/hostname`.
-    Likewise, verify that `ROS_MASTER_URI` is `http://XXX.local:113111`
-    where `XXX` is the same hostname.
-
-27. Install some additional software:
-
-        # This has already been done in the latest system image:
-        sudo apt-get install -y wpasupplicant minicom setserial mgetty wireless-tools
-        # Why are we reinstalling the compilers?  This should be unnecessary:
-        sudo apt-get install -y --reinstall build-essential git
-
-28. Install some more ROS packages:
-
-        # This has already been done in the latest system image:
-        sudo apt-get install -y ros-indigo-ros-tutorials ros-indigo-joystick-drivers python-serial              
-        sudo apt-get install -y ros-indigo-serial ros-indigo-navigation ros-indigo-tf-conversions
-        sudo apt-get install -y ros-indigo-robot-model ros-indigo-tf2-geometry-msgs
-
-        # Is this still necessary?  Will the OSRF mirrors fix this problem?
-        cd ~/catkin_ws/src # to pull code that will be compiled
-        git clone https://github.com/DLu/navigation_layers.git
-        git clone https://github.com/ros/robot_state_publisher.git
-        #git clone https://github.com/bosch-ros-pkg/usb_cam.git
-
-        git clone https://github.com/ros/robot_model.git  # required for crash fix for now
-
-29. Install some Ubiquity Robotics packages.  Eventually, these will be
-    `apt get install ...` from a ubiquity PPA:
-
-        #git clone https://github.com/hbrobotics/ros_arduino_bridge.git
-        cd ~/catkin_ws/src
-        git clone https://github.com/UbiquityRobotics/ros_arduino_bridge.git
-        git clone https://github.com/UbiquityRobotics/joystick_input.git
-        git clone https://github.com/UbiquityRobotics/fiducials.git
-        # The next line is optional for Wayne's experimental config file stuff:
-        git clone http://github.com/UbiquityRobotics/robot-configurations.git
-        # Then make the system by typing the following line, with the parentheses
-        (cd ~/catkin_ws ; catkin_make)
-
-30. Set your git user name and E-mail address.  (Eventually this will
+20. Set your git user name and E-mail address.  (Eventually this will
     be done from `configure.py`):
 
-        # We should modify Kurt's configurations stuff to do this:
+        # We should modify `configure.py` stuff to do this:
         git config --global user.email "your.email@whatever"
         git config --global user.name "First Last"
 
     where you fill in the appropriate fields in the quotes.
 
-31. Setup the baud rate on the serial port by adding the stty line to
-    `rc.local`.  Add the line at the end just before the `exit 0`.
+21. This is where add packages to install that did not make
+    it into the latest system image.  Please add the following
+    packages:
 
-        # We still need to do this automagically:
-        sudo vi /etc/rc.local 
-        stty -F /dev/ttyAMA0 115200
-
-32. Remove delays if you want to avoid 2 minute bootup sleeps that
-    are not really a RasPi issue.
-
-        sudo vi /etc/init/failsafe.conf
-        # Now remove the 40 and 59 sec sleeps right after message
-        # 'Waiting for network configuration'
-
-33. Pull in xacro for magni_robot tools:
-
-        sudo apt-get install -y ros-indigo-xacro
-
-
-34. Pull in code to support joystick node:
-
-        sudo apt-get install -y joystick ros-indigo-joy ros-indigo-joystick-drivers
-        sudo apt-get install -y ros-indigo-teleop-twist-joy
-        sudo apt-get install -y ros-indigo-yocs-velocity-smoother
-        sudo apt-get install -y ros-indigo-turtlebot-teleop
-
-35. Add in bmap-tools:
-
-        sudo apt-get install -y bmap-tools zip
+        sudo apt-get install chrony
+        sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
+        sudo apt-get install ros-indigo-joy-input
 
 ## Constructing the System Image from Scratch
 

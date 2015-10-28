@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+# Copyright (c) 2015 by Wayne C. Gramlich.  All rights reserved.
+
+# This program is used to configure a robot system.
+#
+# Currently, this program permits the following:
+#
+# * Changing the host name.
+#
+# * Configuring WiFi
+
 import os
 import os.path
 import sys
@@ -8,7 +18,7 @@ def main():
 
     # For debugging only:
     root = ""
-    root = "/tmp"
+    #root = "/tmp"
     
     # Make sure we are root:
     if os.geteuid() != 0:
@@ -235,21 +245,40 @@ def main():
 	    interfaces_file.write(
 	      "iface lo inet loopback\n\n")
 
+
+	    eth_count = 6
 	    interfaces_file.write(
-	      "# The primary network interface\n")
+	      "# Wired interface(s). {0} for 70-persistent-rules-net.rules\n".
+	      format(eth_count))
+	    for index in range(eth_count):
+		interfaces_file.write(
+		  "allow-hotplug eth{0}\n".format(index))
+		interfaces_file.write(
+		  "iface eth{0} inet dhcp\n".format(index))
+                # Prioritize interface for gateway selection (the lower the metric,
+                # the higher the priority):
+	        #interfaces_file.write(
+		#    "    metric {0}\n".format(100 + index))
+	    interfaces_file.write("\n")
+
+	    wlan_count = 6
 	    interfaces_file.write(
-	      "allow-hotplug eth0\n")
-	    interfaces_file.write(
-	      "iface eth0 inet dhcp\n\n")
+	      "# WiFi Settings.  {0} for 70-persistent-rules-net.rules\n".
+	      format(wlan_count))
+	    for index in range(wlan_count):
+		interfaces_file.write(
+		  "allow-hotplug wlan{0}\n".format(index))
+		interfaces_file.write(
+		  "iface wlan{0} inet manual\n".format(index))
+                # Prioritize interface for gateway selection (the lower the metric,
+                # the higher the priority):
+	        interfaces_file.write(
+		    "    metric {0}\n".format(200 + index))
+	        interfaces_file.write(
+	          "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
 
 	    interfaces_file.write(
-	      "# WiFi Settings\n")
-	    interfaces_file.write(
-	      "allow-hotplug wlan0\n")
-	    interfaces_file.write(
-	      "iface wlan0 inet manual\n")
-	    interfaces_file.write(
-	      "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n")
+	      "# Get internet address via DHCP:\n")
 	    interfaces_file.write(
 	      "iface default inet dhcp\n\n")
 	    interfaces_file.close()
@@ -263,12 +292,12 @@ def main():
 	    have_localhost = False
 	    have_hostname = False
 	    have_zero_conf = False
-	    inesrt_index = 0
+	    insert_index = 0
 	    for index in range(len(hosts_lines)):
 		hosts_line = hosts_lines[index]
 		if hosts_line.startswith("127.0.0.1"):
 		    # We have a loopback address:
-		    print("old_host_line='{0}'".format(hosts_line))
+		    #print("old_host_line='{0}'".format(hosts_line))
 		    old_names = hosts_line.split()[1:]
 		    new_names = []
 		    for old_name in old_names:
@@ -289,7 +318,7 @@ def main():
 			new_names.append(new_name)
 		    host_line = ' '.join(["127.0.0.1"] + new_names)
 		    hosts_lines[index] = host_line
-		    print("new_host_line='{0}'".format(host_line))
+		    #print("new_host_line='{0}'".format(host_line))
 
 	    # Insert any missing bindings to loopback interface `127.0.0.1`:
 	    if not have_localhost:
