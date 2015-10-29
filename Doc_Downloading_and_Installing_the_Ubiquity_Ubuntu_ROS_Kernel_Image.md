@@ -183,6 +183,12 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
         sudo apt-get install ros-indigo-joy-input
 
+22. Fix .git permissions:
+
+        cd ~/catin_ws/src/ubiquity_main
+        sudo chown ubuntu -R .
+        sudo chgrp ubuntu -R .
+
 ## Constructing the System Image from Scratch
 
 This Ubiquity/ROS/Ubuntu System image is constructed with
