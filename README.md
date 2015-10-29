@@ -343,7 +343,7 @@ following packages:
         sudo apt-get install joystick ros-indigo-joy ros-indigo-joystick-drivers
         sudo apt-get install ros-indigo-teleop-twist-joy
         sudo apt-get install ros-indigo-yocs-velocity-smoother
-        sudo apt-get install turtlebot-teleop
+        sudo apt-get install ros-indigo-turtlebot-teleop
 
 Getting a USB Dongle to work with a PS3 sixshock 3 game controller
 is a bunch of work:
