@@ -277,3 +277,8 @@ For further reading, you might start with:
 
 * [Debugging Udev](https://wiki.ubuntu.com/DebuggingUdev)
 
+### Additional Links
+
+* [notes1](http://natisbad.org/dyn-net/index.html)
+
+* [notes2](https://wiki.archlinux.org/index.php/Wireless_network_configuration)
