@@ -207,11 +207,16 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
 19. Fix .git permissions:
 
-        cd ~/catin_ws/src/ubiquity_main
+        cd ~/catkin_ws/src/ubiquity_main
         sudo chown ubuntu -R .
         sudo chgrp ubuntu -R .
 
+You are done.
+
 ## Constructing the System Image from Scratch
+
+This section is the documentation of how to build the system
+`.img` file.  This is definitely documentation for experts only.
 
 This Ubiquity/ROS/Ubuntu System image is constructed with
 two scripts:
