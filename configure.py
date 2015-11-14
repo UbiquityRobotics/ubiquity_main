@@ -166,11 +166,13 @@ def main():
 		      raw_input("SSID (i.e. access point name): ").strip()
 		    psk = \
 		      raw_input("Access Point Password: ").strip()
+		    priority = \
+		      raw_input("Priority (1=low, 5=average, 9=high): ").strip()
 
 		    # Create new *wifi* and append to *wifis*:
 		    wifi = WiFi(comment=comment, ssid=ssid, psk=psk,
 		      proto="RSN", key_mgmt="WPA-PSK", pairwise="CCMP",
-		      auth_alg="OPEN", priority="5")
+		      auth_alg="OPEN", priority=priority)
 		    wifis.append(wifi)
 		elif 0 < command < add_command:
 		    # Prompt for Wifi command:
@@ -187,7 +189,9 @@ def main():
 			  format(wifi.ssid))
 			print("[3] Edit Wifi Password (currently '{0}')".
 			  format(wifi.psk))
-			print("[4] Delete entire '{0}' access point)".
+			print("[4] Edit Wifi priority (currently '{0}')".
+			  format(wifi.priority))
+			print("[5] Delete entire '{0}' access point)".
 			  format(wifi.ssid))
 			try:
 			    command = int(raw_input("Command: ").strip())
@@ -210,6 +214,9 @@ def main():
 			    # Edit password:
 			    wifi.psk = raw_input("New Password: ").strip()
 			elif command == 4:
+			    # Edit priority:
+			    wifi.priority = raw_input("New priority: ").strip()
+			elif command == 5:
 			    # Delete entire wifi object:
 			    del wifis[wifis_index]
 			    break
@@ -255,10 +262,10 @@ def main():
 		  "allow-hotplug eth{0}\n".format(index))
 		interfaces_file.write(
 		  "iface eth{0} inet dhcp\n".format(index))
-                # Prioritize interface for gateway selection (the lower the metric,
-                # the higher the priority):
-	        #interfaces_file.write(
-		#    "    metric {0}\n".format(100 + index))
+		# Prioritize interface for gateway selection (the lower the metric,
+		# the higher the priority):
+		interfaces_file.write(
+		  "    up ifmetric eth{0} {1}\n".format(index, 100 + index))
 	    interfaces_file.write("\n")
 
 	    wlan_count = 6
@@ -270,12 +277,12 @@ def main():
 		  "allow-hotplug wlan{0}\n".format(index))
 		interfaces_file.write(
 		  "iface wlan{0} inet manual\n".format(index))
-                # Prioritize interface for gateway selection (the lower the metric,
-                # the higher the priority):
+		# Prioritize interface for gateway selection (the lower the metric,
+		# the higher the priority):
 	        interfaces_file.write(
-		    "    metric {0}\n".format(200 + index))
-	        interfaces_file.write(
-	          "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
+		    "    up ifmetric wlan{0} {1}\n".format(index, 200 + index))
+		interfaces_file.write(
+		  "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
 
 	    interfaces_file.write(
 	      "# Get internet address via DHCP:\n")
