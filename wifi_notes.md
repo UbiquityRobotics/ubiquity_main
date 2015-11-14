@@ -180,3 +180,105 @@ but with lsmod I see this line matching my modprobe argument:
         Bus 001 Device 004: ID 0bda:8179 Realtek Semiconductor Corp.
 
 
+### Message From Michael Wimble
+
+(The following message was posted by Micahel Wimble on HBRobotics.)
+
+In writing device drivers on my Pi, such as for the robot motor
+controller or using the LIDAR sensor, I have to deal with Linux's
+way of naming devices, especially USB devices. If you plug in the
+RPLIDAR device, it might be named ttyUSB0 at one time, but if the
+system reboots, or if the device fails, is unplugged or otherwise
+causes a reconnection sequence to occur, it might be named ttyUSB1.
+This makes it difficult to write a driver which can even find the
+name of the device to start with. I don't want some person to have
+to discover the device name and tell the robot. And I'd rather not
+programmatically do the discovery by walking the various kernel
+device tree files. And I don't have to.
+
+It's possible to write a couple of lines in a system configuration
+file that says, essentially, if a USB (or other) device gets plugged
+in, look to see if has a specific vendor ID and device ID (other tests
+are possible). If so, beside doing the usual wonky device naming
+(ttyUSB0), also create a symbolic to that wonky name, but give the
+symbolic name one that is stable. So, when my Roboclaw device gets
+into a bad state, I can force it to restart (not what I'm going to
+talk about here) and regardless of how Linux would normally name it,
+I can always refer to it as "/dev/roboclaw".
+
+If you are trying to deal with a USB device, and already know the
+manufacture's ID and device ID for the device, Here's what you do.
+
+In /etc/udev/rules.d, there can be any number of files. The files
+are processed in lexical order—so "10-FixupRoboClaw.rules" is processed
+before "12-AddMagicalDevices.rules". The files must have a name that
+ends in ".rules". The contents of each file is one or more lines that
+starts with a test which, if found to be true, causes actions at the
+end of the line to be executed. Here is one of my lines I put in the
+file "/etc/udev/rules.d/11-usb.rules".
+
+        ATTR{idVendor}=="03eb", ATTR{idProduct}=="2404", SYMLINK+="roboclaw", MODE="660"
+
+
+Which says that if any device (not just a USB device) is discovered
+to have an attribute called "idVendor" with a value of "03eb", and
+an attribute called "idProduct" with a value of 2404 (these are the
+values for my 2x30A Roboclaw device), then add a soft link (SYMLINK)
+called "roboclaw" to the device directory (/dev) and also change the
+access privileges to "660", which allows my code to be able to access
+the device without requiring root access.
+
+I have another rule in that same file which creates "/dev/lidar" as
+a device name for my LIDAR. The LIDAR sometimes gets assigned as
+"/dev/ttyUSB0", and sometimes as "/dev/ttyUSB1", but "/dev/lidar"
+always names the LIDAR and I can use that name in my program to
+reference the LIDAR and not need human discovery or programmatic
+code to inform the robot of the device name of the LIDAR.
+
+
+Note that ALL of the "rules" files are processed and ALL of the
+actions are performed when the test succeeds. This is not a situation
+where the first rule that matches gets applied and later rules are
+ignored. But the actions are performed as ordered by the file name,
+and lines within the file, as mentioned above.
+
+Your only problem then is to come up with something that can be
+tested to make the rule apply only to the desired device. 
+
+For USB devices, there are several ways to figure this out. The
+easiest is to just unplug the device and then plug it back in,
+then use "sudo dmeg" to look at the last lines of the system log
+which will show something like:
+
+
+        [  281.023743] usb 1-1.5.4: new full-speed USB device number 17 using dwc_otg
+        [  281.147156] usb 1-1.5.4: New USB device found, idVendor=03eb, idProduct=2404
+        [  281.147185] usb 1-1.5.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+        [  281.147203] usb 1-1.5.4: Product: USB Roboclaw 2x30A
+        [  281.186577] cdc_acm 1-1.5.4:1.0: ttyACM0: USB ACM device
+
+which shows me that my Roboclaw has an "idVendor" attribute with
+a value of "03eb", and an "idProduct" attribute with a value of
+"2404". Which is what I used in the example above.
+
+There is a lot more you can do with the "udev" system. And there
+are tools to help you debug things when they don't work, albeit
+weak tools. My tip is you should look at existing rules files to
+see what others have done. Besides the files in "/etc/udev/rules.d",
+there are more rules in "/lib/udev/rules.d". Be VERY careful about
+the spelling of everything, including whether the plural form or
+singular form issued.
+
+For further reading, you might start with:
+
+* [Writing udev rules](http://www.reactivated.net/writing_udev_rules.html)
+
+* [How can I match a ttyUSBX device to a usb serial device](http://unix.stackexchange.com/questions/81754/how-can-i-match-a-ttyusbx-device-to-a-usb-serial-device)
+
+* [Debugging Udev](https://wiki.ubuntu.com/DebuggingUdev)
+
+### Additional Links
+
+* [notes1](http://natisbad.org/dyn-net/index.html)
+
+* [notes2](https://wiki.archlinux.org/index.php/Wireless_network_configuration)

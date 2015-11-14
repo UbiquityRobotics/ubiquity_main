@@ -16,88 +16,105 @@ the image to your laptop/desktop and copy it onto a micro-SD card.
 The micro-SD card is plugged into a Raspberry Pi 2 and the
 Raspberry Pi 2 is powered up.  Please do the following steps:
 
-1. Get a micro-SD card that is at least 8GB is size.  Frankly,
-   we recommend a minimum of 16GB.
+1. Get a micro-SD card that is at least 16GB in size.  In addition,
+   make sure you have either a USB to micro-SD adapter or a memory
+   card micro-SD adapter.  Plug the micro-SD card into the adapter.
+   Do not plug the adapter into the computer.  If you are running
+   Ubuntu under a virtual machine, we strongly recommend that you
+   get the USB to micro-SD adapter.
 
-2. Get either a USB/micro-SD adapter or regular SD to micro-SD
-   card adaptor and plug your micro-SD card into it.
-
-3. On your laptop/desktop, run the following command on your
-   Ubuntu 14.04LTS system from the command line:
-
-        sudo blkid
-
-   This will print a bunch of stuff out.
-
-4. Insert your micro-SD adapter into your desktop and run
-   the same command again:
-
-        sudo blkid
-
-   Again, this will print a bunch of stuff out.
-
-5. For the `bmaptool copy` command further below, we will need the
-   correct location to copy the Ubiquity/Unbuntu/ROS system to.
-   This will have a form of `/dev/XXXX`, where `XXXX` depends upon your system.
-
-   Now look through the two lists and visually search for the
-   new entries from the first and second invocations of `blkid`.
-
-   If see a one or two new lines show up that look like:
-
-        /dev/sdX#: UUID="..." TYPE="..."
-
-   The `X` will be a lower case letter (typically `a` or `b`)
-   and the `#` will be a digit like `0` or `1`.
-   The `/dev/XXXX` for the `bmaptool copy ...` command will be
-   `/dev/sdX` where `X` is the lower case letter.
-
-   Alternatively, if you see one or two lines that look like:
-
-        /dev/mmcblk@p# UUID="..." TYPE="..."
-
-   where both `@` and `#` are digits like `0` or `1`.
-   The `/dev/XXX` for the `bmaptool copy ...` will be `/dev/mmcblk@`
-   (i.e. no `p#`.)
-
-   Write down the /dev/XXXX value we have just determined, we are
-   going to need it later.
-
-6. Download the image using the following commands:
+2. Download the image using the following commands:
 
         cd /tmp      # Or someplace else if you choose...
         wget http://gramlich.net/2015-10-14-ubuntu-trusty.zip
-        # This takes a while, it is ~1.2GB.
-
-7. Unpacking the zip file below should result in a *.img and *.bmap file.
-
+        # This takes a while, it is ~1.2GB in size.
+        # Unpack it as follows:
         unzip *.zip
 
-8. Copy the .img file onto the micro-SD card.  This is the
-   place where you will type in the value for `/dev/XXXX`
-   that was determined in step 5 above.  Run the following
-   commands (Remember to replace `/dev/XXXX`.):
+3. The next steps are kind of arcane Linux stuff.  They actually
+   make sense to a long term Unix/Linux person, but look very
+   strange to somebody who is not a Unix/Linux expert.  In the
+   steps below you will see upper case text enclosed in curly
+   braces (e.g. `{DRIVE_NUMBER}`, `{DRIVE_LETTER}`,
+   `{PARTITION_NUMBER}`, etc.)  This formatting indicates that
+   some letter, digit, etc, will show up insted of the text
+   in the curly braces.
 
-        # In the same directory as the previous step:
+   For a memory card to micro-SD adapter, the device name looks
+   as follows:
+
+        /dev/mmcblk{DRIVE_NUMBER}
+
+   where `{DRIVE_NUMBER}` is a single digit from `0` to `9`.
+
+   For the USB to micro-SD adapter, the device name looks like:
+
+        /dev/sd{DRIVE_LETTER}
+
+   where `{DRIVE_LETTER}` is a single lower case letter from
+   `a` to `z`.
+
+   Run the commands below:
+
+        # Keep your adapter card out of the computer:
+        sudo blkid > /tmp/before
+        # Now plug your adapter card into the computer:
+        sudo blkid > /tmp/after
+        # Now find out what changed:
+        diff /tmp/before /tmp/after
+
+   For the memory card to micro-SD adapter, you should get
+   output that looks like:
+
+        3a4,5
+        > /dev/mmcblk0p1: SEC_TYPE="msdos" UUID="7723-9122" TYPE="vfat" 
+        > /dev/mmcblk0p2: UUID="e73646c3-4134-4793-b4bf-49a8ced6b0cb" TYPE="ext4" 
+   For this example output, your device is `/dev/mmcblk0`.  Do *NOT*
+   not tack a `p0` or `p1` onto your device name.
+
+   For the USB to micro-SD adaptor, you should get some putput
+   that looks like:
+
+        3a4,5
+        > /dev/sdb1: SEC_TYPE="msdos" UUID="7723-9122" TYPE="vfat" 
+        > /dev/sdb2: UUID="e73646c3-4134-4793-b4bf-49a8ced6b0cb" TYPE="ext4 
+
+   For this example output, your device is `/dev/sdb`.  Again, *NOT*
+   tack the `0` or `1` onto the end of the device name.
+
+4. For the USB to micro-SD adapter *ONLY*, unmount both of the
+   partions.  Ignore all error messages:
+
+        sudo umount /dev/sd{DRIVE_LETTER}1
+        # Ignore any error ouput
+        sudo umount /dev/sd{DRIVE_LETTER}2
+        # Ignore any error output
+
+   Where you use exactly the same `{DRIVE_LETTER}` that you determined
+   in the previous step:
+
+5. Copy the `.img` file onto the micro-SD card.
+   Run the following commands (Remember to replace `/dev/XXXX`.):
+
+        # In the same directory as the previous steps (i.e. `/tmp`):
         sudo apt-get install -y bmap-tools
-        # Ralph Hipps says that he had to unmount USB to micro-SD
-        # cards first.  Do this for `/dev/sdXXXX` devices only!
-        # Do *NOT* attempt to unmount a `/dev/mmcblk` device:
-        sudo umount /dev/XXXX
-        sudo bmaptool copy --bmap *.bmap *.img /dev/XXXX
+        sudo bmaptool copy --bmap *.bmap *.img {DEVICE}
         sudo sync
 
-9. Remove the micro-SD card from the adaptor and plug it into
+    where `{DEVICE}` is either `/dev/mmcblk{DRIVE_NUMBER}` or
+    `/dev/sd{DRIVE_LETTER}`.
+
+6. Remove the micro-SD card from the adaptor and plug it into
    Raspberry Pi 2 micor-SD slot.  This slot is on the *back*
    of the Raspberry Pi 2.
 
-10. Connect an RJ45 Ethernet cable between your Raspberry Pi 2 and
+7. Connect an RJ45 Ethernet cable between your Raspberry Pi 2 and
     your router.
 
-11. You need to bring up "zeroconf".  "zeroconf" is system of
-    software tools that will allow you to access the Raspberry Pi 2
-    using the name `ubuntu.local` rather than an internet addess
-    (e.g. 192.168.1.123 .)  On you desktop/laptop do the following:
+8. You need to bring up "zeroconf".  "zeroconf" is system of
+   software tools that will allow you to access the Raspberry Pi 2
+   using the name `ubuntu.local` rather than an internet addess
+   (e.g. 192.168.1.123 .)  On you desktop/laptop do the following:
 
         # Install the `avahi` Linux "zeroconf" server:
         sudo apt-get install libnss-mdns
@@ -107,31 +124,36 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # You should get 5 ping responses.  If not, "zeroconf" is
         # not working.
 
-12. Apply power to the Raspberry Pi 2 via the micro-USB
-    connector on the edge of the the Raspberry Pi 2.
+9. Apply power to the Raspberry Pi 2 via the micro-USB
+   connector on the edge of the the Raspberry Pi 2.
 
-13. Wait about a minute.  The LED's on the Raspberry Pi 2
+10. Wait about a minute.  The LED's on the Raspberry Pi 2
     should stop blinking.
 
-14. Connect to the Raspberry Pi 2 from your laptop desktop:
+11. Connect to the Raspberry Pi 2 from your laptop desktop:
 
+        # Log into your Raspberry Pi under user name `ubuntu`:
         ssh ubuntu@ubuntu.local
         # If you asked a yes/no questions, answer `yes`.
-        # Password is `ubuntu`
+        # Password is `ubuntu` (which is the same as the user name):
         # You should see a prompt that looks like:
         ubuntu@ubuntu:~$
 
-15. Expand the 2nd partion to the full size of the micro-SD card:
+12. Expand the 2nd partion to the full size of the micro-SD card:
 
         sudo fdisk /dev/mmcblk0
-        # Delete 2nd partition with (d,2)
-        # Recreate 2nd partition with (n,p,2,enter,enter)
-        # Write the new 2nd partition out (w)
-        #
+        # Delete 2nd partition by typing:
+        # The letter `d` followed the [Enter] key.
+        # Now type the digit `2` followed by the [Enter] key.
+        # Recreate 2nd partition by typing:
+        # `n`, [Enter], `p`, [Enter], `2`, [Enter], [Enter]
+        # Write the new 2nd partition out by typing:
+        # `w`, [Enter].
+        
         # Now immediately reboot:
         sudo reboot
 
-16. Login again and resize the file system:
+13. Login again and resize the file system:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
@@ -140,13 +162,13 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # For fun, see how much space is available on `/dev/mmcblk0p2`
         df -kh
 
-17. Install a swap file:
+14. Install a swap file:
 
         sudo apt-get install -y dphys-swapfile
         # Now immediately reboot:
         sudo reboot
 
-18. Now is a good time to update your system:
+15. Now is a good time to update your system:
 
         # From you deskop/laptop:
         ssh ubuntu@ubuntu.local
@@ -154,7 +176,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get update
         sudo apt-get -y upgrade
 
-19. Change the hostname and set up the WiFi:
+16. Change the hostname and set up the WiFi:
 
         cd ~/catkin_ws/src/ubiquity_main
         # Update the code (it changes):
@@ -166,7 +188,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # Note, use the new host name when you log back in.
         ssh ubuntu@new_host_name.local
 
-20. Set your git user name and E-mail address.  (Eventually this will
+17. Set your git user name and E-mail address.  (Eventually this will
     be done from `configure.py`):
 
         # We should modify `configure.py` stuff to do this:
@@ -175,7 +197,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 
     where you fill in the appropriate fields in the quotes.
 
-21. This is where add packages to install that did not make
+18. This is where add packages to install that did not make
     it into the latest system image.  Please add the following
     packages:
 
@@ -183,7 +205,18 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
         sudo apt-get install ros-indigo-joy-input
 
+19. Fix .git permissions:
+
+        cd ~/catkin_ws/src/ubiquity_main
+        sudo chown ubuntu -R .
+        sudo chgrp ubuntu -R .
+
+You are done.
+
 ## Constructing the System Image from Scratch
+
+This section is the documentation of how to build the system
+`.img` file.  This is definitely documentation for experts only.
 
 This Ubiquity/ROS/Ubuntu System image is constructed with
 two scripts:
