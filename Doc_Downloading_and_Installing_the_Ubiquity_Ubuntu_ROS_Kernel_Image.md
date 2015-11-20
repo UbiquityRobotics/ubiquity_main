@@ -211,13 +211,13 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo chown ubuntu -R .
         sudo chgrp ubuntu -R .
 
-20. For Magni:
+20. For Magni platform only:
 
         cd ~/catkin_ws/src
-	sudo apt-get install -y ros-indigo-hardware-interface
-	sudo apt-get install -y ros-indigo-controller-manager
-	git clone https://github.com/UbiquityRobotics/ubiquity_motor.git
-	(cd .. ; catkin_make)
+        sudo apt-get install -y ros-indigo-hardware-interface
+        sudo apt-get install -y ros-indigo-controller-manager
+        git clone https://github.com/UbiquityRobotics/ubiquity_motor.git
+        (cd .. ; catkin_make)
 
 You are done.
 
