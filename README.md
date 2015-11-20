@@ -374,3 +374,32 @@ Visit:
         sudo rosdep init && rosdep update
 
 > * WiFi material has been removed and placed in a separate document *
+
+### Tony's notes on bringing up `stormbringer`
+
+The following issues were encountered on bringing up Tony's `stormbringer`:
+
+* hosing /etc/host - adding 12 megs of vacuous stuff
+
+* bus_server was not initially installed
+
+* bus_common was not installed
+
+* bus_loki was not installed
+
+* bus_slave was not installed
+
+* Arduino was not installed
+
+* Arudino-Makefile was not installed
+
+* Apt package gcc-avr was not installed
+
+* Apt package avr-libc was not installed
+
+* sudo apt-get install libjack-dev
+
+* sudo apt-get install joystick ros-indigo-joy ros-indigo-joystick-drivers
+
+
+
