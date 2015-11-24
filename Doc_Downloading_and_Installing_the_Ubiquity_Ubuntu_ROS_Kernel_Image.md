@@ -201,15 +201,23 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
     it into the latest system image.  Please add the following
     packages:
 
-        sudo apt-get install chrony
-        sudo apt-get install ros-indigo-tf2-kdl # ROS Arduino Bridge only
-        sudo apt-get install ros-indigo-joy-input
+        sudo apt-get install -y chrony
+        sudo apt-get install -y ros-indigo-tf2-kdl # ROS Arduino Bridge only
+        sudo apt-get install -y ros-indigo-joy-input
 
 19. Fix .git permissions:
 
         cd ~/catkin_ws/src/ubiquity_main
         sudo chown ubuntu -R .
         sudo chgrp ubuntu -R .
+
+20. For Magni platform only:
+
+        cd ~/catkin_ws/src
+        sudo apt-get install -y ros-indigo-hardware-interface
+        sudo apt-get install -y ros-indigo-controller-manager
+        git clone https://github.com/UbiquityRobotics/ubiquity_motor.git
+        (cd .. ; catkin_make)
 
 You are done.
 
