@@ -282,3 +282,75 @@ For further reading, you might start with:
 * [notes1](http://natisbad.org/dyn-net/index.html)
 
 * [notes2](https://wiki.archlinux.org/index.php/Wireless_network_configuration)
+
+## 5GHz WiFi Dongles
+
+Most USB WiFi Dongles that support 801.11b/g/n only support
+2.4GHz.  If you want a USB WiFi Dongle, you need to look for
+a "dual-band" dongle.  Eventually, the following page was encountered:
+
+    http://blog.danielscrivano.com/installing-rtl8812au-on-linux-for-wireless-dual-band-usb-adapters/
+
+The instructions when followed on an AMD64 architecture work just fine.
+So now the trick is to get them to work on a RasPi2.  Let the **PAIN**
+begin!!!
+
+Guess what, the instructions do not work on the RasPi2.  The
+Linux header files are wrong.
+
+### Setting the Date and Time:
+
+Make will choke unless the date and time is set reasonably.
+
+The first step is to make sure that you have your RasPi2 plugged
+into a network that access the rest of the Internet.
+
+So, we install `ntpdate`:
+
+        sudo apt-get install ntpdate
+
+It is critcal to set the time zone:
+
+        sudo dpkg-reconfigure tzdata
+
+Now restart the ntp server:
+
+        sudo service ntp restart
+
+Now see if you got a new date:
+
+        date
+
+That was pretty tedious...
+
+### Trying to get correct header files
+
+Next reinstall everything as per the following knowledge nugget:
+
+        http://ubuntuforums.org/showthread.php?t=2292112&p=13344716
+
+After all that, we run make and get:
+
+        make ARCH=armv7l CROSS_COMPILE= -C /lib/modules/3.18.0-25-rpi2/build M=/home/ubuntu/git_downloads/rtl8812AU_8821AU_linux  modules
+        make[1]: Entering directory `/usr/src/linux-headers-3.18.0-25-rpi2'
+        Makefile:620: arch/armv7l/Makefile: No such file or directory
+        make[1]: *** No rule to make target `arch/armv7l/Makefile'.  Stop.
+        make[1]: Leaving directory `/usr/src/linux-headers-3.18.0-25-rpi2'
+        make: *** [modules] Error 2
+
+Indeed, our header files do not have the `arch/armv7l/Makefile`.
+It looks like the header files in the debian repositories are a
+tad incomplete.
+
+So off to the Raspberry Pi forums:
+
+        https://www.raspberrypi.org/forums/viewtopic.php?f=71&t=17666
+
+This is as far as I have gotten so far.  There is an interesting
+question of just where did the kernel we are using with Ubuntu
+got its kernel from.
+
+Great fun!!
+
+
+
