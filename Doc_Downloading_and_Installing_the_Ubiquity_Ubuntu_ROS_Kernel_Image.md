@@ -26,7 +26,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
 2. Download the image using the following commands:
 
         cd /tmp      # Or someplace else if you choose...
-        wget http://gramlich.net/2015-10-14-ubuntu-trusty.zip
+        wget http://ubiquityrobotics.com/2015-10-14-ubuntu-trusty.zip
         # This takes a while, it is ~1.2GB in size.
         # Unpack it as follows:
         unzip *.zip
