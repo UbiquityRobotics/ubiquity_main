@@ -289,7 +289,7 @@ Most USB WiFi Dongles that support 801.11b/g/n only support
 2.4GHz.  If you want a USB WiFi Dongle, you need to look for
 a "dual-band" dongle.  Eventually, the following page was encountered:
 
-    http://blog.danielscrivano.com/installing-rtl8812au-on-linux-for-wireless-dual-band-usb-adapters/
+    [Installing RTL8812AU](http://blog.danielscrivano.com/installing-rtl8812au-on-linux-for-wireless-dual-band-usb-adapters/)
 
 The instructions when followed on an AMD64 architecture work just fine.
 So now the trick is to get them to work on a RasPi2.  Let the **PAIN**
@@ -327,7 +327,7 @@ That was pretty tedious...
 
 Next reinstall everything as per the following knowledge nugget:
 
-        http://ubuntuforums.org/showthread.php?t=2292112&p=13344716
+	(Building RTL8812AU Driver)[http://ubuntuforums.org/showthread.php?t=2292112&p=13344716)
 
 After all that, we run make and get:
 
@@ -350,7 +350,14 @@ This is as far as I have gotten so far.  There is an interesting
 question of just where did the kernel we are using with Ubuntu
 got its kernel from.
 
-Great fun!!
+It looks like the kernel comes from:
+
+    (RasPi2 ARM7 Kernel)[https://wiki.ubuntu.com/ARM/RaspberryPi]
+
+(scroll down to "Kernel").  The documentation for building the
+kernel is not present.
+
+
 
 
 
