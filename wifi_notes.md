@@ -287,9 +287,10 @@ For further reading, you might start with:
 
 Most USB WiFi Dongles that support 801.11b/g/n only support
 2.4GHz.  If you want a USB WiFi Dongle, you need to look for
-a "dual-band" dongle.  Eventually, the following page was encountered:
-
-    [Installing RTL8812AU](http://blog.danielscrivano.com/installing-rtl8812au-on-linux-for-wireless-dual-band-usb-adapters/)
+a "dual-band" dongle.  Eventually, a web page for 
+[Installing RTL8812AU](http://blog.danielscrivano.com/installing-rtl8812au-on-li
+nux-for-wireless-dual-band-usb-adapters/)
+was found.
 
 The instructions when followed on an AMD64 architecture work just fine.
 So now the trick is to get them to work on a RasPi2.  Let the **PAIN**
@@ -325,9 +326,9 @@ That was pretty tedious...
 
 ### Trying to get correct header files
 
-Next reinstall everything as per the following knowledge nugget:
-
-	(Building RTL8812AU Driver)[http://ubuntuforums.org/showthread.php?t=2292112&p=13344716)
+Next reinstall everything as per the
+[building RTL8812AU Driver](http://ubuntuforums.org/showthread.php?t=2292112&p=13344716)
+information.
 
 After all that, we run make and get:
 
@@ -342,20 +343,14 @@ Indeed, our header files do not have the `arch/armv7l/Makefile`.
 It looks like the header files in the debian repositories are a
 tad incomplete.
 
-So off to the Raspberry Pi forums:
+So off to the
+[Raspberry Pi forums](https://www.raspberrypi.org/forums/viewtopic.php?f=71&t=17666).
 
-        https://www.raspberrypi.org/forums/viewtopic.php?f=71&t=17666
-
-This is as far as I have gotten so far.  There is an interesting
-question of just where did the kernel we are using with Ubuntu
-got its kernel from.
-
-It looks like the kernel comes from:
-
-    (RasPi2 ARM7 Kernel)[https://wiki.ubuntu.com/ARM/RaspberryPi]
-
-(scroll down to "Kernel").  The documentation for building the
-kernel is not present.
+It looks like the
+[RasPi2 ARM7 Kernel](https://wiki.ubuntu.com/ARM/RaspberryPi)
+(scroll down to  "Kernel") is a weird mixture of 3.18 plus
+some patches.  The documentation for building the kernel is
+not present.
 
 
 
