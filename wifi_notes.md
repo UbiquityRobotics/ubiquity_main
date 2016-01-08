@@ -288,8 +288,7 @@ For further reading, you might start with:
 Most USB WiFi Dongles that support 801.11b/g/n only support
 2.4GHz.  If you want a USB WiFi Dongle, you need to look for
 a "dual-band" dongle.  Eventually, a web page for 
-[Installing RTL8812AU](http://blog.danielscrivano.com/installing-rtl8812au-on-li
-nux-for-wireless-dual-band-usb-adapters/)
+[Installing RTL8812AU](http://blog.danielscrivano.com/installing-rtl8812au-on-linux-for-wireless-dual-band-usb-adapters/)
 was found.
 
 The instructions when followed on an AMD64 architecture work just fine.
@@ -308,7 +307,7 @@ into a network that access the rest of the Internet.
 
 So, we install `ntpdate`:
 
-        sudo apt-get install ntpdate
+        sudo apt-get install ntp ntpdate
 
 It is critcal to set the time zone:
 
@@ -351,6 +350,8 @@ It looks like the
 (scroll down to  "Kernel") is a weird mixture of 3.18 plus
 some patches.  The documentation for building the kernel is
 not present.
+
+
 
 
 
