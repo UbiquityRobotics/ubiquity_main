@@ -264,8 +264,8 @@ def main():
 		  "iface eth{0} inet dhcp\n".format(index))
 		# Prioritize interface for gateway selection (the lower the metric,
 		# the higher the priority):
-		interfaces_file.write(
-		  "    up ifmetric eth{0} {1}\n".format(index, 100 + index))
+		#interfaces_file.write(
+		#  "    up ifmetric eth{0} {1}\n".format(index, 100 + index))
 	    interfaces_file.write("\n")
 
 	    wlan_count = 6
@@ -279,8 +279,8 @@ def main():
 		  "iface wlan{0} inet manual\n".format(index))
 		# Prioritize interface for gateway selection (the lower the metric,
 		# the higher the priority):
-	        interfaces_file.write(
-		    "    up ifmetric wlan{0} {1}\n".format(index, 200 + index))
+                #interfaces_file.write(
+		#    "    up ifmetric wlan{0} {1}\n".format(index, 200 + index))
 		interfaces_file.write(
 		  "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
 
