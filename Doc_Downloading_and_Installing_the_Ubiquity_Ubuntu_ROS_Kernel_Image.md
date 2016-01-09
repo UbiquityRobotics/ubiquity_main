@@ -194,6 +194,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # We should modify `configure.py` stuff to do this:
         git config --global user.email "your.email@whatever"
         git config --global user.name "First Last"
+        git config --global push.default simple
 
     where you fill in the appropriate fields in the quotes.
 
