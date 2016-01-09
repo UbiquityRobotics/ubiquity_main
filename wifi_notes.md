@@ -287,16 +287,13 @@ For further reading, you might start with:
 
 Most USB WiFi Dongles that support 801.11b/g/n only support
 2.4GHz.  If you want a USB WiFi Dongle, you need to look for
-a "dual-band" dongle.  Eventually, the following page was encountered:
+a "dual-band" dongle.  Here are a couple that we found on Amazon:
 
-    http://blog.danielscrivano.com/installing-rtl8812au-on-linux-for-wireless-dual-band-usb-adapters/
+* [Edimax EW-7811UTC](http://www.amazon.com/gp/product/B00FW6T36Y)
+  This is a small dual-band USB Wifi adpater with small interal antenna.
 
-The instructions when followed on an AMD64 architecture work just fine.
-So now the trick is to get them to work on a RasPi2.  Let the **PAIN**
-begin!!!
-
-Guess what, the instructions do not work on the RasPi2.  The
-Linux header files are wrong.
+* [Edimax EW-7811UAC with antenna](http://www.amazon.com/gp/product/B00LGN8I40)
+  This is a larger dual-band USB Wifi adpater with a larger external antenna.
 
 ### Setting the Date and Time:
 
@@ -307,7 +304,7 @@ into a network that access the rest of the Internet.
 
 So, we install `ntpdate`:
 
-        sudo apt-get install ntpdate
+        sudo apt-get install ntp ntpdate
 
 It is critcal to set the time zone:
 
@@ -323,34 +320,47 @@ Now see if you got a new date:
 
 That was pretty tedious...
 
-### Trying to get correct header files
+### Building the driver from source:
 
-Next reinstall everything as per the following knowledge nugget:
+Let's make sure everthing is up-to-date:
 
-        http://ubuntuforums.org/showthread.php?t=2292112&p=13344716
+        sudo apt-get update
+        sudo apt-get upgrade -y
 
-After all that, we run make and get:
+Now make sure you have the correct Linux header files:
 
-        make ARCH=armv7l CROSS_COMPILE= -C /lib/modules/3.18.0-25-rpi2/build M=/home/ubuntu/git_downloads/rtl8812AU_8821AU_linux  modules
-        make[1]: Entering directory `/usr/src/linux-headers-3.18.0-25-rpi2'
-        Makefile:620: arch/armv7l/Makefile: No such file or directory
-        make[1]: *** No rule to make target `arch/armv7l/Makefile'.  Stop.
-        make[1]: Leaving directory `/usr/src/linux-headers-3.18.0-25-rpi2'
-        make: *** [modules] Error 2
+        sudo apt-get install linux-headers-3.18.0-25-rpi2
 
-Indeed, our header files do not have the `arch/armv7l/Makefile`.
-It looks like the header files in the debian repositories are a
-tad incomplete.
+Now download the source from github:
 
-So off to the Raspberry Pi forums:
+        cd ~
+        mkdir drivers
+        cd drivers
+        git clone https://github.com/abperiasamy/rtl8812AU_8821AU_linux.git
+        cd rtl8812AU_8821AU_linux
 
-        https://www.raspberrypi.org/forums/viewtopic.php?f=71&t=17666
+As per the `README.md`, edit the `Makefile` to change the following
+two lines:
 
-This is as far as I have gotten so far.  There is an interesting
-question of just where did the kernel we are using with Ubuntu
-got its kernel from.
+        CONFIG_PLATFORM_I386_PC = n
+        CONFIG_PLATFORM_ARM_RPI = y
 
-Great fun!!
+Now build the code:
 
+        make
 
+Now install the code:
 
+        sudo make install
+        # Ignore the complaint about depmode.
+
+Verify that the module installes:
+
+        sudo modprobe 8812au
+        lsmod | grep 8812
+
+Plug in an appropriate dual band USB WiFi dongle and we are
+good to go.
+
+{Add some discusstion about having 2 SSID's, one for 2.4GHz
+and the other for 5GHz.}
