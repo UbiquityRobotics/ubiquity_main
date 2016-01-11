@@ -385,3 +385,112 @@ There are a number of future possibilities:
   time it is likely that there will be graphical tools to help
   assemble the nodes that make up a robot behavior.  This will
   almost certainly impact this launch repository architecture.
+
+### Debugging Support
+
+The trick with debugging support is to use X11 window server to pop up
+debuggers in concunction with
+[ROS Launch Debug Support](http://wiki.ros.org/roslaunch/Tutorials/Roslaunch%20Nodes%20in%20Valgrind%20or%20GDB).  There are configuration issues to
+be worked out.  In general, `xterm gdb -tui -x1` will fire up `gdb` in
+[Text User Interface](https://sourceware.org/gdb/onlinedocs/gdb/TUI.html)
+mode for C/C++ code.  After look at the
+[Python Debugging Wiki](https://wiki.python.org/moin/PythonDebuggingTools)
+it looks `winpdb` will be adequate for debugging Python code on
+a headless robot.
+
+The trick is to get the silly X11 security stuff out of the way.
+If the laptop/desktop always uses executes:
+
+        ssh -X user@robot.local command arg1, ...
+
+to start ROS on the robot, the remote process will have the `DISPLAY`,
+`SSH_CLIENT`, `SSH_CONNECTION`, and `SSH_TTY` environment variables
+properly set up to allow the robot to pop up X11 windows on the
+laptop/desktop.  There some issues with geting enough the the X11
+client and `xauth` installed:
+
+        sudo apt-get install xorg xauth
+
+It may be necessary to configure `/etc/ssh/ssh_config` to
+enable `ForwaredX11 yes`, `ForwardX11Trused yes`, etc.  Frankly,
+given how mature X11 is, the documentation that explains all of
+this is still quite gnarly.
+
+A couple of additional issues are that we have to suppress password
+prompting from ssh.  This means properly distributing the public/private
+keys between the laptop/desktop and the robot.  This mean creating the
+proper user on each robot.
+
+Also, to further support debugging, we will want to have the robot
+export the `catkin_ws` as a samba mount.  This allows the
+desktop/laptop to mount the filesystem.
+
+## Platform Neutral Launch Files
+
+We want to support a variety of different robotic platforms
+(after all we are *Ubiquity Robotics*.)  For now, the following
+platforms are envisioned:
+
+* Stage: This is a 2-dimensional simulator that can be run without
+  requiring any robot hardware.
+
+* Loki: This is a small and relatively small robot platform with
+  limited payload capability.
+
+* Magni: This is a larger platform with more significant payload
+  capabilities.
+
+We want the launch files to be platform neutral.
+
+What we want is that when we run the a Ubiquity Robotics
+program on your laptop/desktop, the launch files will
+determine which platform (e.g. Stage, Loki, Magni) to use
+and fire all the necessary ROS nodes to bring it up.  In
+addition any appropriate visualization tools (e.g RViz)
+will come up on the laptop/desktop appropriately configured.
+Much of this behavior will be set up by a shell script
+before running `roslaunch`.
+
+The way that the user specifies the robot to run is via
+the `ROS_MASTER_URI` environment variable.  Since Ubiquity
+Robotics extensively uses the `zeroconf` system, the
+format of the `ROS_MASTER_URI` is:
+
+        http://HOSTNAME.local:11311
+
+where `HOSTNAME` is the host name of the processor that is
+(or will be) running roscore.
+
+The difference between a laptop/desktop and a robot is that
+the laptop/desktop has a display head and the robot does not.
+Linux currently uses the X11 window system to manage the display.
+Critical to this is the `DISPLAY` environment variable.  If 
+a shell script finds that the `DISPLAY` environment variable
+is present, we assume that the we a laptop/desktop.  Conversely,
+if `DISPLAY` is not present, it is assumed that the script is
+running on a native robot.
+
+Lastly, the `ROS_HOSTNAME` environment variable, specifies
+the name to use to access the local host.  For Ubiquity
+Robotics, this will have the form:
+
+        HOSTNAME.local
+
+where `HOSTNAME` is the host name for the processor.
+
+Using the `DISPLAY` and `ROS_MASTER_URI` environment variables
+we can figure out the following:
+
+        DISPLAY  ROS_HOSTNAME    ROS_MASTER_URI              LAPTOP  ROBOT
+        ====================================================================
+        empty    robot.local     http://robot.local:13311    none    robot
+        :0       laptop.local    http://laptop.local:13311   laptop  none
+        :0       laptop.local    http://robot.local:13311    laptop  robot
+
+The next step is to determine the what platform the robot is.
+We are going to do this with a probe program.  This program
+will attach to the appropriate serial port and send commands
+down the line to see whether is a Loki or Magni platform.
+If there is no serial port, probe will return "Stage" as the
+platform (for now.)
+

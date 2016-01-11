@@ -364,3 +364,22 @@ good to go.
 
 {Add some discusstion about having 2 SSID's, one for 2.4GHz
 and the other for 5GHz.}
+
+
+### wpa_supplicant without plain text passwords
+
+[See stackoverflow](http://unix.stackexchange.com/questions/40/use-wpa-supplicant-without-plain-text-passwords)
+
+### `nmcli` stuff
+
+The issue with `nmcli` is that there is no way to enter an
+access point SSID/password into the auto connect database
+unless the SSID signal is actually present and an initial
+connection is made.  This issue is a show stopper for us,
+so it still looks like we are going to have to take a pass
+on network manager.
+
+[Why you shouldn't hate and disable NetworkManager anymore](https://www.hogarthuk.com/?q=node/8)
+
+
+
