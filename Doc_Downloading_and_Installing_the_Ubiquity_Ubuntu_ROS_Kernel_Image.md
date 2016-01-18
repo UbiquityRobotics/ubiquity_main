@@ -194,6 +194,7 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         # We should modify `configure.py` stuff to do this:
         git config --global user.email "your.email@whatever"
         git config --global user.name "First Last"
+        git config --global push.default simple
 
     where you fill in the appropriate fields in the quotes.
 
@@ -204,6 +205,10 @@ Raspberry Pi 2 is powered up.  Please do the following steps:
         sudo apt-get install -y chrony
         sudo apt-get install -y ros-indigo-tf2-kdl # ROS Arduino Bridge only
         sudo apt-get install -y ros-indigo-joy-input
+	sudo apt-get install -y ntp ntpdate
+	sudo apt-get dpkg-reconfigure tzdata
+	# Use the menus to select your time zone.
+	sudo service ntp restart
 
 19. Fix .git permissions:
 
