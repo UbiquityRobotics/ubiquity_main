@@ -1,3 +1,9 @@
+---
+layout: post
+title: Raspberry Pi Camera on Ubuntu
+author: Wayne Gramlich
+---
+
 Frankly, it took a small miricle to get the raspicam node to
 work under Ubuntu.  The reason why is described below.
 
