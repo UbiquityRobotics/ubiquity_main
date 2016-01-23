@@ -388,42 +388,161 @@ There are a number of future possibilities:
 
 ### Debugging Support
 
-The trick with debugging support is to use X11 window server to pop up
-debuggers in concunction with
-[ROS Launch Debug Support](http://wiki.ros.org/roslaunch/Tutorials/Roslaunch%20Nodes%20in%20Valgrind%20or%20GDB).  There are configuration issues to
-be worked out.  In general, `xterm gdb -tui -x1` will fire up `gdb` in
-[Text User Interface](https://sourceware.org/gdb/onlinedocs/gdb/TUI.html)
-mode for C/C++ code.  After look at the
-[Python Debugging Wiki](https://wiki.python.org/moin/PythonDebuggingTools)
-it looks `winpdb` will be adequate for debugging Python code on
-a headless robot.
+We want to be able to run Python and C/C++ debuggers locally
+on the robot, but show debugger running in a window the
+laptop/desktop.  This is usally an `xterm` window.
 
-The trick is to get the silly X11 security stuff out of the way.
-If the laptop/desktop always uses executes:
+The trick is to get the silly X11 security stuff out of the way
+so that `xterm` will work.  This is done using `ssh` with the
+`-X` option specified as follows:
 
-        ssh -X user@robot.local command arg1, ...
+        ssh -X user@robot.local command arg1 ... argN
 
-to start ROS on the robot, the remote process will have the `DISPLAY`,
-`SSH_CLIENT`, `SSH_CONNECTION`, and `SSH_TTY` environment variables
-properly set up to allow the robot to pop up X11 windows on the
-laptop/desktop.  There some issues with geting enough the the X11
-client and `xauth` installed:
+which sets some environment variables like:
+
+ * XDG_SESSION_COOKIE
+ * SSH_CLIENT
+ * SSH_TTY
+ * SSH_CONNECTION
+ * DISPLAY
+
+and probably a few more that matter.  Once these variables are
+set, when the `xterm` program is run on the robot, it will pop
+a window up on the desktop/laptop.
+
+In order for the `-X` option to work, we need to ensure that
+the Ubuntu `xorg` and `xauth` packages are installed on the
+laptop/desktop:
 
         sudo apt-get install xorg xauth
+
+In addition, it is necessary to ensure that `/etc/ssh/ssh_config`
+is edited to enable `ForwardX11` and `ForwardX11Trusted`.
+
+        ForwardX11 yes
+        ForwardX11Trusted yes
 
 It may be necessary to configure `/etc/ssh/ssh_config` to
 enable `ForwaredX11 yes`, `ForwardX11Trused yes`, etc.  Frankly,
 given how mature X11 is, the documentation that explains all of
 this is still quite gnarly.
 
-A couple of additional issues are that we have to suppress password
-prompting from ssh.  This means properly distributing the public/private
-keys between the laptop/desktop and the robot.  This mean creating the
-proper user on each robot.
+Once all the X11 stuff works, the documentation for using
+[ROS Launch Debug Support](http://wiki.ros.org/roslaunch/Tutorials/Roslaunch%20Nodes%20in%20Valgrind%20or%20GDB)
+can be visited.
 
-Also, to further support debugging, we will want to have the robot
-export the `catkin_ws` as a samba mount.  This allows the
-desktop/laptop to mount the filesystem.
+Now that we have X11 set up, we need to get `xterm` installed
+on the robot:
+
+        sudo apt-get install xterm
+
+Once `xterm` is installed, it can be run as follows:
+
+        xterm -e program_name argument1 ... argumentN
+
+This will run *program* with *argument1* through *argumentN* passed
+in and ther result will pop up on the laptop.
+
+For example, to run the python `pudb` debugger:
+
+        xterm -e python -m pudb.run my_python.py
+
+Similarly, to run gdb with the TUI (Text User Interface):
+
+        xterm -e gdb -tui my_program
+
+You can also specify font size on the `xterm` command line.
+First run:
+
+        xlsfonts
+
+to list the fonts.  Now, you can set the font size as:
+
+        xterm -fn 9x15bold ...
+
+to set the font to `9x15bold`.
+
+Here are some `gdb` and `pudb` links:
+
+* [gdb Text User Interface](https://sourceware.org/gdb/onlinedocs/gdb/TUI.html)
+
+* [Python Debugging Wiki](https://wiki.python.org/moin/PythonDebuggingTools)
+
+* [Intro to pdb](http://heather.cs.ucdavis.edu/~matloff/pudb.html)
+
+* [happy pudb user](https://asmeurersympy.wordpress.com/2010/06/04/pudb-a-better-python-debugger/)
+
+* [more happy](https://asmeurersympy.wordpress.com/2011/08/08/hacking-pudb-now-an-even-better-python-debugger/)
+
+* [Old screencast](https://vimeo.com/5255125)
+
+An article on
+[Passwordless SSH Login](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
+was useful.  The steps below get the job:
+
+        ssh-keygen -t rsa
+        # Type [Enter] for all prompts:
+        ssh ubuntu@robot.local mkdir -p .ssh
+        # Type in "yes" and "password" as possible:
+        cat ~/.ssh/id_rsa.pub | ssh ubuntu@robot.local 'cat >> .ssh/authorized_keys'
+        ssh ubuntu@robot.local "chmod 700 .ssh; chmod 640 .ssh/authorizied_keys"
+        ssh ubuntu@robot.local
+        # No password is needed now.
+
+### File System Sharing
+
+For a variety of reasons, it would be nice to allow the developer
+to directly access the catkin workspace on the robot from the
+laptop/desktop.
+
+The original plan was to simply mount the robot catkin workspace
+on the laptop using a network file sharing protocol like NFS, Samba,
+sshfs, etc.  The plan was to mount the robot catkin workspace
+directly onto the catkin workspace on the laptop.  The problem
+with this idea is that the laptop/desktop will almost certainly
+be running some form x86 processor architecture, whereas the robot
+will probably be running some sort of ARM processor architecture.
+Total chaos will result if `catkin_make` is run on the same workspace
+with different processor architectures.  We need something a little
+more robust.
+
+The next proposal is to have each laptop/desktop and each robot
+have a directory called `~/willow` directory.
+For each desktop/laptop and for each robot, we could have
+a directory under `~/willow`.  Something like:
+
+        ~/willow/laptop1/catkin_ws
+        ...
+        ~/willow/loptopN/catkin_ws
+        ~/willow/robot1/catkin_ws
+        ...
+        ~/willow/robotM/catkin_ws
+
+Where `laptopI` is the host name for the I'th laptop
+and `robotI` is the host name for the I'th robot.
+
+We should put a wrapper around catkin_make to ensure that
+we are running the correct processor architecture for a
+given catkin workspace.
+
+Of the various network file system protocols out there,
+the `sshfs` seems to be the one to use.  To set up `sshf`,
+do the following:
+
+        sudo apt-get install sshfs
+        sudo gpasswd -a $USER fuse
+
+To mount xxx:
+
+        sshfs ubuntu@robotI.local:/home/ubuntu/willow/robotI/catkin_ws /home/`whoami`/willow/robotI/catkin_ws
+
+To unmount:
+
+        fusermount -u /home/ubuntu/willow/robotI/catkin_ws
+
+There is more documentation on
+[installing SSHFS](https://help.ubuntu.com/community/SSHFS)
+available.
 
 ## Platform Neutral Launch Files
 
