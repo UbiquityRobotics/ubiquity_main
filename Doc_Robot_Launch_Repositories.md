@@ -389,32 +389,20 @@ There are a number of future possibilities:
 ### Debugging Support
 
 We want to be able to run Python and C/C++ debuggers locally
-on the robot, but show debugger running in a window the
-laptop/desktop.  This is usally an `xterm` window.
+on the robot, but ashow debugger running in a window the
+laptop/desktop.  This is done using an `xterm` window which
+via the X11 protocol forwarding via an SSH connection.
+The article
+[How X Over SSH really works](http://dustwell.com/how-x-over-ssh-really-works.html)
+helps to explain what is going on.  The bottom line is that
+we need the following:
 
-The trick is to get the silly X11 security stuff out of the way
-so that `xterm` will work.  This is done using `ssh` with the
-`-X` option specified as follows:
+* One `ssh -X` connection between the remote machine to the
+  robot to cause the secure shell daemon (i.e. `sshd`) to turn on.
 
-        ssh -X user@robot.local command arg1 ... argN
-
-which sets some environment variables like:
-
- * XDG_SESSION_COOKIE
- * SSH_CLIENT
- * SSH_TTY
- * SSH_CONNECTION
- * DISPLAY
-
-and probably a few more that matter.  Once these variables are
-set, when the `xterm` program is run on the robot, it will pop
-a window up on the desktop/laptop.
-
-In order for the `-X` option to work, we need to ensure that
-the Ubuntu `xorg` and `xauth` packages are installed on the
-laptop/desktop:
-
-        sudo apt-get install xorg xauth
+* We need to set the `DISPLAY` environment variable to the
+  value created by previous connection.  It will be of the
+  form `localhost:NN.0', where NN is 10 or higher.
 
 In addition, it is necessary to ensure that `/etc/ssh/ssh_config`
 is edited to enable `ForwardX11` and `ForwardX11Trusted`.
@@ -422,10 +410,8 @@ is edited to enable `ForwardX11` and `ForwardX11Trusted`.
         ForwardX11 yes
         ForwardX11Trusted yes
 
-It may be necessary to configure `/etc/ssh/ssh_config` to
-enable `ForwaredX11 yes`, `ForwardX11Trused yes`, etc.  Frankly,
-given how mature X11 is, the documentation that explains all of
-this is still quite gnarly.
+Frankly, given how mature X11 is, the documentation that
+explains all of this is still quite gnarly.
 
 Once all the X11 stuff works, the documentation for using
 [ROS Launch Debug Support](http://wiki.ros.org/roslaunch/Tutorials/Roslaunch%20Nodes%20in%20Valgrind%20or%20GDB)
@@ -493,58 +479,114 @@ was useful.  The steps below get the job:
 
 For a variety of reasons, it would be nice to allow the developer
 to directly access the catkin workspace on the robot from the
-laptop/desktop.
+laptop/desktop.  
 
-The original plan was to simply mount the robot catkin workspace
-on the laptop using a network file sharing protocol like NFS, Samba,
-sshfs, etc.  The plan was to mount the robot catkin workspace
-directly onto the catkin workspace on the laptop.  The problem
-with this idea is that the laptop/desktop will almost certainly
-be running some form x86 processor architecture, whereas the robot
-will probably be running some sort of ARM processor architecture.
-Total chaos will result if `catkin_make` is run on the same workspace
-with different processor architectures.  We need something a little
-more robust.
-
-The next proposal is to have each laptop/desktop and each robot
-have a directory called `~/willow` directory.
-For each desktop/laptop and for each robot, we could have
-a directory under `~/willow`.  Something like:
-
-        ~/willow/laptop1/catkin_ws
-        ...
-        ~/willow/loptopN/catkin_ws
-        ~/willow/robot1/catkin_ws
-        ...
-        ~/willow/robotM/catkin_ws
-
-Where `laptopI` is the host name for the I'th laptop
-and `robotI` is the host name for the I'th robot.
-
-We should put a wrapper around catkin_make to ensure that
-we are running the correct processor architecture for a
-given catkin workspace.
-
-Of the various network file system protocols out there,
-the `sshfs` seems to be the one to use.  To set up `sshf`,
+Of the various network file system protocols out there, the
+`sshfs` seems to be the easiest one to use.  To set up `sshf`,
 do the following:
 
         sudo apt-get install sshfs
         sudo gpasswd -a $USER fuse
 
-To mount xxx:
+To mount the robot `~/catkin_ws/src` on top of the local `~/catkin_ws/src`:
 
-        sshfs ubuntu@robotI.local:/home/ubuntu/willow/robotI/catkin_ws /home/`whoami`/willow/robotI/catkin_ws
+        sshfs ubuntu@robot.local:/home/ubuntu/catkin_ws/src ~/catkin_ws/src -o nonempty
 
 To unmount:
 
-        fusermount -u /home/ubuntu/willow/robotI/catkin_ws
+        fusermount -u ~/catkin_ws/src
 
-There is more documentation on
+There is additional documentation on
 [installing SSHFS](https://help.ubuntu.com/community/SSHFS)
 available.
 
-## Platform Neutral Launch Files
+## Launch Files for Multiple Processors
+
+The ROS launch files support the ability to launch node on
+more than one processor.  This done in conjunction with the
+`<machine .../>` tag.  Each `<machine .../>` tag specifies
+a machine name some addition configuration information for
+each machine.  The 
+[<machine> tag](http://wiki.ros.org/roslaunch/XML/machine)
+attributes we require are:
+
+* `name="machine_name"`:
+   This attribute specifies the machine name that used to reference
+   the machine elsewhere in the launch file.
+
+* `address="network_address":
+   This is the DNS address for the processor.
+
+* `user="user_name"`:
+   This attribute specifies the user name to use to log into
+   machine.
+
+* `default="true|false|never":
+   In general, we never want a non-robotic machine to be default.
+   Thus, the remote machine is set to `never`.  For the robot,
+   it is a reasonable default, so we set it `true`.
+
+* `env-loader="full_path_for_environment_script":
+  When a remote node is executed, `~/.bashrc` is **NOT** executed.
+  Instead, the file specified by this attribute is executed
+  to set the needed environment variables.  This file then executes
+  its arguments using `exec "$@"`.  This file is a bit tricky
+  an is discussed further below.
+
+The networking aspects of the `<machine .../>` tag are a bit
+non-obvious.  The `address="..."` attribute is actually pretty
+straight forward.  Since we use the zeroconf system, the address
+to stuff into this attribute will always end with `.local` (e.g.
+`robot.local`, `laptop.local`, etc.)  The more subtle issue
+occurs with the `env-loader="..."` attribute.  When, the `roslaunch`
+system attempts to start a node, it does **NOT** run `~/.bashrc`
+beforehand.  Thus, the `ROS_HOSTNAME` environment variable
+is not set *unless* it is set in the `env-loader` script.
+In addition, the catkin search path is not set up either.
+The miniminal `env-loader` script would look something like:
+
+        #!/bin/sh
+        export DISPLAY=localhost:12.0
+        export ROS_MASTER_URI=http://betty.local:11311
+        export ROS_HOSTNAME=`hostname`.local
+        . /home/ubuntu/catkin_ws/devel/setup.sh
+        exec "$@"
+
+where both the `ROS_HOSTNAME` environment variable gets set
+and the standard catkin workspace is in the search path.
+
+There is note on
+[roslaunch of remote processors](http://answers.ros.org/question/10725/question-about-roslaunch-and-remote-processes/)
+over in
+[ROS answers](http://answers.ros.org/questions/)
+that was quite helpful for figuring these issues out.
+
+In order for the ROS launch architecure to to work, we
+need to have password free `ssh` working.  In addition,
+the `ROSLAUNCH_SSH_UNKNOWN` environment variable needs
+to be set to `1`.
+
+        export ROSLAUNCH_SSH_UNKNOWN=1
+
+{talk about node="..." here}
+
+This should be added to your `~/.bashrc` file for your
+laptop/desktop.
+
+One down side of the "<Machine.../>" tag architecture
+in ROS launch files, is there there is no real place to
+specify where `roscore` should be run.  The solution we
+have adopte is to do the following:
+
+        ssh -X ubuntu@robot.local roscore
+
+{Talk about scraping the X11 protocol environment variables here.}
+
+One nice thing about ROS launch, is that when you type
+Control-C, it takes care of shutting all the nodes down
+on both the local process or and
+
+### Platform Neutral Launch Files
 
 We want to support a variety of different robotic platforms
 (after all we are *Ubiquity Robotics*.)  For now, the following

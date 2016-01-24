@@ -3,6 +3,9 @@
 import os
 import os.path
 
+# http://answers.ros.org/question/12434/using-roslaunch-to-run-distributed-systems-over-ssh/
+# http://answers.ros.org/question/36600/how-to-tell-remote-machines-not-to-start-separate-roscores-when-using-roslaunch-fuerte-regression/
+#http://answers.ros.org/question/10725/question-about-roslaunch-and-remote-processes/
 def main():
     environ = os.environ
     #print("environ={0}".format(environ))
