@@ -71,6 +71,10 @@ to install a specific firmware that worked.  These days, the
 latest released firmware version is used, because it works.
 So, we no longer explicitly specify the firmware version.
 
+The raspicam_node for ROS is available on our github. 
+[https://github.com/UbiquityRobotics/raspicam_node](https://github.com/UbiquityRobotics/raspicam_node)
+
+
 If you are curious about firmware revision numbers, there is a
 [post](http://raspberrypi.stackexchange.com/questions/29991/how-do-i-find-the-firmware-repository-commit-which-matches-the-firmware-version)
 about them.
