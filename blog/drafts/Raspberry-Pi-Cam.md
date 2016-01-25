@@ -11,7 +11,7 @@ The reason why is described below.
 The raspicam node uses the Raspbery Pi video camera interface
 API (Application Programming Interface) to access the image data.
 The Raspberry Pi camera is actually connected to the GPU (Graphics
-Processing Unit) where specalized graphics processing units
+Processing Unit) where specialized graphics processing units
 can manipulate the image before it is forwarded on to the
 main ARM7 cores.  The Raspberry Pi GPU is closed source
 proprietary code is only shipped as a binary blob that is
@@ -36,7 +36,7 @@ confusing, the Raspian Linux distribution is based on the
 Debian Linux distribution.  While the debian package formats
 are the same between both the Ubuntu and Raspian Linux
 distributions, the underlaying Debian packages are *NOT*
-100% interoperable.  Sometimes the Ubuntu Linux distribution
+100% inter-operable.  Sometimes the Ubuntu Linux distribution
 installs files in a different location than the Raspian
 distribution does.  This is great fun.
 
@@ -51,8 +51,8 @@ After compiling `userland` using the `buildme` script, the
 `raspicam_node` was first run it failed.  After running the
 `rpi-update` program it worked for a while.  As other people
 tryed to install `raspicam_node`, it simply did not work.
-After much sluething it became clear that the Raspberry Pi
-foundation had accidently checked in a firmware version that
+After much sleuthing it became clear that the Raspberry Pi
+foundation had accidentally checked in a firmware version that
 did not work.
 
 Our temporary solution is to use slightly older firmware,
@@ -69,7 +69,7 @@ command below:
 
 to install a specific firmware that worked.  These days, the
 latest released firmware version is used, because it works.
-So, we no longer explictly specify the firmeware version.
+So, we no longer explicitly specify the firmware version.
 
 If you are curious about firmware revision numbers, there is a
 [post](http://raspberrypi.stackexchange.com/questions/29991/how-do-i-find-the-firmware-repository-commit-which-matches-the-firmware-version)
