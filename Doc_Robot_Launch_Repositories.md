@@ -655,3 +655,53 @@ down the line to see whether is a Loki or Magni platform.
 If there is no serial port, probe will return "Stage" as the
 platform (for now.)
 
+### Modifiying roslaunch:
+
+Currently, `roslaunch` does not do two things that we need
+regarding the `<machine .../>` tag:
+
+* It does not establish a connection to the to the remote
+  machine with X11 forwarding.   We really really want X11
+  forwarding turned on.  It would be nice to have a
+  `ROSLAUNCH_SSH_X11_FORWARDING` environment variable that
+  when set to `1`  enables X11 forwarding.  This would result
+  in the remote  process having the `DISPLAY` environment
+  variable set to `localhost:N.0` with some value of N greater
+  than 10.
+
+* There is no way to specify that `roscore` should be launched
+  on a remote machine.  Again, we really really need this.
+  The proposal would be to add a `roscore` attribute to the
+  `<machine .../>" tag that would ask `roslaunch` to start
+  `roscore` on the remote machine.
+
+The `roslaunch` program can be found in the 
+[ROS `roscom` package](http://wiki.ros.org/roslaunch)
+which is available in source form via:
+
+        cd .../catkin_ws/src
+        git clone https://github.com/ros/ros_comm
+
+This will show up in the `ros_comm` directory.
+
+We need to fork the `ros_comm` package into the `UbiquityRobotics`
+repository.
+
+The code for `roslaunch` can be found in
+`.../catkin_ws/src/ros_comm/tools/roslaunch/src/roslaunch`.
+The code that is responsible for remotely launching nodes
+on remote machine nodes is in `remotoeprocess.py`.  This
+code uses the Python SSH library called `paramiko`.  This
+library does implement the X11 forwarding protocol, but it
+does not implement the stuff to enable the protocol.  This
+is documented in a 
+[stackoverflow paramiko X11 forwarding post](https://github.com/ros/ros_comm).
+If we integrate the following code taken from the post,
+should be able to do X11 forwarding back to the display machine.
+
+The last thing to integrate to provide a mechanism to force roscore
+to be run on a remote machine.  This is done via the `load_roscore`
+routine in `config.py`.  One thought is to add an attribute for the
+`<machine roscore="1" ... />' that forces roscore to be run on a
+remote machine.
+
