@@ -705,3 +705,101 @@ routine in `config.py`.  One thought is to add an attribute for the
 `<machine roscore="1" ... />' that forces roscore to be run on a
 remote machine.
 
+###
+
+The following file is `.../ubiquity_launches/bin/platform_probe.py` and
+figures out which platform it is:
+
+        #!/usr/bin/env python
+        
+        import os
+        import os.path
+        
+        def main():
+            is_raspberry_pi = os.path.exists("/dev/ttyAMA0")
+            #print("is_raspberry_pi={0}".format(is_raspberry_pi))
+            has_usb_serial = os.path.exists("/dev/ttyUSB0")
+            #print("has_usb_serial={0}".format(has_usb_serial))
+        
+            # This is really kudgey (technical term) for now:
+            platform = "stage"
+            if is_raspberry_pi:
+                platform = "loki"
+                if has_usb_serial:
+                    platform = "magni"
+            print("platform:={0}".format(platform))
+        
+        if __name__ == "__main__":
+            main()
+
+The file below is `.../ubiquity_launches/bin/urtest.sh` and shows how to
+establish X11 forwarding and integrate it with platform probing prior
+to doing the roslaunch:
+
+        #!/bin/sh
+        
+        # Extract robot URL from ROS_MASTER_URI environment varaible:
+        ROBOT_HOST=`echo $ROS_MASTER_URI | sed -e s,http://,, | sed -e s,:11311,,`
+        #echo ROBOT_HOST=$ROBOT_HOST
+        
+        # Probe to find out what kind of platform the robot is:
+        PLATFORM=`ssh ubuntu@$ROBOT_HOST /home/ubuntu/catkin_ws/src/ubiquity_launches/bin/platform_probe.py`
+        #echo PLATFORM=$PLATFORM
+        
+        # Clear out file we use to indicate when the X11 channel is up:
+        rm -f /tmp/x11_up
+        
+        # When we background the process, we want to be sure it gets killed 
+        # off when we type control-C.  The following two trap commands do this:
+        trap "exit" INT TERM
+        trap "kill 0" EXIT
+        
+        # Now open the X11 channel:
+        (ssh -Y ubuntu@$ROBOT_HOST \
+          'echo export DISPLAY=$DISPLAY > /tmp/display.sh ; echo $DISPLAY; sleep 260' \
+          1>&2) 2>/tmp/x11up &
+        
+        # Now we wait for something to be written into `/tmp/x11up` before
+        # firing off the roslaunch:
+        while [ ! -s /tmp/x11up ] ; \
+            do sleep 1;             \
+            done
+        
+        # Now we can run the roslaunch command specifying both the PLATFORM
+        # and ROBOT_HOST:
+        echo roslaunch ubiquity_launches test.launch $PLATFORM robot_host:=$ROBOT_HOST
+        roslaunch ubiquity_launches test.launch $PLATFORM robot_host:=$ROBOT_HOST
+
+The ROS launch file needs an enviroment variable loader file.  This is called
+`ros_setup.sh` and it looks as follows:
+
+        #!/bin/sh
+        
+        export DISPLAY=localhost:12.0
+        export ROS_MASTER_URI=http://betty.local:11311
+        export ROS_HOSTNAME=`hostname`.local
+        while [ ! -f /tmp/display.sh ] ; do sleep 1 ; done
+        . /tmp/display.sh
+        . /home/ubuntu/catkin_ws/devel/setup.sh
+        exec "$@"
+
+The final location for this file is stilling being thought about.
+Also, it is not clear that the `while` loop is needed any longer.
+
+Lastly, here is what the `test.launch` file looks like:
+
+        <launch>
+          <!-- Required Arguments -->
+          <arg name="robot_host" />
+          <arg name="platform" />
+        
+          <machine name="robot"
+           address="$(arg robot_host)" user="ubuntu"
+           env-loader="/home/ubuntu/ros_setup.sh" />
+        
+          <node name="x11_channel" pkg="ubiquity_launches" type="x11_channel.sh" />
+          <node machine="robot" name="robot_loop"
+           pkg="ubiquity_launches" type="robot.py"
+           launch-prefix="xterm -fn 9x15bold -e python -m pudb.run" />
+        </launch>
+
