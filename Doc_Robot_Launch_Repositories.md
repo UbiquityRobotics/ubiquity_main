@@ -803,3 +803,159 @@ Lastly, here is what the `test.launch` file looks like:
            launch-prefix="xterm -fn 9x15bold -e python -m pudb.run" />
         </launch>
 
+## PuDB Notes
+
+`PuDB` (for Python Urwid DeBugger) is text based debugger that runs
+quickly inside of an `xterm` window.  Other more power debuggers
+(e.g. `spyder`) are dreadfully slow over the X11 protocol.
+`PuDB` seems to be pretty functional, except it does not support
+multi-threading or keyboard input very well.
+
+Learning `PuDB` involves the following steps:
+
+1. Install the software.
+
+2. Start `PuDB`.
+
+3. Learn how to resize and navigate around `PuDB`
+
+4. Learn how to use break points and how to step through the code.
+
+5. Learn how to view variables and the stack.
+
+### Installing `PuDB`
+
+Under the Linux Ubuntu system, please do the following:
+
+        sudo apt-get install -y python python-pip xterm
+        sudo pip install pudb
+
+That should take care of install `PuDB`.
+
+### Starting `PuDB`
+
+Now we need to create a small one line Python program
+and install it in a file called `/tmp/test.py`:
+
+    echo "print(2 + 2)" > /tmp/test.py
+
+Next, we run the program as follows:
+
+    xterm -e python -m pudb.run /tmp/test.py
+
+This will cause a terminal window called `xterm` to pop-up on your
+screen running the Python interpreter with the `PuDB` debugger in
+control.  Usually, `PuDB` comes up with some garish blue background
+sub-window with a pop-up window in the middle.
+
+Before you do anything else you will probably want to resize the
+`xterm` window using your mouse.  This is done by position your mouse
+over the edge or corner of the `xterm` window, pressing down and holding
+the left mouse key, dragging the window corner/edge to a new location.
+`PuDB` detects that the window is being reshaped and updates the window
+contents accordingly.
+
+After you have reshaped the `xterm` window, there is one last
+think you need to do with the mouse -- please move your mouse over
+the center of the `xterm` window and click once with the left mouse
+button.  This changes the keyboard input focus to direct keystrokes
+into the `PuDB` debugger.  After that, push your mouse to the side,
+because `PuDB` does not use the mouse.  Instead, you drive `PuDB`
+using your keyboard.
+
+Since `PuDB` is keyboard driven program, we need to have a
+notation to describe a key.  We use the notation of `[ key_name ]`
+to describe a key.  For example,
+
+* `[a]` refers to the lower case letter 'a`.
+* `[A]` refers to the upper case letter 'A' (use the `[Shift]` key
+   to shift from lower case to upper case.)
+* `[Space]` refers to the Space bar.
+* `[Enter]` refers to the 'Enter' key.
+* `[Ctrl-X]` refers to the Control-X key (use the `[Ctrl]` key
+   and the depress the `[X]` key to generate Control-X.)
+* `[Page_Up]` refers to the Page Up key.
+* `[left_arrow]` refers to the left arrow key.
+
+With that out of the way let us start putting `PuDB` through its
+paces using the keyboard.
+
+When `PuDB` first comes up, it has a `Message` pop-up "window"
+in the middle of the screen.  So before you can do anything you
+have learn how to navigate through `PuDB` menu system.  The `PuDB`
+menu system is navigated using the 4 arrow keys `[up_arrow]`,
+`[down_arrow]`, `[left_arrow]`, and `[right_arrow]`, and the
+`[Enter]` key.  We want to get out of the boring message pop-up
+as fast as possible.  So just type `[right_arrow]` followed
+by `[Enter]`.  Now the 'Message` pop-up window has been replaced
+by the 'Edit Preferences' window.
+
+The 'Edit Preferences' window has a richer menu structure that
+we can play around with.  If the 'Edit Preference' window accidentally
+gets dismissed, you can bring it back by typing the `[Ctrl-P]` key.
+
+To move vertically up and down the menu items, use the `[up arrow]`
+and `[down arrow]` keys.  (Give them a try.)  To move left and right
+between menu item columns, use the `[left_arrow]` and `[right_arrow]`
+keys.  In order to select a menu item, use the `[Enter]` key.  Please
+give these keys a work out.  When you are all done playing around,
+move over to the right column, high-light '<Cancel>', and type the
+`[Enter]` key.  This exits the 'Edit Preferences' pop-up window.
+
+Now finally we can see the top level `PuDB` window.
+There are a 6 sub-windows, of which only 5 are visible at first:
+
+* Source Code Sub-window: This sub-window is the large sub-window in
+  the upper left that always shows the current source file with the
+  line about to be executed highlighted.
+
+* Command Sub-window: This sub-window is the small sub-window in the
+  lower left where you can type command the the Python interpreter.
+
+* Variable Sub-window: This sub-window is the upper-right sub-window
+  that shows the current variables.
+
+* Stack Sub-window: This sub-window is the middle right sub-window
+  and shows the current stack back trace.
+
+* Breakpoint Sub-window: This sub-window is the bottom right sub-window
+  that shows the current list of breakpoints.
+
+* Console Sub-window: This window is not visible at first, so do not
+  go looking for it.  This window is discussed a bit further below.
+
+Now we need to learn how move the focus between these 5 sub-windows.
+
+You can change the focus for the first 4 windows with the `[C]` key
+(for Code), `[V]` key for (Variables), `[S]` key for (Stack) and
+`[B]` key for Breakpoints.  The Command sub-window is entered with
+the `[Ctrl-X]` key to enter and `[Ctrl-X]` again to leave. `PuDB`
+will generally high light window is currently the focus (except for
+the Code sub-window.)  Please give these keys a try to move between
+sub-windows. 
+
+Usually, the Variable, Stack, and Breakpoints windows are the
+wrong size.  The sub-window sizes can be changed using the `[[]`
+key, `[]]` key, `[+]` key, and the `[-]` key.   Within the
+Variables/Stack/Breakpoint sub-windows you can use `[+]` and `[-]`
+key to resize a window either larger or smaller in the horizontal
+direction.  Use the `[[]` and `[]]` keys to resize the current
+sub-window in the vertical direction.  Please give these keys a try.
+
+`PuDB` has a pop-up 'PuDB Help' sub-window that is brought up
+using the `[?]` key.  You can scroll up and down pages using
+the `[Page_Up]` and `[Page_Down]` keys.  Try these 2 keys and
+see what works for you.  Depending upon the sub-window, the
+`[up_arrow]` and `[down_arrow]` keys will scroll up/down one
+line at a time.  You can dismiss the 'PuDB Help' window with
+the stand menu navigation keys to select '<OK>' and press
+the `[Enter]` key.  The help pop-up is really quite useful
+in the early stages of learning `PuDB`, so please refer to
+it frequently.
+
+This more or less gets you started on manuvering around the
+text based window system used by `PuDB`.
+
+The next step is to debug a more complex program to learn
+about program stepping, break points, and variable inspection.
+
