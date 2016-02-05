@@ -2,7 +2,7 @@
 
 A robot launch repository is a `git` repository that
 primarily contains ROS `.launch` files and associated
-robot configuration files (e.g. `.yaml`, `.urdf`, etc.)
+robot configuration files (e.g., `.yaml`, `.urdf`, etc.)
 A combination of shell scripts and
 [ROS `.launch`](http://wiki.ros.org/roslaunch) files are
 used to start and configure one or more
@@ -20,18 +20,18 @@ Ultimately, there are a bunch of shell scripts and launch files.
 The shell scripts will typically call a launch file with one
 or more launch file arguments set.
 
-This repository is broken into some categories:
+This repository is broken into several categories:
 
-* `bin`: The `bin` directory contains a bunch of executable
+* `bin`: The `bin` directory contains executable
   shell scripts that fire off a launch file.  It is expected
   that you will place this `bin` directory in your path.
 
-* `n_*`: The n_* directories contain a ROS launch files and
-  associated configuration files needed to launch a single
+* `n_*`: The n_* directories contain ROS launch files and
+  associated configuration files that launch a single
   ROS Node.
 
-* `m_*`: The m_* directories contain a ROS launch that
-  will start Multiple ROS nodes.
+* `m_*`: The m_* directories contain files that
+  launch Multiple ROS nodes.
 
 * `rviz_*`: The `rviz_*` directories are used to launch the
   RViz program configured to view a corresponding robot program.
@@ -50,7 +50,7 @@ This repository is broken into some categories:
 There are several issues about ROS launch files that need to
 be discussed:
 
-* The `<arg>` tag is used heavily needs to be fully understood.
+* The `<arg>` tag is used heavily and needs to be fully understood.
 
 * There are two common launch file suffixes -- `.launch` and
   `.launch.xml`.
@@ -60,11 +60,11 @@ be discussed:
 
 ### The `<arg>` Tag
 
-Some documentation for ROS launch files can be by following
+Some documentation for ROS launch files can be seen by following
 the hypertext links below:
 
 * [ROS Launch Overview](http://wiki.ros.org/roslaunch) provides an
-  over view of the ROS launch file architecture.
+  overview of the ROS launch file architecture.
 
 * [ROS launch XML file format](http://wiki.ros.org/roslaunch/XML)
   provides documentation of the XML format used for writing
@@ -74,7 +74,7 @@ the hypertext links below:
   is the documentation for the `<arg ... >` tag.
 
 The `<arg>` tag is singled out because it is used in the
-launch files to pass around the robot platform information.
+launch files to pass robot platform information, such as the robot type.
 If you do not understand the `<arg>`, you will not understand
 the launch files.
 
@@ -90,7 +90,7 @@ The `<arg>` tag has three forms:
 * `<arg name="foo" value="bar" />`: This form has two different usages.
   When at the level immediately inside of a `<launch> ... </launch>`
   pair, this form defines a convenience value that can be used to
-  improve overall legibility.  Think of this as a kind of a macro
+  improve overall legibility.  Think of this as a kind of macro
   definition.  The second form occurs immediately inside of a
   `<include> ... </include>` pair.  This form is like passing arguments
   into a routine call.
@@ -806,8 +806,8 @@ Lastly, here is what the `test.launch` file looks like:
 ## PuDB Notes
 
 `PuDB` (for Python Urwid DeBugger) is text based debugger that runs
-quickly inside of an `xterm` window.  Other more power debuggers
-(e.g. `spyder`) are dreadfully slow over the X11 protocol.
+quickly inside of an `xterm` window.  Other more powerful debuggers
+(e.g. `Spyder`) are dreadfully slow over the X11 protocol.
 `PuDB` seems to be pretty functional, except it does not support
 multi-threading or keyboard input very well.
 
@@ -856,7 +856,7 @@ the left mouse key, dragging the window corner/edge to a new location.
 contents accordingly.
 
 After you have reshaped the `xterm` window, there is one last
-think you need to do with the mouse -- please move your mouse over
+thing you need to do with the mouse--move your mouse over
 the center of the `xterm` window and click once with the left mouse
 button.  This changes the keyboard input focus to direct keystrokes
 into the `PuDB` debugger.  After that, push your mouse to the side,
@@ -905,20 +905,20 @@ move over to the right column, high-light '<Cancel>', and type the
 Now finally we can see the top level `PuDB` window.
 There are a 6 sub-windows, of which only 5 are visible at first:
 
-* Source Code Sub-window: This sub-window is the large sub-window in
+* Source Code Sub-window: This is the large sub-window in
   the upper left that always shows the current source file with the
   line about to be executed highlighted.
 
-* Command Sub-window: This sub-window is the small sub-window in the
+* Command Sub-window: This is the small sub-window in the
   lower left where you can type command the the Python interpreter.
 
-* Variable Sub-window: This sub-window is the upper-right sub-window
+* Variable Sub-window: This is the upper-right sub-window
   that shows the current variables.
 
-* Stack Sub-window: This sub-window is the middle right sub-window
+* Stack Sub-window: This is the middle right sub-window
   and shows the current stack back trace.
 
-* Breakpoint Sub-window: This sub-window is the bottom right sub-window
+* Breakpoint Sub-window: This is the bottom right sub-window
   that shows the current list of breakpoints.
 
 * Console Sub-window: This window is not visible at first, so do not
@@ -937,8 +937,8 @@ sub-windows.
 Usually, the Variable, Stack, and Breakpoints windows are the
 wrong size.  The sub-window sizes can be changed using the `[[]`
 key, `[]]` key, `[+]` key, and the `[-]` key.   Within the
-Variables/Stack/Breakpoint sub-windows you can use `[+]` and `[-]`
-key to resize a window either larger or smaller in the horizontal
+Variables/Stack/Breakpoint sub-windows you can use the `[+]` and `[-]`
+keys to resize a window either larger or smaller in the horizontal
 direction.  Use the `[[]` and `[]]` keys to resize the current
 sub-window in the vertical direction.  Please give these keys a try.
 
