@@ -959,3 +959,6 @@ text based window system used by `PuDB`.
 The next step is to debug a more complex program to learn
 about program stepping, break points, and variable inspection.
 
+### Mini Notes:
+
+[reload python code](http://stackoverflow.com/questions/724924/how-to-make-pdb-recognize-that-the-source-has-changed-between-runs)
