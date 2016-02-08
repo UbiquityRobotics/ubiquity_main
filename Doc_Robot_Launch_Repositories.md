@@ -962,3 +962,23 @@ about program stepping, break points, and variable inspection.
 ### Mini Notes:
 
 [reload python code](http://stackoverflow.com/questions/724924/how-to-make-pdb-recognize-that-the-source-has-changed-between-runs)
+
+### `robot_upstart`
+
+The notes on installing `robot_upstart` to bring up roscore
+
+    sudo apt-get install daemontools
+    cd ~/catkin_src/src
+    git clone  https://github.com/clearpathrobotics/robot_upstart.git
+    rosrun robot_upstart install --job n_forever --rosdistro indigo --master http://betty.local:11311 --user wayne ubiquity_launches/n_sleep_forever/launch/n_sleep_forever.launch
+    # Type in sudo password for wayne
+    sudo service n_forever_start
+    # Verify that roscore is up
+    rosnode list
+
+
+Some links:
+
+* [robot_upstart package](http://wiki.ros.org/robot_upstart)
+* [top level documenation](http://docs.ros.org/api/robot_upstart/html/)
+* [install script docs](http://docs.ros.org/api/robot_upstart/html/install.html)
