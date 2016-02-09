@@ -16,15 +16,17 @@ import sys
 
 import NetworkManager
 
+import subprocess
+
 def main():
 
     # For debugging only:
-    root = ""
-    #root = "/tmp"
+    #root = ""
+    root = "/tmp"
     
     # Make sure we are root:
-    if os.geteuid() != 0:
-	exit("You should run this command as `sudo configure.py`")
+    #if os.geteuid() != 0:
+	#exit("You should run this command as `sudo configure.py`")
 
     # Make sure that `*root*/etc/network/interfaces` exists:
     interfaces_file_name = "{0}/etc/network/interfaces".format(root)
@@ -229,123 +231,125 @@ def main():
 	    else:
 		print("Invalid command")
 	elif command == 3:
-	    # Save and exit:
+	 #    # Save and exit:
 
-            # Write out contents for *conf_file_name*:
-	    conf_file = open(conf_file_name, "wa")
-	    conf_file.write(
-	     "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n")
-	    conf_file.write("update_config=1\n\n")
-	    for wifi in wifis:
-                wifi.write(conf_file)
-	    conf_file.close()
+  #           # Write out contents for *conf_file_name*:
+	 #    conf_file = open(conf_file_name, "wa")
+	 #    conf_file.write(
+	 #     "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n")
+	 #    conf_file.write("update_config=1\n\n")
+	 #    for wifi in wifis:
+  #               wifi.write(conf_file)
+	 #    conf_file.close()
 
-	    interfaces_file_name = "{0}/etc/network/interfaces".format(root)
-	    interfaces_file = open(interfaces_file_name, "wa")
-	    interfaces_file.write(
-	      "# Include files from /etc/network/interfaces.d:\n")
-	    interfaces_file.write(
-	      "source-directory /etc/network/interfaces.d\n\n")
+	 #    interfaces_file_name = "{0}/etc/network/interfaces".format(root)
+	 #    interfaces_file = open(interfaces_file_name, "wa")
+	 #    interfaces_file.write(
+	 #      "# Include files from /etc/network/interfaces.d:\n")
+	 #    interfaces_file.write(
+	 #      "source-directory /etc/network/interfaces.d\n\n")
 
-	    interfaces_file.write(
-	      "# The loopback network interface\n")
-	    interfaces_file.write(
-	      "auto lo\n")
-	    interfaces_file.write(
-	      "iface lo inet loopback\n\n")
+	 #    interfaces_file.write(
+	 #      "# The loopback network interface\n")
+	 #    interfaces_file.write(
+	 #      "auto lo\n")
+	 #    interfaces_file.write(
+	 #      "iface lo inet loopback\n\n")
 
 
-	    eth_count = 6
-	    interfaces_file.write(
-	      "# Wired interface(s). {0} for 70-persistent-rules-net.rules\n".
-	      format(eth_count))
-	    for index in range(eth_count):
-		interfaces_file.write(
-		  "allow-hotplug eth{0}\n".format(index))
-		interfaces_file.write(
-		  "iface eth{0} inet dhcp\n".format(index))
-		# Prioritize interface for gateway selection (the lower the metric,
-		# the higher the priority):
-		#interfaces_file.write(
-		#  "    up ifmetric eth{0} {1}\n".format(index, 100 + index))
-	    interfaces_file.write("\n")
+	 #    eth_count = 6
+	 #    interfaces_file.write(
+	 #      "# Wired interface(s). {0} for 70-persistent-rules-net.rules\n".
+	 #      format(eth_count))
+	 #    for index in range(eth_count):
+		# interfaces_file.write(
+		#   "allow-hotplug eth{0}\n".format(index))
+		# interfaces_file.write(
+		#   "iface eth{0} inet dhcp\n".format(index))
+		# # Prioritize interface for gateway selection (the lower the metric,
+		# # the higher the priority):
+		# #interfaces_file.write(
+		# #  "    up ifmetric eth{0} {1}\n".format(index, 100 + index))
+	 #    interfaces_file.write("\n")
 
-	    wlan_count = 6
-	    interfaces_file.write(
-	      "# WiFi Settings.  {0} for 70-persistent-rules-net.rules\n".
-	      format(wlan_count))
-	    for index in range(wlan_count):
-		interfaces_file.write(
-		  "allow-hotplug wlan{0}\n".format(index))
-		interfaces_file.write(
-		  "iface wlan{0} inet manual\n".format(index))
-		# Prioritize interface for gateway selection (the lower the metric,
-		# the higher the priority):
-                #interfaces_file.write(
-		#    "    up ifmetric wlan{0} {1}\n".format(index, 200 + index))
-		interfaces_file.write(
-		  "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
+	 #    wlan_count = 6
+	 #    interfaces_file.write(
+	 #      "# WiFi Settings.  {0} for 70-persistent-rules-net.rules\n".
+	 #      format(wlan_count))
+	 #    for index in range(wlan_count):
+		# interfaces_file.write(
+		#   "allow-hotplug wlan{0}\n".format(index))
+		# interfaces_file.write(
+		#   "iface wlan{0} inet manual\n".format(index))
+		# # Prioritize interface for gateway selection (the lower the metric,
+		# # the higher the priority):
+  #               #interfaces_file.write(
+		# #    "    up ifmetric wlan{0} {1}\n".format(index, 200 + index))
+		# interfaces_file.write(
+		#   "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf\n\n")
 
-	    interfaces_file.write(
-	      "# Get internet address via DHCP:\n")
-	    interfaces_file.write(
-	      "iface default inet dhcp\n\n")
-	    interfaces_file.close()
+	 #    interfaces_file.write(
+	 #      "# Get internet address via DHCP:\n")
+	 #    interfaces_file.write(
+	 #      "iface default inet dhcp\n\n")
+	 #    interfaces_file.close()
 
 	    # Write out the `/etc/hostname` file:
-	    hostname_file = open(hostname_file_name, "wa")
-	    hostname_file.write("{0}\n".format(new_hostname))
-	    hostname_file.close()
+	    # hostname_file = open(hostname_file_name, "wa")
+	    # hostname_file.write("{0}\n".format(new_hostname))
+	    # hostname_file.close()
+
+	    returncode = subprocess.call(["/usr/bin/sudo", "./hostname.py", hostname_file_name, new_hostname])
 
 	    # Sweep through *hosts_lines*:
-	    have_localhost = False
-	    have_hostname = False
-	    have_zero_conf = False
-	    insert_index = 0
-	    for index in range(len(hosts_lines)):
-		hosts_line = hosts_lines[index]
-		if hosts_line.startswith("127.0.0.1"):
-		    # We have a loopback address:
-		    #print("old_host_line='{0}'".format(hosts_line))
-		    old_names = hosts_line.split()[1:]
-		    new_names = []
-		    for old_name in old_names:
-			new_name = old_name
-			if old_name.endswith("localhost"):
-			    have_localhost = True
-			    insert_index = index + 1
-			elif old_name.endswith(".local"):
-			    new_name = "{0}.local".format(new_hostname)
-			    have_zero_conf = True
-			    insert_index = index + 1
-                        elif old_name == old_hostname:
-			    new_name = new_hostname
-			    have_hostname = True
-			    insert_index = index + 1
-			else:
-			    pass
-			new_names.append(new_name)
-		    host_line = ' '.join(["127.0.0.1"] + new_names)
-		    hosts_lines[index] = host_line
-		    #print("new_host_line='{0}'".format(host_line))
+	 #    have_localhost = False
+	 #    have_hostname = False
+	 #    have_zero_conf = False
+	 #    insert_index = 0
+	 #    for index in range(len(hosts_lines)):
+		# hosts_line = hosts_lines[index]
+		# if hosts_line.startswith("127.0.0.1"):
+		#     # We have a loopback address:
+		#     #print("old_host_line='{0}'".format(hosts_line))
+		#     old_names = hosts_line.split()[1:]
+		#     new_names = []
+		#     for old_name in old_names:
+		# 	new_name = old_name
+		# 	if old_name.endswith("localhost"):
+		# 	    have_localhost = True
+		# 	    insert_index = index + 1
+		# 	elif old_name.endswith(".local"):
+		# 	    new_name = "{0}.local".format(new_hostname)
+		# 	    have_zero_conf = True
+		# 	    insert_index = index + 1
+  #                       elif old_name == old_hostname:
+		# 	    new_name = new_hostname
+		# 	    have_hostname = True
+		# 	    insert_index = index + 1
+		# 	else:
+		# 	    pass
+		# 	new_names.append(new_name)
+		#     host_line = ' '.join(["127.0.0.1"] + new_names)
+		#     hosts_lines[index] = host_line
+		#     #print("new_host_line='{0}'".format(host_line))
 
-	    # Insert any missing bindings to loopback interface `127.0.0.1`:
-	    if not have_localhost:
-		hosts_lines.insert(insert_index, "127.0.0.1 localhost")
-                insert_index += 1
-	    if not have_hostname:
-		hosts_lines.insert(insert_index,
-		  "127.0.0.1 {0}".format(new_hostname))
-	    if not have_zero_conf:
-		hosts_lines.insert(insert_index,
-		  "127.0.0.1 {0}.local".format(new_hostname))
+	 #    # Insert any missing bindings to loopback interface `127.0.0.1`:
+	 #    if not have_localhost:
+		# hosts_lines.insert(insert_index, "127.0.0.1 localhost")
+  #               insert_index += 1
+	 #    if not have_hostname:
+		# hosts_lines.insert(insert_index,
+		#   "127.0.0.1 {0}".format(new_hostname))
+	 #    if not have_zero_conf:
+		# hosts_lines.insert(insert_index,
+		#   "127.0.0.1 {0}.local".format(new_hostname))
 
-	    # Write out the `/etc/hosts` file:
-	    hosts_file = open(hosts_file_name, "wa")
-	    for hosts_line in hosts_lines:
-		hosts_file.write(hosts_line)
-		hosts_file.write('\n')
-	    hosts_file.close()
+	 #    # Write out the `/etc/hosts` file:
+	 #    hosts_file = open(hosts_file_name, "wa")
+	 #    for hosts_line in hosts_lines:
+		# hosts_file.write(hosts_line)
+		# hosts_file.write('\n')
+	 #    hosts_file.close()
 
 	    break
 	else:
