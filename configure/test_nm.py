@@ -2,14 +2,6 @@
 
 # Copyright (c) 2016 by Rohan Agrawal.  All rights reserved.
 
-# This program is used to configure a robot system.
-#
-# Currently, this program permits the following:
-#
-# * Changing the host name.
-#
-# * Configuring WiFi
-
 import os
 import os.path
 import sys
