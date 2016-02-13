@@ -144,10 +144,10 @@ def main():
 		print("")
 		print("[0]: Exit WiFi access point mode")
 		index = 0
-		for wifi in wifis:
-		    index += 1
-		    print("[{0}]: Edit/delete ssid `{1}'".
-		      format(index, wifi.ssid))
+		for x in NetworkManager.Settings.ListConnections():
+			if x.GetSettings()['connection']['type'] == '802-11-wireless':
+				index += 1
+				print("[{0}]: Edit/delete ssid `{1}'". format(index, x.GetSettings()['802-11-wireless']['ssid']))
 		add_command = index + 1
 		print("[{0}]: Add new Wifi access point". \
 		    format(add_command))
@@ -294,14 +294,9 @@ def main():
 	 #      "iface default inet dhcp\n\n")
 	 #    interfaces_file.close()
 
-	    # Write out the `/etc/hostname` file:
-	    # hostname_file = open(hostname_file_name, "wa")
-	    # hostname_file.write("{0}\n".format(new_hostname))
-	    # hostname_file.close()
-
 	    returncode = subprocess.call(["/usr/bin/sudo", "./hostname.py", hostname_file_name, new_hostname])
 
-	    # Sweep through *hosts_lines*:
+	 #    # Sweep through *hosts_lines*:
 	 #    have_localhost = False
 	 #    have_hostname = False
 	 #    have_zero_conf = False

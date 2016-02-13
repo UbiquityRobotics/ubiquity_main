@@ -8,6 +8,7 @@ import sys
 
 import NetworkManager
 
+import struct
 for x in NetworkManager.Settings.ListConnections():
 	if x.GetSettings()['connection']['type'] == '802-11-wireless':
 		print x.GetSettings()['802-11-wireless']['ssid']
@@ -27,6 +28,6 @@ for device in NetworkManager.NetworkManager.GetDevices():
 	active = device.ActiveAccessPoint
 	aps = device.GetAccessPoints()
 	for ap in aps:
-		prefix = '* ' if ap.object_path == active.object_path else '  '
+		prefix = '* ' if active !="/" and ap.object_path == active.object_path else '  '
 		print("%s %s" % (prefix, ap.Ssid))
 # print x.Interface
