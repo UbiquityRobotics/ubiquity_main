@@ -22,7 +22,7 @@ def main():
 
     # For debugging only:
     #root = ""
-    root = "/tmp"
+    root = "./"
     
     # Make sure we are root:
     #if os.geteuid() != 0:
@@ -34,17 +34,6 @@ def main():
 	print("The file '{0}' does not exist".format(interfaces_file_name))
 	return 1
    
-    # Make sure `*root*/etc/wpa_supplicant` directory exists:
-    supplicant_directory_name = "{0}/etc/wpa_supplicant".format(root)
-    if not os.path.exists(supplicant_directory_name):
-	try:
-	    os.mkdir(supplicant_directory_name)
-	except:
-	    print("Unable to create '{0}' directory".
-	      format(suplicant_directory_name))
-	    return 1
-    assert os.path.exists(supplicant_directory_name)
-
     # Read the hostname:
     hostname_file_name = "{0}/etc/hostname".format(root)
     if not os.path.isfile(hostname_file_name):
@@ -55,6 +44,9 @@ def main():
     hostname_file.close()
     new_hostname = old_hostname
     #print("hostname='{0}'".format(old_hostname))
+
+    hosts_file_name = "{0}/etc/hosts".format(root)
+
 
 
     # For debugging only:
@@ -178,8 +170,9 @@ def main():
 	    else:
 		print("Invalid command")
 	elif command == 3:
-	    returncode = subprocess.call(["/usr/bin/sudo", "./hostname.py", hostname_file_name, hosts_file_name, new_hostname])
-	    break
+		print("Need root to save changes to hostname, calling sudo")
+		returncode = subprocess.call(["/usr/bin/sudo", "./change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
+		break
 
 	else:
 	    print("Invalid comand")
