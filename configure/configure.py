@@ -15,6 +15,7 @@ import os.path
 import sys
 
 import NetworkManager
+import uuid
 
 import subprocess
 
