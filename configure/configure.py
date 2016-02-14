@@ -128,15 +128,11 @@ def main():
 				print("Edit WiFi '{0}' access point".
 				  format(wifi.ssid))
 				print("[0] Done editing this Wifi access point")
-				print("[1] Edit WiFi Description (currently '{0}')".
-				  format(wifi.comment))
-				print("[2] Edit WiFi Name (currently '{0})'".
+				print("[1] Edit WiFi Name (currently '{0})'".
 				  format(wifi.ssid))
-				print("[3] Edit Wifi Password (currently '{0}')".
+				print("[2] Edit Wifi Password (currently '{0}')".
 				  format(wifi.psk))
-				print("[4] Edit Wifi priority (currently '{0}')".
-				  format(wifi.priority))
-				print("[5] Delete entire '{0}' access point)".
+				print("[3] Delete entire '{0}' access point)".
 				  format(wifi.ssid))
 				try:
 				    command = int(raw_input("Command: ").strip())
