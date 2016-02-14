@@ -66,9 +66,9 @@ def main():
 	print("[2]: Manage hostname WiFi access points")
 	print("[3]: Save everything and exit")
 	try:
-	    command = int(raw_input("Command: ").strip())
+		command = int(raw_input("Command: ").strip())
 	except:
-	    command = 999999
+		command = 999999
 
 	# Dispatch on command:
 	if command == 0:
