@@ -44,15 +44,6 @@ def main():
 
 	hosts_file_name = "{0}/etc/hosts".format(root)
 
-
-
-	# For debugging only:
-	if False:
-		for index in range(len(hosts_lines)):
-			hosts_line = hosts_lines[index].strip()
-			hosts_lines[index] = hosts_line
-			print("'{0}'".format(hosts_line))
-
 	# This is the user edit menu tree:
 	while True:
 		# List possibilities and prompt for input command:
