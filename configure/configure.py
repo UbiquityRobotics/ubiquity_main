@@ -174,7 +174,39 @@ def main():
 
 	else:
 	    print("Invalid comand")
-    return 0
+	return 0
+
+class Wifi:
+	def __init__(self, ssid, psk):
+		self.ssid = ssid
+		self.psk = psk
+
+	def nm_settings():
+		settings = {
+			'connection': {
+				'id': self.ssid,
+				'type': '802-11-wireless',
+				'uuid': str(uuid.uuid4()) 
+			},
+
+			'802-11-wireless': {
+				'mode': 'infrastructure',
+				'security': '802-11-wireless-security',
+				'ssid': self.ssid 
+			},
+
+			'802-11-wireless-security': {
+				'auth-alg': 'open', 
+				'key-mgmt': 'wpa-psk',
+				'psk': self.psk 
+			},
+
+			'ipv4': {'method': 'auto'},
+			'ipv6': {'method': 'auto'}
+		}
+
+		return settings
+		
 
 if __name__ == "__main__":
     main()
