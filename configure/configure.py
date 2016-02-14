@@ -140,33 +140,31 @@ def main():
 				    command = 999999
 
 				# Dispatch on command:
-	                        if command == 0:
-				    # Done editing:
-				    break
-	                        elif command == 1:
-				    # Edit description
-				    wifi.comment = \
-				      raw_input("New Description: ").strip()
+				if command == 0:
+					# Done editing:
+					break
+				elif command == 1:
+					# Edit description
+					wifi.comment = \
+					raw_input("New Description: ").strip()
 				elif command == 2:
-				    # Edit name:
-				    wifi.ssid = \
-				      raw_input("New name (SSID): ").strip()
+					# Edit name:
+					wifi.ssid = \
+					raw_input("New name (SSID): ").strip()
 				elif command == 3:
-				    # Edit password:
-				    wifi.psk = raw_input("New Password: ").strip()
+					# Edit password:
+					wifi.psk = raw_input("New Password: ").strip()
 				elif command == 4:
-				    # Edit priority:
-				    wifi.priority = raw_input("New priority: ").strip()
+					# Edit priority:
+					wifi.priority = raw_input("New priority: ").strip()
 				elif command == 5:
-				    # Delete entire wifi object:
-				    del wifis[wifis_index]
-				    break
-	                        else:
-				    print("Invalid command")
+					# Delete entire wifi object:
+					del wifis[wifis_index]
+					break
+				else:
+					print("Invalid command")
 			else:
-			    print("Invalid command")
-	    else:
-		print("Invalid command")
+				print("Invalid command")
 	elif command == 3:
 		print("Need root to save changes to hostname, calling sudo")
 		returncode = subprocess.call(["/usr/bin/sudo", "./change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
