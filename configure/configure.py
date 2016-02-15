@@ -74,11 +74,14 @@ def main():
 
 				for x in NetworkManager.Settings.ListConnections():
 					if x.GetSettings()['connection']['type'] == '802-11-wireless':
-						wifi = new
+						wifi = Wifi(x)
+						wifis.append(wifi)
+
 				index = 0
-						index += 1
-						print("[{0}]: Edit/delete ssid `{1}'". \
-							format(index, x.GetSettings()['802-11-wireless']['ssid']))
+				for wifi in wifis:
+					index += 1
+					print("[{0}]: Edit/delete ssid `{1}'". format(index, wifi.get_ssid()))
+
 				add_command = index + 1
 
 				print("[{0}]: Add new Wifi access point". \
@@ -180,23 +183,23 @@ class Wifi:
 				self.ssid = connection.GetSettings()['802-11-wireless']['ssid']
 				self.uuid = connection.GetSettings()['connection']['uuid']
 
-	def set_basic_settings(ssid, psk=None):
+	def set_basic_settings(self, ssid, psk=None):
 		self.ssid = ssid
 		self.psk = psk
 
-	def get_ssid():
+	def get_ssid(self):
 		return self.ssid
 
-	def get_uuid():
+	def get_uuid(self):
 		return self.uuid
 
-	def mark_for_delete():
+	def mark_for_delete(self):
 		self.delete_mark = True
 
-	def delete_if_marked():
-		self
+	def delete_if_marked(self):
+		self.connection.Delete()
 
-	def save():
+	def save(self):
 		if (self.connection != None):
 			settings = self.connection.GetSettings()
 			secrets = self.connection.GetSecrets()
