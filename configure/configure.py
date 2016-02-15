@@ -122,7 +122,7 @@ def main():
 						print("[0] Done editing this Wifi access point")
 						print("[1] Edit WiFi Name (currently '{0})'".
 							format(wifi.get_ssid()))
-						print("[2] Change Wifi Password"
+						print("[2] Change Wifi Password")
 						print("[3] Delete entire '{0}' access point)".
 							format(wifi.get_ssid()))
 						try:
@@ -137,11 +137,11 @@ def main():
 						elif command == 1:
 							# Edit name:
 							ssid = raw_input("New name (SSID): ").strip()
-							wifi.set_basic_settings(wifi.get_ssid(), psk=psk)
+							wifi.set_basic_settings(ssid)
 						elif command == 2:
 							# Edit password:
 							psk = raw_input("New Password: ").strip()
-							wifi.set_basic_settings(ssid)
+							wifi.set_basic_settings(wifi.get_ssid(), psk=psk)
 						elif command == 3:
 							pass
 						else:
