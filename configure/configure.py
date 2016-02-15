@@ -161,36 +161,43 @@ def main():
 	return 0
 
 class Wifi:
-	def __init__(self, ssid, psk):
+	def __init__(self, connection=None):
+		# Generate default UUID
+		self.uuid = str(uuid.uuid4())
+		self.connection = connection
+
+		if (connection != None):
+			if(connection.GetSettings()['connection']['type'] == '802-11-wireless'):
+				self.ssid = connection.GetSettings()['802-11-wireless']['ssid']
+				self.uuid = connection.GetSettings()['connection']['uuid']
+
+	def set_basic_settings(ssid, psk=None):
 		self.ssid = ssid
 		self.psk = psk
 
-	def nm_settings():
-		settings = {
-			'connection': {
-				'id': self.ssid,
-				'type': '802-11-wireless',
-				'uuid': str(uuid.uuid4()) 
-			},
+	def get_ssid():
+		return self.ssid
 
-			'802-11-wireless': {
-				'mode': 'infrastructure',
-				'security': '802-11-wireless-security',
-				'ssid': self.ssid 
-			},
+	def get_uuid():
+		return self.uuid
 
-			'802-11-wireless-security': {
-				'auth-alg': 'open', 
-				'key-mgmt': 'wpa-psk',
-				'psk': self.psk 
-			},
+	def save():
+		if (self.connection != None):
+			settings = self.connection.GetSettings()
+			secrets = self.connection.GetSecrets()
+			#Add secrets to connection settings
+			for key in secrets:
+				settings[key].update(secrets[key])
 
-			'ipv4': {'method': 'auto'},
-			'ipv6': {'method': 'auto'}
-		}
+			if(settings['connection']['type'] == '802-11-wireless'):
+				settings['802-11-wireless']['ssid'] = self.ssid
+				if (self.psk != None):
+					settings['802-11-wireless-security']['psk'] = self.psk
 
-		return settings
-		
+			connection.Update(settings)
+
+		else:
+			pass
 
 if __name__ == "__main__":
 	main()
