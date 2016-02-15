@@ -194,7 +194,7 @@ class Wifi:
 				if (self.psk != None):
 					settings['802-11-wireless-security']['psk'] = self.psk
 
-			connection.Update(settings)
+			self.connection.Update(settings)
 
 		else:
 			settings = {
@@ -221,6 +221,7 @@ class Wifi:
 			}
 
 			NetworkManager.Settings.AddConnection(settings)
+			self.connection = NetworkManager.Settings.GetConnectionByUuid(self.uuid)
 
 
 if __name__ == "__main__":
