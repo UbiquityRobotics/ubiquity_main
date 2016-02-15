@@ -216,9 +216,11 @@ class Wifi:
 					settings['802-11-wireless-security']['psk'] = self.psk
 
 			if(settings['ipv4']['method'] == 'auto'):
-				settings['ipv4'].update({'method': 'auto'})
+				del settings['ipv4']
+				settings['ipv4'] = {'method': 'auto'}
 			if(settings['ipv6']['method'] == 'auto'):
-				settings['ipv6'].update({'method': 'auto'})
+				del settings['ipv6']
+				settings['ipv6'] = {'method': 'auto'}
 
 			self.connection.Update(settings)
 
