@@ -45,6 +45,11 @@ def main():
 	hosts_file_name = "{0}/etc/hosts".format(root)
 
 	wifis = []
+	for x in NetworkManager.Settings.ListConnections():
+		if x.GetSettings()['connection']['type'] == '802-11-wireless':
+			wifi = Wifi(x)
+			wifis.append(wifi)
+
 	# This is the user edit menu tree:
 	while True:
 		# List possibilities and prompt for input command:
@@ -71,11 +76,6 @@ def main():
 				# List possibilities and prompt for input command:
 				print("")
 				print("[0]: Exit WiFi access point mode")
-
-				for x in NetworkManager.Settings.ListConnections():
-					if x.GetSettings()['connection']['type'] == '802-11-wireless':
-						wifi = Wifi(x)
-						wifis.append(wifi)
 
 				index = 0
 				for wifi in wifis:
@@ -107,7 +107,7 @@ def main():
 						raw_input("Access Point Password: ").strip()
 
 					# Create new *wifi* and append to *wifis*:
-					wifi = WiFi()
+					wifi = Wifi()
 					wifi.set_basic_settings(ssid, psk=psk)
 					wifis.append(wifi)
 
@@ -159,7 +159,7 @@ def main():
 					print("Invalid command")
 
 		elif command == 3:
-			if (old_hostname != hostname):
+			if (old_hostname != new_hostname):
 				print("Need root to save changes to hostname, calling sudo")
 				returncode = subprocess.call(["/usr/bin/sudo", "./change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
 
@@ -176,6 +176,9 @@ class Wifi:
 	def __init__(self, connection=None):
 		# Generate default UUID
 		self.uuid = str(uuid.uuid4())
+
+		self.ssid = ''
+		self.psk = None
 		self.connection = connection
 
 		if (connection != None):
