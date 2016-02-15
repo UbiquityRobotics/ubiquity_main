@@ -44,6 +44,7 @@ def main():
 
 	hosts_file_name = "{0}/etc/hosts".format(root)
 
+	wifis = []
 	# This is the user edit menu tree:
 	while True:
 		# List possibilities and prompt for input command:
@@ -66,15 +67,15 @@ def main():
 			new_hostname = raw_input("New Hostname: ").strip()
 		elif command == 2:
 			# Manage Wifi access points:
-			connections = []
 			while True:
 				# List possibilities and prompt for input command:
 				print("")
 				print("[0]: Exit WiFi access point mode")
 
-				index = 0
 				for x in NetworkManager.Settings.ListConnections():
 					if x.GetSettings()['connection']['type'] == '802-11-wireless':
+						wifi = new
+				index = 0
 						index += 1
 						print("[{0}]: Edit/delete ssid `{1}'". \
 							format(index, x.GetSettings()['802-11-wireless']['ssid']))
@@ -103,7 +104,10 @@ def main():
 						raw_input("Access Point Password: ").strip()
 
 					# Create new *wifi* and append to *wifis*:
-					wifi = WiFi(ssid, psk)
+					wifi = WiFi()
+					wifi.set_basic_settings(ssid, psk=psk)
+					wifis.append(wifi)
+
 				elif 0 < command < add_command:
 					# Prompt for Wifi command:
 					wifis_index = command - 1
@@ -152,8 +156,13 @@ def main():
 					print("Invalid command")
 
 		elif command == 3:
-			print("Need root to save changes to hostname, calling sudo")
-			returncode = subprocess.call(["/usr/bin/sudo", "./change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
+			if (old_hostname != hostname):
+				print("Need root to save changes to hostname, calling sudo")
+				returncode = subprocess.call(["/usr/bin/sudo", "./change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
+
+			for wifi in wifis:
+				wifi.save()
+
 			break
 
 		else:
@@ -180,6 +189,12 @@ class Wifi:
 
 	def get_uuid():
 		return self.uuid
+
+	def mark_for_delete():
+		self.delete_mark = True
+
+	def delete_if_marked():
+		self
 
 	def save():
 		if (self.connection != None):
