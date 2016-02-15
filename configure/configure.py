@@ -118,14 +118,13 @@ def main():
 					while True:
 						print("")
 						print("Edit WiFi '{0}' access point".
-							format(wifi.ssid))
+							format(wifi.get_ssid()))
 						print("[0] Done editing this Wifi access point")
 						print("[1] Edit WiFi Name (currently '{0})'".
-							format(wifi.ssid))
-						print("[2] Edit Wifi Password (currently '{0}')".
-							format(wifi.psk))
+							format(wifi.get_ssid()))
+						print("[2] Change Wifi Password"
 						print("[3] Delete entire '{0}' access point)".
-							format(wifi.ssid))
+							format(wifi.get_ssid()))
 						try:
 							command = int(raw_input("Command: ").strip())
 						except:
@@ -136,23 +135,15 @@ def main():
 							# Done editing:
 							break
 						elif command == 1:
-							# Edit description
-							wifi.comment = \
-							raw_input("New Description: ").strip()
-						elif command == 2:
 							# Edit name:
-							wifi.ssid = \
-							raw_input("New name (SSID): ").strip()
-						elif command == 3:
+							ssid = raw_input("New name (SSID): ").strip()
+							wifi.set_basic_settings(wifi.get_ssid(), psk=psk)
+						elif command == 2:
 							# Edit password:
-							wifi.psk = raw_input("New Password: ").strip()
-						elif command == 4:
-							# Edit priority:
-							wifi.priority = raw_input("New priority: ").strip()
-						elif command == 5:
-							# Delete entire wifi object:
-							del wifis[wifis_index]
-							break
+							psk = raw_input("New Password: ").strip()
+							wifi.set_basic_settings(ssid)
+						elif command == 3:
+							pass
 						else:
 							print("Invalid command")
 				else:
