@@ -202,10 +202,14 @@ class Wifi:
 	def save(self):
 		if (self.connection != None):
 			settings = self.connection.GetSettings()
-			secrets = self.connection.GetSecrets()
-			#Add secrets to connection settings
-			for key in secrets:
-				settings[key].update(secrets[key])
+
+			try:
+				secrets = self.connection.GetSecrets()
+				#Add secrets to connection settings
+				for key in secrets:
+					settings[key].update(secrets[key])
+			except Exception, e:
+				print ("no secrets for: " + settings['connection']['id'])
 
 			if(settings['connection']['type'] == '802-11-wireless'):
 				settings['connection']['id'] = self.ssid
@@ -220,7 +224,13 @@ class Wifi:
 				del settings['ipv6']
 				settings['ipv6'] = {'method': 'auto'}
 
-			self.connection.Update(settings)
+			try:
+				self.connection.Update(settings)
+			except:
+				print("self.connection.Update(settings) Failed")
+				print("Make sure you have the policykit file installed")
+				print("Outlined here https://github.com/UbiquityRobotics/ubiquity_main/issues/5#issuecomment-184276930")
+				sys.exit(0)
 
 		else:
 			settings = {
@@ -246,7 +256,13 @@ class Wifi:
 				'ipv6': {'method': 'auto'}
 			}
 
-			NetworkManager.Settings.AddConnection(settings)
+			try:
+				NetworkManager.Settings.AddConnection(settings)
+			except:
+				print("NetworkManager.Settings.AddConnection(settings) Failed")
+				print("Make sure you have the policykit file installed")
+				print("Outlined here https://github.com/UbiquityRobotics/ubiquity_main/issues/5#issuecomment-184276930")
+				sys.exit(0)
 			self.connection = NetworkManager.Settings.GetConnectionByUuid(self.uuid)
 
 
