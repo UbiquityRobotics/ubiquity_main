@@ -202,6 +202,7 @@ class Wifi:
 				settings[key].update(secrets[key])
 
 			if(settings['connection']['type'] == '802-11-wireless'):
+				settings['connection']['id'] = self.ssid
 				settings['802-11-wireless']['ssid'] = self.ssid
 				if (self.psk != None):
 					settings['802-11-wireless-security']['psk'] = self.psk
