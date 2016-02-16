@@ -14,7 +14,13 @@ import os
 import os.path
 import sys
 
-import NetworkManager
+try:
+	import NetworkManager
+except:
+	print("Please install NetworkManager and python-networkmanager")
+	print("sudo apt-get install network-manager python-networkmanager")
+	sys.exit(0)
+
 import uuid
 
 import subprocess
