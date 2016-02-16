@@ -31,12 +31,6 @@ def main():
 	#root = ""
 	root = "./"
 
-	# Make sure that `*root*/etc/network/interfaces` exists:
-	interfaces_file_name = "{0}/etc/network/interfaces".format(root)
-	if not os.path.isfile(interfaces_file_name):
-		print("The file '{0}' does not exist".format(interfaces_file_name))
-		return 1
-
 	# Read the hostname:
 	hostname_file_name = "{0}/etc/hostname".format(root)
 	if not os.path.isfile(hostname_file_name):
