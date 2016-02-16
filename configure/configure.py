@@ -228,7 +228,7 @@ class Wifi:
 				self.connection.Update(settings)
 			except:
 				print("self.connection.Update(settings) Failed")
-				print("Make sure you have the policykit file installed")
+				print("Make sure you have the policykit file installed, and that you are in the netdev group")
 				print("Outlined here https://github.com/UbiquityRobotics/ubiquity_main/issues/5#issuecomment-184276930")
 				sys.exit(0)
 
@@ -260,7 +260,7 @@ class Wifi:
 				NetworkManager.Settings.AddConnection(settings)
 			except:
 				print("NetworkManager.Settings.AddConnection(settings) Failed")
-				print("Make sure you have the policykit file installed")
+				print("Make sure you have the policykit file installed, and that you are in the netdev group")
 				print("Outlined here https://github.com/UbiquityRobotics/ubiquity_main/issues/5#issuecomment-184276930")
 				sys.exit(0)
 			self.connection = NetworkManager.Settings.GetConnectionByUuid(self.uuid)
