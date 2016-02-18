@@ -373,7 +373,7 @@ if $IS_ARM ; then								\
   chgrp -R ubuntu $R/home/ubuntu/catkin_ws/src/userland ;			\
   	   	  								\
   # Now build everything: ;			      				\
-  chroot $R su ubuntu -c "(cd ~/catkin_ws ; /opt/ros/indigo/bin/catkin_make)" ;	\
+  #chroot $R su ubuntu -c "(cd ~/catkin_ws ; /opt/ros/indigo/bin/catkin_make)" ;	\
   	       	      	      		    				        \
   # Install rpi-update and update the Raspberry Pi firmware: ;		      	\
   chroot $R sudo curl -L --output /usr/bin/rpi-update https://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update ; \
