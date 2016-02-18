@@ -352,7 +352,7 @@ chroot $R apt-get install -y --force-yes	\
   wpasupplicant					\
   zip
 
-chroot $R apt-get -y --force-yes network-manager python-networkmanager
+chroot $R apt-get install -y --force-yes network-manager python-networkmanager
         
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
