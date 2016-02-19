@@ -132,6 +132,52 @@ wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroo
 chroot $R apt-get update
 chroot $R apt-get -y --force-yes install ros-indigo-ros-base
 
+# Install some more ROS stuff:
+chroot $R apt-get install -y --force-yes  \
+  bmap-tools          \
+  build-essential       \
+  curl            \
+  devscripts          \
+  equivs          \
+  emacs           \
+  fakeroot          \
+  gdebi-core          \
+  joystick          \
+  mgetty          \
+  minicom         \
+  python-bloom          \
+  python-serial         \
+  ros-indigo-compressed-image-transport   \
+  ros-indigo-joy        \
+  ros-indigo-joystick-drivers     \
+  ros-indigo-joystick-drivers     \
+  ros-indigo-navigation       \
+  ros-indigo-robot-model      \
+  ros-indigo-ros-tutorials      \
+  ros-indigo-serial       \
+  ros-indigo-teleop-twist-joy     \
+  ros-indigo-tf-conversions     \
+  ros-indigo-tf2-geometry-msgs      \
+  ros-indigo-turtlebot-teleop     \
+  ros-indigo-xacro        \
+  ros-indigo-yocs-velocity-smoother   \
+  setserial         \
+  vim           \
+  wireless-tools        \
+  wpasupplicant         \
+  zip
+
+chroot $R apt-get install -y --force-yes network-manager python-networkmanager
+
+# Add Ubiquity repository:
+echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
+# It would be nice if we did a wget to get the B5A652C1...
+chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
+chroot $R apt-get update
+
+# Finish making the Rasperry Pi camera work:
+chroot $R apt-get install -y --force-yes linux-firmware
+
 # Kernel installation:
 # Install flash-kernel last so it doesn't try (and fail) to detect the
 # platform in the chroot:
@@ -301,58 +347,12 @@ cat bashrc_tail >> $R/home/ubuntu/.bashrc
 chroot $R mkdir -p /etc/modules-load.d
 echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/etc/modules-load.d/raspi-camera.conf
 
-# Add Ubiquity repository:
-echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
-# It would be nice if we did a wget to get the B5A652C1...
-chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
-chroot $R apt-get update
-
-# Finish making the Rasperry Pi camera work:
-chroot $R apt-get install -y --force-yes linux-firmware
-
 # Remove persistent net rules from UDev:
 chroot $R rm -f /etc/udev/rules.d/70-persistent-net.rules
 
 # Make sure that `/dev/vchiq` is accessible to user `ubuntu`:
 echo 'SUBSYSTEM=="vchiq",GROUP="video",MODE="0660"' > $R/etc/udev/rules.d/10-vchiq-permissions.rules
 chroot $R usermod -a -G video `whoami`
-
-# Install some more ROS stuff:
-chroot $R apt-get install -y --force-yes	\
-  bmap-tools					\
-  build-essential				\
-  curl						\
-  devscripts					\
-  equivs					\
-  emacs						\
-  fakeroot					\
-  gdebi-core					\
-  joystick					\
-  mgetty					\
-  minicom					\
-  python-bloom					\
-  python-serial					\
-  ros-indigo-compressed-image-transport		\
-  ros-indigo-joy				\
-  ros-indigo-joystick-drivers			\
-  ros-indigo-joystick-drivers			\
-  ros-indigo-navigation				\
-  ros-indigo-robot-model			\
-  ros-indigo-ros-tutorials			\
-  ros-indigo-serial				\
-  ros-indigo-teleop-twist-joy			\
-  ros-indigo-tf-conversions			\
-  ros-indigo-tf2-geometry-msgs 			\
-  ros-indigo-turtlebot-teleop			\
-  ros-indigo-xacro				\
-  ros-indigo-yocs-velocity-smoother		\
-  setserial					\
-  vim						\
-  wireless-tools				\
-  wpasupplicant					\
-  zip
-
-chroot $R apt-get install -y --force-yes network-manager python-networkmanager
 
 cat <<EOM >$R/etc/polkit-1/localauthority/50-local.d/nm.pkla
 [network-manager]
