@@ -143,7 +143,7 @@ def main():
 							psk = raw_input("New Password: ").strip()
 							wifi.set_basic_settings(wifi.get_ssid(), psk=psk)
 						elif command == 3:
-							pass
+							wifi.mark_for_delete()
 						else:
 							print("Invalid command")
 				else:
@@ -156,6 +156,7 @@ def main():
 
 			for wifi in wifis:
 				wifi.save()
+				wifi.delete_if_marked()
 
 			break
 
@@ -171,6 +172,8 @@ class Wifi:
 		self.ssid = ''
 		self.psk = None
 		self.connection = connection
+
+		self.delete_mark = False
 
 		if (connection != None):
 			if(connection.GetSettings()['connection']['type'] == '802-11-wireless'):
@@ -191,7 +194,8 @@ class Wifi:
 		self.delete_mark = True
 
 	def delete_if_marked(self):
-		self.connection.Delete()
+		if(delete_mark == True):
+			self.connection.Delete()
 
 	def save(self):
 		if (self.connection != None):
