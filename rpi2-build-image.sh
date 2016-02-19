@@ -51,7 +51,7 @@ BUILDDIR=${BASEDIR}/build
 # I use a local caching proxy to save time/bandwidth; in this mode, the
 # local mirror is used to download almost everything, then the standard
 # http://ports.ubuntu.com/ is replaced at the end for distribution.
-#LOCAL_MIRROR=""
+LOCAL_MIRROR="http://10.0.1.105:3142/ports.ubuntu.com/"
 
 # Don't clobber an old build:
 if [ -e "$BUILDDIR" ]; then
@@ -168,15 +168,6 @@ chroot $R apt-get install -y --force-yes  \
   zip
 
 chroot $R apt-get install -y --force-yes network-manager python-networkmanager
-
-# Add Ubiquity repository:
-echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
-# It would be nice if we did a wget to get the B5A652C1...
-chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
-chroot $R apt-get update
-
-# Finish making the Rasperry Pi camera work:
-chroot $R apt-get install -y --force-yes linux-firmware
 
 # Kernel installation:
 # Install flash-kernel last so it doesn't try (and fail) to detect the
@@ -346,6 +337,15 @@ cat bashrc_tail >> $R/home/ubuntu/.bashrc
 # Create the raspberry pi camera module load script:
 chroot $R mkdir -p /etc/modules-load.d
 echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/etc/modules-load.d/raspi-camera.conf
+
+# Add Ubiquity repository:
+echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
+# It would be nice if we did a wget to get the B5A652C1...
+chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
+chroot $R apt-get update
+
+# Finish making the Rasperry Pi camera work:
+chroot $R apt-get install -y --force-yes linux-firmware
 
 # Remove persistent net rules from UDev:
 chroot $R rm -f /etc/udev/rules.d/70-persistent-net.rules
