@@ -16,8 +16,7 @@ import sys
 
 def main():
 
-	print("This script is now deprecated, please use the new configure.py")
-	print("The new script is located at ubiquity_main/configure/configure.py")
+	print("This script will be deprecated, be aware that it will change very soon")
 	print("Please see the migration guide at ubiquity_main/configure/Migrating.md")
 
     # For debugging only:
