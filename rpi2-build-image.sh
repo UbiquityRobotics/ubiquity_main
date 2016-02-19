@@ -161,7 +161,7 @@ EOM
 
 # Set up default user:
 chroot $R adduser --gecos "Ubuntu user" --add_extra_groups --disabled-password ubuntu
-chroot $R usermod -a -G sudo,adm -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30NqsYKpGDoTAUV2mzmHEgP/1B7rV3vfsjZKnAWn6M2d.V2UsPuZ2nWHg1iqzIu/nF/' ubuntu
+chroot $R usermod -a -G sudo,adm,netdev -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30NqsYKpGDoTAUV2mzmHEgP/1B7rV3vfsjZKnAWn6M2d.V2UsPuZ2nWHg1iqzIu/nF/' ubuntu
 
 # Restore standard sources.list if a local mirror was used:
 if [ -n "$LOCAL_MIRROR" ]; then
@@ -286,7 +286,7 @@ sed -i "s/sleep 59/#sleep 59/" $R/etc/init/failsafe.conf
 sed -i "1istty -F /dev/ttyAMA0 115200" $R/etc/rc.local 
 
 # Install the 8188 keneral module (* will expand to the corret directory name):
-chroot $R ln -s /lib/modules/*/kernel/drivers/staging/rtl8188eu/rtl8188eu.ko /lib/modules/*/rtl8188eu.ko
+chroot $R ln -s $R/lib/modules/*/kernel/drivers/staging/rtl8188eu/rtl8188eu.ko $R/lib/modules/*/rtl8188eu.ko
 
 # Install some more ROS stuff:
 chroot $R apt-get -y --force-yes install python-rosdep
