@@ -394,6 +394,9 @@ if $IS_ARM ; then								\
   chroot $R sudo /usr/bin/rpi-update ;			      			\
 fi
 
+# Clean cached downloads:
+chroot $R apt-get clean
+
 # Unmount mounted filesystems (rsyslog must be halted to do this):
 echo "build current fails on umount; reboot and run clean-up.sh to finish build"
 umount $R/proc
