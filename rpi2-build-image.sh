@@ -46,7 +46,7 @@ if [ $EUID -ne 0 ] ; then
 fi
 
 RELEASE=trusty
-BASEDIR=/srv/rpi2/${RELEASE}
+BASEDIR=/var/rpi2/${RELEASE}
 BUILDDIR=${BASEDIR}/build
 # I use a local caching proxy to save time/bandwidth; in this mode, the
 # local mirror is used to download almost everything, then the standard

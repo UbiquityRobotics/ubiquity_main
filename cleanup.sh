@@ -4,7 +4,7 @@ set -e
 set -x
 
 RELEASE=trusty
-BASEDIR=/srv/rpi2/${RELEASE}
+BASEDIR=/var/rpi2/${RELEASE}
 BUILDDIR=${BASEDIR}/build
 R=${BUILDDIR}/chroot
 
