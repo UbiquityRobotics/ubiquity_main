@@ -353,6 +353,15 @@ chroot $R apt-get install -y --force-yes	\
   zip
 
 chroot $R apt-get install -y --force-yes network-manager python-networkmanager
+
+cat <<EOM >$R/etc/polkit-1/localauthority/50-local.d/nm.pkla
+[network-manager]
+Identity=unix-group:netdev
+Action=org.freedesktop.NetworkManager.*
+ResultAny=yes
+ResultInactive=no
+ResultActive=yes
+EOM
         
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
