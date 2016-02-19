@@ -169,6 +169,9 @@ chroot $R apt-get install -y --force-yes  \
 
 chroot $R apt-get install -y --force-yes network-manager python-networkmanager
 
+# Install some more ROS stuff:
+chroot $R apt-get -y --force-yes install python-rosdep
+
 # Kernel installation:
 # Install flash-kernel last so it doesn't try (and fail) to detect the
 # platform in the chroot:
@@ -326,8 +329,6 @@ sed -i "1istty -F /dev/ttyAMA0 115200" $R/etc/rc.local
 # Install the 8188 keneral module (* will expand to the corret directory name):
 chroot $R ln -s /lib/modules/*/kernel/drivers/staging/rtl8188eu/rtl8188eu.ko /lib/modules/*/rtl8188eu.ko
 
-# Install some more ROS stuff:
-chroot $R apt-get -y --force-yes install python-rosdep
 chroot $R rosdep init
 # Execute `rosdep update` as user `ubuntu`:
 chroot $R su ubuntu -c "rosdep update"
