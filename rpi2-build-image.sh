@@ -366,11 +366,10 @@ EOM
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/DLu/navigation_layers.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_model.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/raspicam_node.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/ros/robot_state_publisher.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_launches.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_main.git)"
+chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/bus_server.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/raspberrypi/userland.git)"
 
 # ARM specific stuff:
