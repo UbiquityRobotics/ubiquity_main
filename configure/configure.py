@@ -195,7 +195,7 @@ class Wifi:
 		self.delete_mark = True
 
 	def delete_if_marked(self):
-		if(delete_mark == True):
+		if(self.delete_mark == True):
 			self.connection.Delete()
 
 	def save(self):
