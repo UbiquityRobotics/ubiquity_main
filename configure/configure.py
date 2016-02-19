@@ -152,7 +152,8 @@ def main():
 		elif command == 3:
 			if (old_hostname != new_hostname):
 				print("Need root to save changes to hostname, calling sudo")
-				returncode = subprocess.call(["/usr/bin/sudo", "./change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
+				file_dir =  os.path.dirname(os.path.realpath(__file__))
+				returncode = subprocess.call(["/usr/bin/sudo", file_dir + "/change_hostname.py", hostname_file_name, hosts_file_name, new_hostname])
 
 			for wifi in wifis:
 				wifi.save()
