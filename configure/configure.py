@@ -28,8 +28,8 @@ import subprocess
 def main():
 
 	# For debugging only:
-	#root = ""
-	root = "./"
+	root = ""
+	#root = "./"
 
 	# Read the hostname:
 	hostname_file_name = "{0}/etc/hostname".format(root)
