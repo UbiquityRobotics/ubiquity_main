@@ -205,6 +205,7 @@ chroot $R usermod -a -G sudo,adm,netdev -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30Nqs
 
 # Install GUI
 chroot $R apt-get -y install lubuntu
+chroot $R apt-get -y install xterm
 
 # Restore standard sources.list if a local mirror was used:
 if [ -n "$LOCAL_MIRROR" ]; then
