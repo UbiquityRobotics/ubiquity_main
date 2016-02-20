@@ -204,7 +204,7 @@ chroot $R adduser --gecos "Ubuntu user" --add_extra_groups --disabled-password u
 chroot $R usermod -a -G sudo,adm,netdev -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30NqsYKpGDoTAUV2mzmHEgP/1B7rV3vfsjZKnAWn6M2d.V2UsPuZ2nWHg1iqzIu/nF/' ubuntu
 
 # Install GUI
-chroot $R apt-get -y install lubuntu
+chroot $R apt-get -y install lubuntu-desktop
 chroot $R apt-get -y install xterm
 
 # Restore standard sources.list if a local mirror was used:
