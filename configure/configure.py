@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Copyright (c) 2015 by Wayne C. Gramlich.  All rights reserved.
+# Copyright (c) 2015 by Rohan Agrawal.  All rights reserved.
 
 # This program is used to configure a robot system.
 #
@@ -8,7 +9,9 @@
 #
 # * Changing the host name.
 #
-# * Configuring WiFi
+# * Configuring WiFi.
+#
+# * Setting up password free SSH connections.
 
 import os
 import os.path
@@ -175,10 +178,39 @@ def main():
                     machine_name = columns[3]
                     machine_names[machine_name] = machine_name
 
-            # Yippee! We've got the various machines that we can attempt to transfer
-            # secure shell keys to:
-            for machine_name in sorted(machine_names.keys()):
-                print("machine={0}".format(machine_name))
+            # Compute the final list of available hosts sorted alphabetically:
+            sorted_machine_names = machine_names.keys()
+
+            # Keep prompting for SSH Key tasks:
+            while True:
+                # We've got the various machines that we can attempt to transfer
+                # secure shell keys to:
+                print("[0]: Exit SSH mode")
+                index = 1
+                for machine_name in sorted_machine_names:
+                    print("[{0}]: Set up SSH keys for {1}".format(index, machine_name))
+                    index += 1
+
+                # Prompt the user for a command:
+                try:
+                    command = int(raw_input("Command: ").strip())
+                except:
+                    command = 999999
+
+                if command == 0:
+                    # Command 0 breaks us out of this loop:
+                    break
+                elif command <= len(sorted_machine_names):
+                    # Get the user name to try on *machine_name*:
+                    machine_name = sorted_machine_names[command - 1]
+                    user_name = raw_input("User name on {0}.local: ".format(machine_name)).strip()
+
+                    # Perform the `ssh-copy-id` command to do the copy:
+                    command = ["ssh-copy-id", "{0}@{1}.local".format(user_name, machine_name)]
+                    ssh_copy_id = subprocess.Popen(command, stdin=None, stdout=None, stderr=None)
+                    ssh_copy_id.wait()
+                else:
+                    print("Invalid command: {0}".format(command))
 
         elif command == 4:
             # Save everything and exit:
