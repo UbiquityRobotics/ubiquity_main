@@ -201,9 +201,28 @@ def main():
                     # Command 0 breaks us out of this loop:
                     break
                 elif command <= len(sorted_machine_names):
-                    # Get the user name to try on *machine_name*:
+                    # Determine our host name:
+                    host_name = ""
+                    with open("/etc/hostname", "r") as host_name_file:
+                        host_name = host_name_file.read().strip()
+                    print("host_name='{0}'".format(host_name))
+
+                    # Determine our user name:
+                    who_am_i_process = subprocess.Popen(["whoami"], stdout=subprocess.PIPE)
+                    local_user_name = who_am_i_process.communicate()[0].strip()
+                    print("local_user_name='{0}'".format(local_user_name))
+
+                    # Compute *default_user_name*, the user name to use if enter is typed:
+                    default_user_name = "ubuntu"
                     machine_name = sorted_machine_names[command - 1]
-                    user_name = raw_input("User name on {0}.local: ".format(machine_name)).strip()
+                    if host_name == machine_name:
+                        default_user_name = local_user_name
+
+                    # Get the *user_name* to try on *machine_name*:
+                    user_name = raw_input("User name on {0}.local [{1}]: ".
+                      format(machine_name, default_user_name)).strip()
+                    if user_name == "":
+                        user_name = default_user_name
 
                     # Perform the `ssh-copy-id` command to do the copy:
                     command = ["ssh-copy-id", "{0}@{1}.local".format(user_name, machine_name)]
