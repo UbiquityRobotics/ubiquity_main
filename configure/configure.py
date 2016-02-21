@@ -18,6 +18,9 @@ import os.path
 import sys
 import subprocess
 
+print("Do not edit this any more.")
+return 1
+
 try:
     import NetworkManager
 except:
