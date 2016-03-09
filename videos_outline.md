@@ -13,11 +13,69 @@
     * Stage (simulator)
     * ROS Pi Bot
     * BotVac
-    * Feya
+    * Freya
     * Loki
     * Magni
   * All of our robots run ROS (Robot Operating System)
   * We'll talk more about ROS next time
+
+Script:
+
+* [Show UR splash]
+* "Hi, I'm WG."
+* "I discovered the SV HBRC in the mid-90's and I've been doing robots ever since."
+  [Show HBRC logo]
+* "Indeed, I got drafted to be HBRC president about 10 years ago."
+* "For the past 4 years, I've been working with a group of like minded
+  people to work on a concept we call 'Ubiquitous Robots'".
+  [Show group shot in front of Robot Shed]
+* "The 'UR' vision is that robots will be as prevalent as cars, TV's, and computers".
+* 'We believe that robots will come in a variety of sizes, shapes, and functionality,
+  just like 'droids in a Star Wars movie."
+  [Show still shot of R2D2 and C3PO.]
+* "To pull off this vision, robots need to share some common software so that one
+  robotic application can be run on a number of different robots."
+* "This is called a Robot Operating System and luckily another group of people
+  have already developed ROS."
+  [Show OSRF Logo]
+* "We just want just wanted to buy a ROS capable robot off the shelf."
+* "When we priced what was available, we had a serious case of sticker shock."
+* "Thus, we decided to build our own."
+* "We ultimately came up with a three prong approach to develop robot applications."
+* "First, you do your initial development using a robot simulator."
+  [Show Stage]
+* "Second, you do the next level of development on a small inexpesive robot.]
+  [Show Loki]
+* "Third, once that is starting to work, you upgrade the platform to a
+  more robust and powerful platform".
+  [Show Magni]
+* "If you visit our web site, you will find instructions on how do download
+  and run a ROS robot simulator for free."
+  [Show web site]
+* "Our low cost entry level ROS robot is called Loki and it consits of two
+  motor, encoder and wheel assemblies, a ring of 16 sonars to detect obsticles,
+  an optional arm, an Arduino compatible processor to control the motors, sonars,
+  and arm, and a Raspberry Pi computer with both a WiFi dongle and a camera
+  that runs ROS."
+  [Show Loki]
+* "Our heavy duty platform is called Magni and consists of two electric
+  scooter motor/wheel assemblies, a power management and motor control board,
+  some lead acid batteries, and again, a Raspberry Pi computer with Wifi to
+  run ROS on."
+  [Show Magni]
+* "Using this three prongOne of our team members was able to develop a voice activated robot driving
+  application."
+  [Show 4 screens - Simulator, Loki, Magni, and Wayne]
+* "Robot forward 1 meter"
+  [All 3 robots move forward 1 meter]
+* "Robot left 45 degrees"
+  [All 3 robots turn left 45 degrees]
+* "Robot forward 50 centimeters"
+  [All 3 robots move forward 50 centimeters]
+* "In the next video in this series, I will talk more about ROS."
+* "Until then, I want to close with a question and comment:
+* "'What robot application do *you* want to develop?'.  Let's get started now!."
+  [UR Splash Screen]
 
 ## Video 2: ROS: Robot Operating System
 
