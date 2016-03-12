@@ -79,7 +79,7 @@ Script:
 
 ## Video 2: ROS: Robot Operating System
 
-* ROS stands for "Robot Operating System"
+* ROS stands for 'Robot Operating System'
 * Created by Willow Garage (now closed) which was funded
   by an early Google employee.
 * Currently maintained by Open Source Robotics Foundation.
@@ -100,6 +100,47 @@ Script:
 * Lastly, ROS launch files are used to fire off all of the
   nodes and plug them all together.
 * Next is installing via virtual box.
+
+Script:
+
+* [UR splash screen]
+* "Hello, I am Wayne Gramlich and welcome back to Ubiqity Robotics."
+* "In this video, I'm going to spend some time doing a brief overview
+  ROS -- Robot Operating System."
+* "ROS was developed in Silicon Valley at Willow Garage, a robotics
+  think tank founded by an early Google employee."
+* "The two robots that Willow Garage is most famous for developing are
+  the PR2 and the TurtleBot."
+  [show pictures of PR2 and TurtleBot]
+* "Enough history, 'What is ROS?'"
+* "Ultimately, ROS is a confederation of processes that together
+  run a robot platform.  They communicate with one another via ROS
+  commuication protocol."
+* "The four primary ROS concepts are 1) nodes, 2) topics, 3) services,
+  and 4) parameters."
+* "There is a fifth topic called launch files which is used to glue
+  everything together."
+* "Let's first talk about nodes and topics."
+* "In ROS terminology, a ROS node is a program runs in parallel
+  other ROS nodes."
+* "In ROS terminology, a ROS topic is a communication channel by which
+  ROS nodes communicate with one another."
+* "We'll show a diagram of the nodes and topics that implement the robot
+  simulator."
+  [show rqt_graph output]
+* "In this picture there are 12 ROS nodes represented by horizontal ovals.
+  When the mouse is over an oval, it highlights the node in red."
+  [show red node highlight]
+* "The nodes usually communicate with one another via ROS topics.
+  The best analogy for ROS topic is that it is analogous to a radio channel.
+  For a radio channel there can be multiple nodes that transmit on the
+  channel and there can multiple recepiants as well.  In ROS terminology,
+  a transmitter is a ROS topic publisher and a receiver is a ROS topic
+  subscriber."
+* "When the mouse is over ROS node, the topics that the node subscribes
+  to are highlighted in blue and the topics that it publishes are highlighted
+  in green."
+* "The next concept
 
 ## Video 3: Installing ROS Via Virtualbox
 
