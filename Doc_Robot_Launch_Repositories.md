@@ -968,10 +968,11 @@ about program stepping, break points, and variable inspection.
 The notes on installing `robot_upstart` to bring up roscore
 
     sudo apt-get install daemontools
-    cd ~/catkin_src/src
-    git clone  https://github.com/clearpathrobotics/robot_upstart.git
-    rosrun robot_upstart install --job n_forever --rosdistro indigo --master http://betty.local:11311 --user wayne ubiquity_launches/n_sleep_forever/launch/n_sleep_forever.launch
-    # Type in sudo password for wayne
+    (cd ~/catkin_src/src ; git clone  https://github.com/clearpathrobotics/robot_upstart.git)
+    (cd ~/catkin ; catkin_make)
+    # Substitute correct values for USER and ROBOT in command below
+    rosrun robot_upstart install --job n_forever --rosdistro indigo --master http://ROBOT.local:11311 --user USER ubiquity_launches/n_sleep_forever/launch/n_sleep_forever.launch
+    # Type in sudo password for USER
     sudo service n_forever_start
     # Verify that roscore is up
     rosnode list
