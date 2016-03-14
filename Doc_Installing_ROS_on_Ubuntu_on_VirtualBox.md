@@ -3,48 +3,53 @@
 September 2015
 March 2016 work in progress
 
-* Download Ubuntu 14.04LTS.  You need a file with
-  a suffix of .iso. (A .iso file is an image of a CD/DVD ROM.)
-  You will need to feed this file to VirtualBox to set up your
-  virtual machine.  There are several flavors of Ubuntu 14.04LTS that can be downloaded; most people download the "default" version, which uses the Unity desktop:
 
-    http://www.ubuntu.com/download/desktop        # choose the 64-bit version
-
-  Some use Kubuntu instead:
-
-    http://www.kubuntu.org/getkubuntu
-
-* Download and install VirtualBox for your 64-bit platform (amd64 is required):
+* Download VirtualBox for your 64-bit platform (amd64 is required):
 
     https://www.virtualbox.org/wiki/Downloads
+	
+* Install VirtualBox.  Instructions are at
+    
+	https://www.virtualbox.org/manual/ch02.html#install-linux-host
+	
+* Download Lubuntu 14.04 LTS.  Lubuntu is a lightweight version of Ubuntu. You will get a file with
+  a suffix of .iso. (A .iso file is an image of a CD/DVD ROM.)
+  You will feed this file to VirtualBox to set up your virtual machine.	
+
+    http://cdimages.ubuntu.com/lubuntu/releases/trusty/release/	        # choose the 64-bit PC (AMD64) desktop image
+
 
 * Start up VirtualBox and click on **New** to create a new virtual machine.
-  Give your new virtual machine a Name (how about "yourname-ros"), Type (Linux), version (Ubuntu (64-bit)), 
-  and a password.  It is reasonble to default pretty much everything
-  else, except the virtual hard disk size, which should be at least 16 GB.  Do not start your virtual machine yet.
+  Give your new virtual machine a Name (how about "yourname-ros"), Type (Linux), and Version (Ubuntu (64-bit). It is reasonble to default pretty much everything
+  else, except the virtual hard disk size, which should be at least 32 GB.  **Do not start your virtual machine yet.**
   
   Your new VM should appear in the list of virtual machines, and should be selected.
 
 * Click on the **Settings** button to bring up the virtual machine settings panel.
 
-  * In the settings panel, click on **System** and make sure
-    that the boot order is set to try CD-ROM first and disk second.
+  * In the Settings panel, click on **System** and make sure
+    that the boot order is set to try CD-ROM ("Optical") first and disk second.
     Not that it matters, but the floppy disk should be disabled.
 
-  * In the settings panel, click on **Display**.  Given
+  * In the Settings panel, click on **Display**.  Given
     how intense `rviz` is with graphics, upping the video memory
     to 64MB seems prudent.  Enable 3D acceleration as well.
 
-  * In the settings panel, click on **Storage**.  You need
-    to find or make an optical drive (which should be listed there).  It should show "empty".  Now click the word "empty", and attach
-    the Ubuntu .iso file to the drive. There is a small icon picturing an optical disk next to the optical drive name for doing this.
+  * In the Settings panel, click on **Storage**.  You need
+    to find or make an optical drive.  It is indicated by a small icon intended to look like a CD-ROM. 
+	If there is one, it should show "empty".  Now click the word "empty", and attach
+    the Lubuntu .iso file to the drive. There is a small icon picturing an optical disk next to the optical drive name for doing this.  
+	If there is no optical drive, add one to the IDE Controller.  Again, there is an icon for this.
 
-  * In the settings panel, click on **Network**.  Select
+  * In the Settings panel, click on **Network**.  Enabme the Network adapter, and select
     the Bridged Adapter.
 
  * Now you can start your virtual machine by clicking on the
-  **Start** button. It will boot from the .iso file that you have loaded into the (virtual) optical drive. Choose the "Install Ubuntu" option. Do not download updates while installing. The remaining installation steps are self-explanatory. The virtual machine should close and restart automatically, but if it does not, close it (File/Close) and restart it. 
-
+  **Start** button. It will boot from the .iso file that you have loaded into the (virtual) optical drive. 
+  
+  Choose the "Install Ubuntu" option. 
+  Do not choose the option to download updates while installing. The remaining installation steps are self-explanatory. 
+  The virtual machine should close and restart automatically, but if it does not, close it (File/Close) and restart it. 
 
 * Upon restart, log in with your password.   The screen will show up in 640 x 480 mode no matter how you resize the larger
   window.  Later steps fix this problem.
@@ -62,7 +67,7 @@ March 2016 work in progress
         sudo apt-get upgrade     # Takes 1 to 10 minutes
 
 * Now that you have a terminal, it is time to install the "VirtualBox
-  Guest Additions" to solve the small screen issues.  This URL is useful:
+  Additions" to solve the small screen issues.  This URL is useful:
 
     http://www.binarytides.com/vbox-guest-additions-ubuntu-14-04/
 
@@ -82,11 +87,11 @@ March 2016 work in progress
 		sudo mount /dev/cdrom /cdrom
 		ls /mnt
 
-	Fire off the `VBoxLinuxAdditions.run` script:
+	Fire off the `VBoxLinuxAdditions.run` script, which may take a few minutes:
         cd /path..to/VBOXADDITIONS*          
-		sudo ./VBoxLinuxAdditions.run     # Takes a few minutes
-
-  * Do the following and check that the VERSION and LINUXVERSION
+		sudo ./VBoxLinuxAdditions.run     
+-------------------------------------------- the following does not work, no response from vboxguest
+ * Do the following and check that the VERSION and LINUXVERSION
     match what you have installed:
 
         # check loaded modules
@@ -102,17 +107,29 @@ March 2016 work in progress
         .....
         $ lsmod | grep -io vboxguest | xargs modinfo | grep -iw version
         version:        VERSION
+		
+		___________________________________________________________________________down to here
 
   * Reboot your virtual machine:
 
         sudo reboot
 
-  * Log in again and bring up a terminal window.  For convenience, lock the terminal application to the Launcher. At this point the VM console will be able to expand to fill the window provided for it by VirtualBox. In the **Devices** menu you will also be able to activate the shared clipboard, mouse integration, drag & drop, and shared folders (with the host).
+  * Log in again and bring up a terminal window.  For convenience, lock the terminal application to the Launcher.  TODO: HOW?
+  At this point the VM console will be able to expand to fill the window provided for it by VirtualBox. 
+  In the **Devices** menu you will also be able to activate the shared clipboard, drag & drop, and shared folders (with the host).
+  
+  * Install avahi-daemon, which allows connection by machine name instead of IP address.
+  
+		sudo apt-get install libnss-mdns
+		
+At this point a virtual machine has been created and Lubuntu has been installed.  It is ready for the installation of ROS and the Ubiquity software.
   
   * Now follow the instructions for installing ROS indigo:
 
         http://wiki.ros.org/indigo/Installation/Ubuntu
-
+		
+		TODO:  we don't know how to add whatever to the repositories, as in the U. instructions
+			
   * Some notes on the installation instructions:
 
 	  * If you are not using Ubuntu, think about using `synaptic` to configure the repositories:
