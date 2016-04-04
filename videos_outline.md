@@ -38,8 +38,8 @@ Script:
 * "This is called a Robot Operating System and luckily another group of people
   have already developed ROS."
   [Show OSRF Logo]
-* "We just want just wanted to buy a ROS capable robot off the shelf."
-* "When we priced what was available, we had a serious case of sticker shock."
+* "We just wanted to buy a ROS capable robot off the shelf, but"
+   when we priced what was available, we had a serious case of sticker shock."
 * "Thus, we decided to build our own."
 * "We ultimately came up with a three prong approach to develop robot applications."
 * "First, you do your initial development using a robot simulator."
@@ -53,18 +53,17 @@ Script:
   and run a ROS robot simulator for free."
   [Show web site]
 * "Our low cost entry level ROS robot is called Loki and it consits of two
-  motor, encoder and wheel assemblies, a ring of 16 sonars to detect obsticles,
+  motor/encoder/wheel assemblies, a ring of 16 sonars to detect obsticles,
   an optional arm, an Arduino compatible processor to control the motors, sonars,
-  and arm, and a Raspberry Pi computer with both a WiFi dongle and a camera
-  that runs ROS."
+  and arm, and a Raspberry Pi computer running ROS with both a WiFi dongle and a camera."
   [Show Loki]
 * "Our heavy duty platform is called Magni and consists of two electric
   scooter motor/wheel assemblies, a power management and motor control board,
-  some lead acid batteries, and again, a Raspberry Pi computer with Wifi to
-  run ROS on."
+  some lead acid batteries, and again, a Raspberry Pi computer running ROS
+  with Wifi and a cammera."
   [Show Magni]
-* "Using this three prongOne of our team members was able to develop a voice activated robot driving
-  application."
+* "Using this three prong approach, one of our team members was able to develop
+  a voice activated robot driving application."
   [Show 4 screens - Simulator, Loki, Magni, and Wayne]
 * "Robot forward 1 meter"
   [All 3 robots move forward 1 meter]
@@ -72,9 +71,9 @@ Script:
   [All 3 robots turn left 45 degrees]
 * "Robot forward 50 centimeters"
   [All 3 robots move forward 50 centimeters]
-* "In the next video in this series, I will talk more about ROS."
-* "Until then, I want to close with a question and comment:
-* "'What robot application do *you* want to develop?'.  Let's get started now!."
+* "The video you just saw pretty much summarizes what Ubiquity Robotics is all about."
+* "Please join me in the next video where I will provide a brief overview Robot
+  Operating System."
   [UR Splash Screen]
 
 ## Video 2: ROS: Robot Operating System
@@ -105,8 +104,7 @@ Script:
 
 * [UR splash screen]
 * "Hello, I am Wayne Gramlich and welcome back to Ubiqity Robotics."
-* "In this video, I'm going to spend some time doing a brief overview
-  ROS -- Robot Operating System."
+* "In this video, I'm going to do a brief overview ROS -- Robot Operating System."
 * "ROS was developed in Silicon Valley at Willow Garage, a robotics
   think tank founded by an early Google employee."
 * "The two robots that Willow Garage is most famous for developing are
@@ -115,32 +113,64 @@ Script:
 * "Enough history, 'What is ROS?'"
 * "Ultimately, ROS is a confederation of processes that together
   run a robot platform.  They communicate with one another via ROS
-  commuication protocol."
+  commuication protocols."
 * "The four primary ROS concepts are 1) nodes, 2) topics, 3) services,
   and 4) parameters."
-* "There is a fifth topic called launch files which is used to glue
+* "There is a fifth topic called launch files which are used to glue
   everything together."
 * "Let's first talk about nodes and topics."
-* "In ROS terminology, a ROS node is a program runs in parallel
-  other ROS nodes."
+* "In ROS terminology, a ROS node is a program runs in simultaneously
+  with other ROS nodes."
 * "In ROS terminology, a ROS topic is a communication channel by which
   ROS nodes communicate with one another."
-* "We'll show a diagram of the nodes and topics that implement the robot
-  simulator."
+* "Let's look at diagram of the nodes and topics that implement the robot simulator."
   [show rqt_graph output]
 * "In this picture there are 12 ROS nodes represented by horizontal ovals.
   When the mouse is over an oval, it highlights the node in red."
   [show red node highlight]
-* "The nodes usually communicate with one another via ROS topics.
-  The best analogy for ROS topic is that it is analogous to a radio channel.
+* "The nodes usually communicate with one another via ROS topics."
+* "The best analogy for ROS topic is that it is analogous to a radio channel.
   For a radio channel there can be multiple nodes that transmit on the
-  channel and there can multiple recepiants as well.  In ROS terminology,
-  a transmitter is a ROS topic publisher and a receiver is a ROS topic
-  subscriber."
+  channel and there can multiple nodes receive the transmission as well."
+* "In ROS terminology, a transmitter is a ROS topic publisher and a
+  receiver is a ROS topic subscriber."
+* "Collectively, this is call a publish/subscribe communication protocol
+  were any node can publish information to a topic and any node can subcribe
+  to a topic to received the published information."
 * "When the mouse is over ROS node, the topics that the node subscribes
   to are highlighted in blue and the topics that it publishes are highlighted
   in green."
-* "The next concept
+  [Show some blue and green topic highlighting]
+* "The next ROS concept to be covered is ROS parameters."
+* "A ROS parameter is value that can you can change without having to
+  edit or recompile any code."
+* "When the simulator started up, it printed out a summary of the ROS parameters."
+  [Show ROS paramaters summary]
+* "As you can see, each parameter has a name that looks like a file name and a
+  value that is usually number, a Boolean value True/False value, or a string."
+* "The key thing here is that by changing ROS parameters, you can change the
+  way the robot behaves."
+* "The forth ROS concept is called a ROS service."
+* "A ROS service is a shorter name for a computer science concept called a
+  'remote procecdure call'."
+* "In ROS, a node sends a request message to a ROS node that implements a service
+  and gets a response message back."
+* "The fifth and final concept we want to cover is the concept of a ROS launch file."
+* "ROS launch files basically provide a recipe for how to assemble all of the ROS nodes
+  into a fuctioning robot."
+  [show ROS launch file]
+* "The wonderful thing about ROS is that it comes with literally hundreds of
+  prewritten nodes that you can use with your robot."
+* "If there is something very specialized to your robot, you may have to write
+  your own ROS node code to support that feature, but mostly you will be reusing
+  nodes that already available from the ROS distribution."
+* "Editing ROS launch files is a bit tedious, so you usually start off modifying some
+  preexisting launch files to suit your needs."
+* "That pretty much introduces the 5 main ROS concepts I wanted to go over --
+  "nodes, topics, parameters, services and launch files."
+* "The good news is that ROS is freely available for download, so you can
+  try it out without spending a lot of cash."
+* "Please join me next time, when I will go over how to install ROS on your computer."
 
 ## Video 3: Installing ROS Via Virtualbox
 
@@ -160,7 +190,64 @@ Script:
 * Show `rosnode list`, `rostopic list`, `rosservice list`,
   `rosparam list` again.
 
-## Video 4: 1st ROS Program: Keyboard Teleop
+Script:
+
+* [UR splash screen]
+* "Hello, I am Wayne Gramlich and welcome back to Ubiqity Robotics."
+* "In this video, I'm going explain how to install ROS (Robot Operating
+  System) on your computer."
+* "The first thing to understand about ROS, is that currently only runs
+  on one of the Ubuntu Linux distributions."
+* "While future versions of ROS will run natively on Windows and MacOS,
+  for now Linux is the game in town."
+* "Let's face it, there are more people running Windows and MacOS natively
+  on their computers than Linux."
+* "Luckily, we can run Ubuntu Linux on you machine via the magic of
+  virtual machines."
+* "While there are a number of virtual machines out there, we are going
+  with the VirtualBox virtual machine which is freely available from Oracle."
+* "The instructions for installing ROS under VirtualBox are available
+  from the Ubiquity Robotics web site at the URL being shown."
+* "There are three broad steps for installing ROS on your computer."
+* "First, we download and install VirtualBox."
+* "Second, we download and install a Ubuntu Linux."
+* "Third, we downlaod and install ROS."
+* "The instructions to follow are on the Ubiquity Robotics web site
+  at the URL visible on your screen."
+  [Show install URL.]
+* "Without any futher adieu, Please join me as we work through these instructions."
+* "The first step is to download and install VirtualBox."
+* "We go to Viritual Box web pages and select the VirtualBox
+  image appropriate for your computer."
+* "Please note that the ROS distribution we are using only runs on 64-bit
+  x68 computers."
+* "If your computer is 32-bits, you need to find a 64-bit computer before
+  you continue."
+* "Here we are installing the 64-bit Virtual Box for Windows."
+  [Kazam download and install of VirtualBox windows and select bridged networking.]
+* "Now that we have VirtualBox installed, we can proceed to the next step."
+* "The next step is to install Ubuntu Linux distribution."
+* "There are several versions of Ubuntu Linux and the one we seleted is
+  called Lubuntu."
+* "The reason why we selected the Lubnutu version of Ubuntu is because Lubuntu
+  also runs rather well on the Raspberry Pi computer."
+  [Kazam download and install of Lunbuntu.]
+* "Now that we have Lubuntu downloaded and installed, we can do the final major
+  step of installing ROS."
+  [Kazam doanload and install of ROS.]
+* "Now that ROS is installed, lets fire up the robot simulator."
+* [Kazam staring of `rosrun ubiquity_launches keyboard_navigate`.]
+* "Now you should spend some time driving your virtual robot around the maze."
+* "By they way, just so you know, it is possible for the this robot to get lost
+  if you drive it around the maze enough.  Give it a try."
+* When you are all done, you stop the simulator by typing control-C at the
+  simulator and it should shut down in a minute or so."
+* Hopefully you are getting really jazzed by what you are seeing with ROS
+  and would like to see how hard it is to program in ROS."
+* "Please join me next time when I will show you how the `keyboard_navigate`
+  program is implemented in Python."
+
+## Video 4: 1st ROS Program: Keyboard Navigate
 
 * Talk about github.com.
 * Create a github account.
