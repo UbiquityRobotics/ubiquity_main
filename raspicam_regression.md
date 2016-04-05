@@ -294,8 +294,12 @@ I labeled a branch on both `raspicam_node` and `userland` called
 So, the commands that should put everything right are:
 
 	# On the robot:
-        (cd ~/catkin_sw/src/raspicam_node ; git pull origin indigo_safe)
-        (cd ~/catkin_sw/src/userland ; git pull origin indigo_safe)
+	rm -f ~/catkin_sw/src/raspicam_node
+	rm -f ~/catkin_sw/src/userland
+	git clone https://github.com/UbiquityRobotics/userland.git
+        get clone https://github.com/UbiquityRobotics/raspicam_node.git
+        (cd ~/catkin_sw/src/raspicam_node ; git checkout indigo_safe)
+        (cd ~/catkin_sw/src/userland ; git checkout indigo_safe)
 	(cd ~/catkin_sw ; catkin_make)
         more /boot/.firmware_revision
         # Should print out: 260bc9c7589b3359485fc02fed8f56d4c5eaad9a
