@@ -1,7 +1,7 @@
 # Ubiquity Robotics `git` Workflow
 
-`git` provides a powerful and flexible version managment system.
-Rather than supporting a rigid workflow, `git` support a multitude
+`git` provides a powerful and flexible version management system.
+Rather than supporting a rigid workflow, `git` supports a multitude
 of different workflows.  The question arises of which of the many
 workflow options should Ubiquity Robotics use?  This document
 proposes a reasonable workflow.
@@ -15,7 +15,7 @@ changes appear to occur atomically.  Either all the changes occur or
 none of them do.  Each time you make some changes to a git repository,
 it creates a "commit" which is a snap-shot of all of the files at the
 time of the commit.  Each commit has a "unique" 160-bit SHA1 hash
-computed on its contents.  The likelyhood of two commits having the
+computed on its contents.  The likelihood of two commits having the
 same hash is remote.  Commits can also have release name and branch
 names attached to them.  While the release names tend to be quite
 sticky, the branch names frequently move over time.  Each commit points
@@ -23,13 +23,13 @@ to its predecessor commit.  In the case of a merge, the commit points
 to both of its predecessors.
 
 In general, each person that is working on a project shares a copy of
-the `git` respository.  The primary benefit of this strategy is that
+the `git` repository.  The primary benefit of this strategy is that
 it allows people to work without having to have a centralized repository
-control (e.g. CVS, Perfore, etc.)
+control (e.g. CVS, Perforce, etc.)
 
 `git` allows for a multitude of workflows.  This primarily done with
 the concept of a branch.  Each branch can be worked on independently.
-At the user's descretion, another branch can be merged into a branch
+At the user's desecration, an other branch can be merged into a branch
 of their choosing.
 
 ## Workflows
@@ -41,7 +41,7 @@ The problem with this workflow is that it is very easy to
 cause great consternation as the broken code propogates to
 other developers.
 
-As more devlopers pile onto a project, the single master workflow
+As more developers pile onto a project, the single master workflow
 starts to break down.  The next workflow is a nested workflow
 where there are one or more integration branches that people
 merge to.  When the code in the integration branch is deemed
@@ -58,10 +58,10 @@ from OSRF (Open Source Robotics Foundation), we need to adopt a
 workflow that is compatible with the OSRF workflow.  The OSRF
 workflow is that they release one master branch per year.  Each
 OSRF ROS release one is given a name -- Indigo, Jade, Kinetic, etc.
-The release that occur on even numbered years are synchronized
+The releases that occur on even numbered years are synchronized
 to the Ubuntu LTS (Long Term Support) releases.  Thus, Indigo is
 synchronized with Ubuntu 14.04LTS (2014.April Long Term Support.)
-Kinnetic will be synchronized with Ubuntu 16.04LTS.
+Kinetic will be synchronized with Ubuntu 16.04LTS.
 
 In general, Ubiquity Robotics currently has inadequate staffing
 to support the odd year number releases.  Thus, we will tend to
@@ -70,7 +70,7 @@ have two master releases at a time.  For now, we would have
 `kinetic_master`.  We can have Ubiquity Robotics specific releases
 are branched off one of these master releases.
 
-We can have as many itegration branches as we want.  Each integration
+We can have as many integration branches as we want.  Each integration
 branch should be for a specific set of features or bug fixes.
 For example, the unified launch files effort of Wayne and Rohan
 belongs in its own integration branch.  Similarly, we should
@@ -83,11 +83,11 @@ branch to another.
 
 ## Testing
 
-In general, each integration area will have a critera that must
-be met before it can be merged to.  The critera can range from
+In general, each integration area will have a criterion that must
+be met before it can be merged to.  The criterion can range from
 minimal to extreme:
 
-* No critera: Just fling it in.
+* No criterion: Just fling it in.
 
 * Documentation: Some documentation is written.
 
@@ -99,11 +99,11 @@ minimal to extreme:
 
 * Extensive Test Suite: The code passes an extensive test suite.
 
-In addition, the critera can change over time.  The pre-alpha, the
-critera can be at its lowest, during alpha the bar can raise a little,
+In addition, the criterion can change over time.  The pre-alpha, the
+criterion can be at its lowest, during alpha the bar can raise a little,
 and during beta even higher, etc.
 
-What testing criteria should Ubiquity Robotics aspire to?
+What testing criterion should Ubiquity Robotics aspire to?
 In general, the "no regressions" criteria is that the new
 code does not break previously merged functionality.  Thus,
 when we get the Raspberry Pi camera to work, in each subsequent
@@ -120,10 +120,17 @@ There are at least three technologies for dealing with multiple
 repositories using `git`:
 
 * [git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules):
-  This one is actually pretty complicated.
+  This one is actually pretty complicated.  There are
+  [complaints](https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/)
+  about sub-modules.
 
 * [git subtrees](https://github.com/apenwarr/git-subtree/blob/master/git-subtree.txt):
   This one is simpler than sub-modules, but is still pretty complicated.
+  In order to install a newer version of git that
+
+        sudo add-apt-repository ppa:git-core/ppa
+        sudo apt-get update
+        sudo apt-get install git
 
 * [git release tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging):
   With this strategy, we sweep through all of our repositories and
@@ -132,7 +139,8 @@ repositories using `git`:
 
 At this point in time, it is not clear which of these techniques
 we should use.  We do need to do something.  Wayne is leaning
-towards release tags.
+towards release tags, but sub-trees with some simple shell scripts
+might do the trick.
 
 ## Specific Proposal
 
@@ -156,7 +164,7 @@ The current proposal is as follows:
   Thus, we will have an `indigo_ur1` branch for the first major release,
   and `indigo_ur2` for second, etc.
 
-* We will contruct integration branches as needed.
+* We will construct integration branches as needed.
 
 We need to start thinking about testing strategies.  It is recommended
 that we use py.test whenever possible:
