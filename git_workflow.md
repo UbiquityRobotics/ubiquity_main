@@ -146,9 +146,9 @@ might do the trick.
 
 The current proposal is as follows:
 
-* Each Ubiquity Robotics repository will have both a `indigo_master` and
-  a `kinetic_master`.  Until `kinetic` is actually being worked on, we
-  can skip the `kinetic_master` branch.
+* Each Ubiquity Robotics repository will have both a `indigo` and
+  a `kinetic` branch.  Until `kinetic` is actually being worked on, we
+  can skip the `kinetic` branch.
 
 * It is proposed that each specific release name be of the form `urX.Y.Z`,
   where `X` is the major release, `Y` is the minor release, and
@@ -164,7 +164,8 @@ The current proposal is as follows:
   Thus, we will have an `indigo_ur1` branch for the first major release,
   and `indigo_ur2` for second, etc.
 
-* We will construct integration branches as needed.
+* We will construct integration branches as needed.  The two main
+  integration branchs will be called `indigo_devel` and `kinetic_devel`.
 
 We need to start thinking about testing strategies.  It is recommended
 that we use py.test whenever possible:
