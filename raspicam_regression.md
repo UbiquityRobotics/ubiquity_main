@@ -87,7 +87,7 @@ Start changing things:
 2. Did a `git pull` on:
 
    * `navigation_layers`:
-	Up-to-date (i.e. no changes!)
+        Up-to-date (i.e. no changes!)
 
    * `robot_model`:
         commit a7c9e1b071018a66bf16b3f220131b907409e358
@@ -134,7 +134,7 @@ Start changing things:
    `https://github.com/UbiquityRobotics/`:
 
    * `raspicam_node`:
-	commit 44cb0940e5ce37b0e4ce35571cb8220bf74e8154
+        commit 44cb0940e5ce37b0e4ce35571cb8220bf74e8154
         Author: Rohan Agrawal <send2arohan@gmail.com>
         Date:   Wed Mar 9 07:45:31 2016 -0800
 
@@ -201,11 +201,11 @@ Start changing things:
 
    * Did:
 
-	mkdir ~/.ros/ubiquity
+        mkdir ~/.ros/ubiquity
         echo `!!` > /home/ubuntu/.ros/ubiquity/robot_dir_name.txt
-	(cd /home ; sudo ln ubuntu wayne; ls -l)
-	# Created ~/.ros_setup
-	# Added `source ~/.ros_setup` to `~/.bashrc` at beginning
+        (cd /home ; sudo ln ubuntu wayne; ls -l)
+        # Created ~/.ros_setup
+        # Added `source ~/.ros_setup` to `~/.bashrc` at beginning
 
    Not working yet!
 
@@ -289,19 +289,25 @@ returns:
 Actually, both `rosrun ubiquity_launches raspicam` and
 `rosrun ubiquity_launches raspicam_view` both seem to be working now.
 
+## Summary
+
 I labeled a branch on both `raspicam_node` and `userland` called
 `indigo-safe` that pulls the correct commit for the two nodes.
+
 So, the commands that should put everything right are:
 
-	# On the robot:
-	rm -f ~/catkin_sw/src/raspicam_node
-	rm -f ~/catkin_sw/src/userland
-	git clone https://github.com/UbiquityRobotics/userland.git
+        # On the robot:
+        rm -f ~/catkin_sw/src/raspicam_node
+        rm -f ~/catkin_sw/src/userland
+        git clone https://github.com/UbiquityRobotics/userland.git
         get clone https://github.com/UbiquityRobotics/raspicam_node.git
         (cd ~/catkin_sw/src/raspicam_node ; git checkout indigo_safe)
         (cd ~/catkin_sw/src/userland ; git checkout indigo_safe)
-	(cd ~/catkin_sw ; catkin_make)
+        (cd ~/catkin_sw ; catkin_make)
         more /boot/.firmware_revision
         # Should print out: 260bc9c7589b3359485fc02fed8f56d4c5eaad9a
 
+To run :
 
+        rosrun raspicam raspicam_node _frame_rate:=30 _quality:=100
+        rosservice call /raspicam_node/camera/start_capture
