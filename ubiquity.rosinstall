@@ -1,11 +1,11 @@
 - git: {local-name: 'ubiquity_motor', 
-	uri: 'https://github.com/UbiquityRobotics/ubiquity_motor.git', version: 0.4.1}
+	uri: 'https://github.com/UbiquityRobotics/ubiquity_motor.git', version: indigo}
 - git: {local-name: 'ubiquity_launches', 
 	uri: 'https://github.com/UbiquityRobotics/ubiquity_launches.git' version: unified-launches}
 - git: {local-name: 'raspicam_node', 
-	uri: 'https://github.com/UbiquityRobotics/raspicam_node.git' version: indigo-devel}
+	uri: 'https://github.com/UbiquityRobotics/raspicam_node.git' version: indigo}
 - git: {local-name: 'bus_server', 
-	uri: 'https://github.com/UbiquityRobotics/bus_server.git' version: indigo-devel}
+	uri: 'https://github.com/UbiquityRobotics/bus_server.git' version: indigo}
 - git: {local-name: 'loki_robot', 
 	uri: 'https://github.com/UbiquityRobotics/loki_robot.git' version: indigo-devel}
 - git: {local-name: 'magni_robot', 
