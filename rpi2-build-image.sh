@@ -376,16 +376,9 @@ chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/Ubiqu
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_launches.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_main.git)"
 chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/bus_server.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/raspberrypi/userland.git)"
 
 # ARM specific stuff:
 if $IS_ARM ; then								\
-  # Compile and install userland as super user:					\
-  chroot $R su root -c "(cd /home/ubuntu/catkin_ws/src/userland; ./buildme)" ;	\
-  # Now change ownership and group to be `ubuntu`:   				\
-  chown -R ubuntu $R/home/ubuntu/catkin_ws/src/userland ;			\
-  chgrp -R ubuntu $R/home/ubuntu/catkin_ws/src/userland ;			\
-  	   	  								\
   # Now build everything: ;			      				\
   #chroot $R su ubuntu -c "(cd ~/catkin_ws ; /opt/ros/indigo/bin/catkin_make)" ;	\
   	       	      	      		    				        \
