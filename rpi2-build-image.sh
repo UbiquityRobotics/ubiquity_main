@@ -340,7 +340,7 @@ chroot $R mkdir -p /etc/modules-load.d
 echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/etc/modules-load.d/raspi-camera.conf
 
 # Add Ubiquity repository:
-echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
+#echo "deb http://packages.ubiquityrobotics.com/ trusty main" > $R/etc/apt/sources.list.d/ubiquityrobotics-latest.list
 # It would be nice if we did a wget to get the B5A652C1...
 chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
 chroot $R apt-get update
