@@ -128,6 +128,7 @@ chroot $R apt-get -y install libnss-mdns openssh-server
 # Install ROS packages:
 chroot $R update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
 echo "deb http://10.0.1.105:3142/packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
+#echo "deb http://packages.ros.org/ros/ubuntu trusty main" > $R/etc/apt/sources.list.d/ros-latest.list
 wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | chroot $R apt-key add -
 chroot $R apt-get update
 chroot $R apt-get -y --force-yes install ros-indigo-ros-base
@@ -204,8 +205,8 @@ chroot $R adduser --gecos "Ubuntu user" --add_extra_groups --disabled-password u
 chroot $R usermod -a -G sudo,adm,netdev -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30NqsYKpGDoTAUV2mzmHEgP/1B7rV3vfsjZKnAWn6M2d.V2UsPuZ2nWHg1iqzIu/nF/' ubuntu
 
 # Install GUI
-chroot $R apt-get -y install lubuntu-desktop
-chroot $R apt-get -y install xterm
+#chroot $R apt-get -y install lubuntu-desktop
+#chroot $R apt-get -y install xterm
 
 # Restore standard sources.list if a local mirror was used:
 if [ -n "$LOCAL_MIRROR" ]; then
@@ -242,12 +243,6 @@ iface lo inet loopback
 # The primary network interface(s):
 allow-hotplug eth0
 iface eth0 inet dhcp
-allow-hotplug eth1
-iface eth1 inet dhcp
-allow-hotplug eth2
-iface eth2 inet dhcp
-allow-hotplug eth3
-iface eth3 inet dhcp
 EOM
 
 # Set up firmware config:
@@ -371,11 +366,6 @@ EOM
         
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/DLu/navigation_layers.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/raspicam_node.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_launches.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_main.git)"
-chroot $R su ubuntu -c "(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/bus_server.git)"
 
 # ARM specific stuff:
 if $IS_ARM ; then								\
