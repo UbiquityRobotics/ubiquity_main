@@ -45,8 +45,10 @@ if [ $EUID -ne 0 ] ; then
   exit 1
 fi
 
+mount /dev/sda1 /mnt/hdd
+
 RELEASE=trusty
-BASEDIR=/var/rpi2/${RELEASE}
+BASEDIR=/mnt/hdd/${RELEASE}
 BUILDDIR=${BASEDIR}/build
 # I use a local caching proxy to save time/bandwidth; in this mode, the
 # local mirror is used to download almost everything, then the standard
@@ -368,8 +370,8 @@ EOM
         
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws"
-chroot $R su ubuntu -c "curl -O https://raw.githubusercontent.com/UbiquityRobotics/ubiquity_main/indigo/ubiquity.rosinstall"
-chroot $R su ubuntu -c "wstool init ~/catkin_ws/src ubiquity.rosinstall"
+chroot $R su ubuntu -c "curl -L --output ~/catkin_ws/ubiquity.rosinstall https://raw.githubusercontent.com/UbiquityRobotics/ubiquity_main/indigo/ubiquity.rosinstall"
+chroot $R su ubuntu -c "wstool init ~/catkin_ws/src ~/catkin_ws/ubiquity.rosinstall"
 
 # ARM specific stuff:
 if $IS_ARM ; then								\
