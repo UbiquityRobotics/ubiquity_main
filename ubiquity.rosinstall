@@ -1,7 +1,7 @@
 - git: {local-name: 'ubiquity_motor', 
 	uri: 'https://github.com/UbiquityRobotics/ubiquity_motor.git', version: indigo}
 - git: {local-name: 'ubiquity_launches', 
-	uri: 'https://github.com/UbiquityRobotics/ubiquity_launches.git' version: unified-launches}
+	uri: 'https://github.com/UbiquityRobotics/ubiquity_launches.git' version: unified_launches}
 - git: {local-name: 'raspicam_node', 
 	uri: 'https://github.com/UbiquityRobotics/raspicam_node.git' version: indigo}
 - git: {local-name: 'bus_server', 
