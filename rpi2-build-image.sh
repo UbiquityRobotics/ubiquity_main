@@ -375,7 +375,7 @@ if $IS_ARM ; then								\
   # Install rpi-update and update the Raspberry Pi firmware: ;		      	\
   chroot $R sudo curl -L --output /usr/bin/rpi-update https://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update ; \
   chroot $R sudo chmod +x /usr/bin/rpi-update ;	      				\
-  chroot $R sudo /usr/bin/rpi-update ;			      			\
+  chroot $R sudo /usr/bin/rpi-update 260bc9c7589b3359485fc02fed8f56d4c5eaad9a;			      			\
 fi
 
 # Clean cached downloads:
