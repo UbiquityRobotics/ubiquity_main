@@ -168,10 +168,12 @@ chroot $R apt-get install -y --force-yes  \
   wpasupplicant         \
   zip
 
+
 chroot $R apt-get install -y --force-yes network-manager python-networkmanager
 
 # Install some more ROS stuff:
 chroot $R apt-get -y --force-yes install python-rosdep
+chroot $R apt-get -y --force-yes install python-rosinstall python-wstool
 
 # Kernel installation:
 # Install flash-kernel last so it doesn't try (and fail) to detect the
@@ -365,7 +367,9 @@ ResultActive=yes
 EOM
         
 # Build the catkin workspace, grab some repositories and build them:
-chroot $R su ubuntu -c "mkdir -p ~/catkin_ws/src"
+chroot $R su ubuntu -c "mkdir -p ~/catkin_ws"
+chroot $R su ubuntu -c "curl -O https://raw.githubusercontent.com/UbiquityRobotics/ubiquity_main/indigo/ubiquity.rosinstall"
+chroot $R su ubuntu -c "wstool init ~/catkin_ws/src ubiquity.rosinstall"
 
 # ARM specific stuff:
 if $IS_ARM ; then								\
