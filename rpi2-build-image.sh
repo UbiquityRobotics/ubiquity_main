@@ -208,6 +208,10 @@ EOM
 chroot $R adduser --gecos "Ubuntu user" --add_extra_groups --disabled-password ubuntu
 chroot $R usermod -a -G sudo,adm,netdev -p '$6$iTPEdlv4$HSmYhiw2FmvQfueq32X30NqsYKpGDoTAUV2mzmHEgP/1B7rV3vfsjZKnAWn6M2d.V2UsPuZ2nWHg1iqzIu/nF/' ubuntu
 
+
+# Finish making the Rasperry Pi camera work:
+chroot $R apt-get install -y --force-yes linux-firmware
+
 # Install GUI
 chroot $R apt-get -y install lubuntu-desktop
 chroot $R apt-get -y install xterm
@@ -348,9 +352,6 @@ echo 'bcm2835-v4l2 gst_v4l2src_is_broken=1' > $R/etc/modules-load.d/raspi-camera
 # It would be nice if we did a wget to get the B5A652C1...
 chroot $R apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5A652C1
 chroot $R apt-get update
-
-# Finish making the Rasperry Pi camera work:
-chroot $R apt-get install -y --force-yes linux-firmware
 
 # Remove persistent net rules from UDev:
 chroot $R rm -f /etc/udev/rules.d/70-persistent-net.rules
