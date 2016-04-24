@@ -45,8 +45,6 @@ if [ $EUID -ne 0 ] ; then
   exit 1
 fi
 
-mount /dev/sda1 /mnt/hdd
-
 RELEASE=trusty
 BASEDIR=/mnt/hdd/${RELEASE}
 BUILDDIR=${BASEDIR}/build
@@ -368,6 +366,16 @@ ResultAny=yes
 ResultInactive=no
 ResultActive=yes
 EOM
+
+# Generate SSH Keys on Firstboot
+cat <<EOM >$R/etc/init.d/ubiquity-firstboot.sh
+su ubuntu -c "ssh-keygen -t rsa -N \"\" -f ~/.ssh/id_rsa"
+su ubuntu -c "cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys"
+
+rm /etc/init.d/ubiquity-firstboot.sh
+
+exit 0
+EOM
         
 # Build the catkin workspace, grab some repositories and build them:
 chroot $R su ubuntu -c "mkdir -p ~/catkin_ws"
@@ -392,4 +400,3 @@ chroot $R apt-get clean
 echo "build current fails on umount; reboot and run clean-up.sh to finish build"
 umount $R/proc
 umount $R/sys
-
