@@ -11,4 +11,4 @@
 - git: {local-name: 'magni_robot', 
     uri: 'https://github.com/UbiquityRobotics/magni_robot.git', version: indigo-devel}
 - git: {local-name: 'fiducials', 
-    uri: 'https://github.com/UbiquityRobotics/fiducials.git', version: master}
+    uri: 'https://github.com/UbiquityRobotics/fiducials.git', version: kinetic-devel}
