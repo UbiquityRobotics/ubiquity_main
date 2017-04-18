@@ -1,16 +1,89 @@
+# Installing Virtualization Software on the Host Computer
 
-## Installing ROS on Ubuntu on VirtualBox
-September 2015
-March 2016 work in progress
+Unless your host computer is already natively running Ubuntu 16.04LTS
+you need to do some work to get Ubuntu 16.04 LTS running on your host
+computer.
 
+## Native Operating System
 
-* Download VirtualBox for your 64-bit platform (amd64 is required):
+For this document, we partition native operating systems into ones
+that Linux operating systems and non-Linux operating systems
+(e.g. Windows, Mac OS, Solaris, etc.).
+
+You can skip reading the rest of this section,
+If your host computer is running non-Linux native operating system.
+All non-Linux native operating systems require the installation of
+virtualization software.
+
+If you are running Linux natively on your host computer please run the
+following command in a terminal window:
+
+        lsb_release -i -r
+
+and it will output:
+
+        Distributor ID: DDDDDD
+	Release:        RRRRRR
+
+where `DDDDDD` is the distributor name (e.g. Ubuntu, Redhat, etc.)
+and `RRRRRR` is the release.
+
+* If your distributor id is `Ubuntu` and the release number is 16.04, you are
+  done an no virtualization software needs to be installed.
+
+* If your distributor id is not `Ubuntu` you *must*
+  install the virtualization software.
+
+* If your distributor id is `Ubuntu`, but the release number is less than 16.04,
+  you can upgrade your Ubuntu release to 16.04.  LTS releases always occur
+  on in April of even years (i.e. 1x.04, where x is even.)  To upgrade,
+  always go to the closest new LTS release and then upgrade LTS releases
+  until you get to 16.04.  For example, to upgrade Ubuntu 11.10, first upgrade
+  to 12.04, then 14.04 and finally to 16.04.  Use your web favorite search
+  engine an search for "Upgrade Ubuntu xx.xx to yy.yy" to get instructions
+  on how to do this.
+
+* If your distributor id is `Ubuntu` and the release number is greater than 16.04,
+  you are running a newer version that 16.04.  In theory, ROS Kinetic will
+  run on such a system, but it is not heavily tested.  While it should work,
+  Ubiquity Robotics does not support this configuration.  It is recommended
+  that you install the virtualiation software so you can run 16.04 in
+  the virtualization software.
+  
+## Installing the VirtualBox Virtualization Software
+
+While there are multiple virtualization software systems out there,
+Ubiquity Robotics has selected
+[VirtualBox](https://www.virtualbox.org/)
+from Oracle.  You ware welcome
+to try one of the others virtualization software system,
+but Ubiquity Robotics can not provide with *any* support for that decision.
+
+You are basically going to be working through the first few chapters of the
+[VirtualBox User Manual](https://www.virtualbox.org/manual/UserManual.html).
+
+* Please preread chapter 1 up to and including the section on extension packs.
+
+* Please preread appropriate section chapter 2 that corresponds to 
+  depending upon which native operating system you are running.
+
+* Please skim through chapter 3 to see what sorts of things you need to
+  configure for your virtual machine.
+
+* Please skim through chapter 4 (Guest Additions).
+
+The remaining chapters are contain useful information, but you do not need
+to preread them.
+
+Now it is time to get started:
+
+* Download VirtualBox for your 64-bit platform (either Intel64 or Amd64 is required):
 
     https://www.virtualbox.org/wiki/Downloads
-	
+
 * Install VirtualBox.  Instructions are at
     
-	https://www.virtualbox.org/manual/ch02.html#install-linux-host
+    https://www.virtualbox.org/manual/ch02.html#install-linux-host
 	
 * Download Lubuntu 14.04 LTS.  Lubuntu is a lightweight version of Ubuntu. You will get a file with
   a suffix of .iso. (A .iso file is an image of a CD/DVD ROM.)
