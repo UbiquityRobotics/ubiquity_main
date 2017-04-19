@@ -107,25 +107,104 @@ Now it is time to get started:
     
     https://www.virtualbox.org/manual/ch02.html#install-linux-host
 	
-* Run VirtualBox.
-
 ## Create Virtual Machine
 
-1. ![new1](install_images/vb_new1.png)
+Creating a virtual machine is actually pretty simple, most of the
+windows can be clicked through 
 
-2. ![new2](install_images/vb_new2.png)
+1. Start VirtualBox.
 
-3. ![new3](install_images/vb_new3.png)
+   After VirtualBox has started you should see window that sort of looks like what
+   is shown below:
 
-4. ![new4](install_images/vb_new4.png)
+   ![vb_start.png](install_images/vb_start.png)
 
-5. ![new5](install_images/vb_new5.png)
+   Please click on the `[New]` button start start creating a virtual machine.
 
-6. ![new6](install_images/vb_new6.png)
+2. Name and operating system window
 
-7. ![new7](install_images/vb_new7.png)
+   When you get the "Name and operating system" window below:
 
-8. ![new8](install_images/vb_new8.png)
+   ![vb_name_os](install_images/vb_name_os.png)
+
+   Please enter "UR_SDE_16.04" as the `Name`, select "Linux" as the `Type`,
+   make sure the `Version` is set to "Ubuntu (64-bit)".
+
+   When that is done, click on `[Next>]`.
+
+3. Memory size window
+
+   When you get the "Memory size" window, it should look as follows:
+
+   ![vb_memory_size](install_images/vb_memory_size.png)
+
+   Make sure that it says 1024MB and then click on the `[Next>]` button.
+
+4. Hard disk window
+
+   When you get the "Hard disk" window, it should look as follows:
+
+   ![vb_hard_disk](install_images/vb_hard_disk.png)
+
+   Make sure that "Create a virtual hard disk now" is selected and click on the
+   `[Next>]` button.
+
+6. Hard disk file type window
+
+   When you get the "Hard disk file type" window, it should look as follows:
+
+   ![vb_hard_disk_file_type](install_images/vb_hard_disk_file_type.png)
+
+   Please make sure that `VDI (VirtualBox Disk Image)` is selected and click on the
+   `[Next>]` button.
+
+7. Storage on physical hard disk window
+
+   When you get the "Storage on physical disk" window, it should look as follows:
+
+   ![vb_storage](install_images/vb_storage.png)
+
+   Please make sure that `Dynamically allocated` is selected and click on the
+   `[Next>]` button.
+
+8. File location and size window
+
+   When you get the "File location and size" window, it should look as follows:
+
+   ![vb_file_size](install_images/vb_file_size.png)
+
+   Please leave the location set to "UR_SDE_16.04" and adjust the file size to
+   be greater than 30GB.  Please note that the slide bar is non-linear.  Afterwards,
+   please click on the `[Create]` button.  This will cause the virtual machine
+   to be created.
+
+9. Virtual machine created
+
+   After the virtual machine is created, the VirtualBox window should look as follows:
+
+   ![vb_done](install_images/vb_done.png)
+
+
+### Run Virtual Machine
+
+* ![lubuntu_welcome](install_images/lubuntu_welcome.png)
+* ![lubuntu_prepare](install_images/lubuntu_prepare.png)
+* ![lubuntu_installation_type](install_images/lubuntu_installation_type.png)
+* ![lubuntu_installation_type2](install_images/lubuntu_installation_type2.png)
+* ![lubuntu_time_zone](install_images/lubuntu_time_zone.png)
+* ![lubuntu_keyboard](install_images/lubuntu_keyboard.png)
+* ![lubuntu_account](install_images/lubuntu_account.png)
+* ![lubuntu_install](install_images/lubuntu_install.png)
+* ![lubuntu_restart](install_images/lubuntu_restart.png)
+* ![lubuntu_remove](install_images/lubuntu_remove.png)
+* ![lubuntu_guest](install_images/lubuntu_guest.png)
+* ![lubuntu_login](install_images/lubuntu_login.png)
+* ![lubuntu_ready](install_images/lubuntu_ready.png)
+* ![lubuntu_logout](install_images/lubuntu_logout.png)
+
+## Old stuff
+
+{Ignore this stuff for now}
 
 
 * Download Lubuntu 14.04 LTS.  Lubuntu is a lightweight version of Ubuntu. You will get a file with
