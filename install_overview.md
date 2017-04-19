@@ -7,27 +7,32 @@ steps.
 
 ## Overview
 
-The primary issue that makes the Ubiquity Robotics (hereafter
-abbreviated as UR) Software Development Environment (hereafter
-abbreviated as SDE) complicated is that the UR robot platforms
-are mobile.  A mobile robot platform can independently move around.
-What this means is that the UR robots are programmed  without a display,
-keyboard, and mouse directly connected to the robot.  A robot that is
-without out a connected display, keyboard and mouse is said to be in
-a "headless" configuration.
+The Ubiquity Robotics Software Development Environment provides
+all of the software tools that you need to develop software for
+a Ubiquity Robotics robot.  Since "Ubiquity Robotics Software
+Development Environment" is a real mouthful, it tends to be
+abbreviated as "UR SDE", where "UR" stands for "Ubiquity Robotics"
+and "SDE" stands for "Software Development Environment".
 
-The way you program a headless UR robot is with another computer
-that UR calls the host computer.  The host computer has the attached
-display, keyboard and mouse.  The host computer can be either a desktop
-or a laptop computer.  The host computer connects to the UR mobile robot
-via a WiFi network connection.  The entire is a bit involved and you will
-be carefully guided through the unfortunately somewhat tedious process.
+The primary issue that makes the UR SDE  complicated is that the UR
+robot platforms are "headless".  What "headless" means is that there
+is no display, keyboard, or mouse attached to the robot.  The reason
+why UR robots are headless is because it is difficult to develop
+software when your display, keyboard, and mouse are moving around.
 
-All of the current UR robot platforms only support the Raspberry Pi 3
-processor board.  The host computer hardware requirements are more
-flexible:
+The way the UR SDE is structured, all software development is done
+at stationary computer called the host computer.  The host computer
+has the attached display, keyboard and mouse.  The host computer can
+be either a desktop or a laptop computer.  The host computer connects
+to the UR robot platform via a WiFi network connection.
 
-* Either an Intel64 or AMD64 processor with 2 or more cores.
+Setting up the stationary host computer and connecting it to a UR
+robot platform is a bit involved.  This document will carefully
+guide you through the unfortunately somewhat tedious process.
+
+The host computer hardware requirements are pretty flexible:
+
+* A 64-bit Intel or AMD processor with 2 or more cores.
 
 * RAM memory should be 8 Gigabytes or more.
 
@@ -40,8 +45,8 @@ flexible:
 
 In general, there is no need to go overboard on the host computer hardware.
 
-Currently, all the UR mobile robot platforms run the Robot Operating
-System (hereafter abbreviated as ROS.)  There are multiple versions of ROS.
+Currently, all the UR robot platforms run the Robot Operating System
+(hereafter abbreviated as ROS.)  There are multiple versions of ROS.
 All of the current UR robot platforms use the ROS version called
 "ROS Kinetic Kame", which is usually abbreviated to "ROS Kinetic".
 
@@ -66,8 +71,7 @@ more involved depending upon whether Linux, Windows, or MacOS X is being
 run natively on the host computer hardware.  For Windows, MacOS X and somee
 versions of Linux, virtualizer softare (e.g. VirtualBox, VMWare, etc.) needs
 to be installed before Ubuntu 16.04LTS can be installed.  Again, this document
-will help
-you perform the necessary installation and configuration.
+will help you perform the necessary installation and configuration.
 
 ## Installation Roadmap
 
@@ -77,10 +81,10 @@ The installation occurs in three distinct phases:
 
 2. Bring up ROS on your Raspberry Pi 3.
 
-3. Connect your Rasperry Pi 3 to your UR robot.
+3. Plug your Rasperry Pi 3 to your UR robot and connect to it via WiFi.
 
-Please note that phase 2 can be done with a stand-alone Raspberry Pi 3 board
-only.  Thus, you can be sure that your UR SDE is ready use before the UR Platform
+Please note that phase 2 can be done with a stand-alone Raspberry Pi 3 board.
+ Thus, you can be sure that your UR SDE is ready use before the UR Platform
 that you ordered is delivered to you.
 
 ### Phase 1: Install and Configure the Host Computer
@@ -89,8 +93,7 @@ Please step through the following installation steps to bring up the UR SDE
 on your host computer:
 
 1. [Install virtualization](install_virtualization.md)
-   on host computer.
-
+   software on host computer.
 
 2. [Install ROS Kinetic](install_ros.md)
    software on host computer.
@@ -101,11 +104,10 @@ on your host computer:
 4. [Install desired desktop software](install_ubuntu.md)
    on host computer.
 
-5. [Run Robot Simulator](install_run_robot_simulator
+5. [Run Robot Simulator](install_run_robot_simulator)
    on host computer.
 
 ### Phase 2: Install and Configure the Raspberry Pi 3 Board
-
 
 1. Download
    [Raspberry Pi3 Image]
@@ -124,8 +126,11 @@ on your host computer:
    to UR robot platform.
 
 2. [Run UR Demo Programs](install_run_ur_demos.md)
+   on your UR robot platform.
 
 ### Conclusion
+
+{Conclusion goes here.}
 
 
 

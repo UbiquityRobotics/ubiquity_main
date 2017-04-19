@@ -4,14 +4,32 @@ Unless your host computer is already natively running Ubuntu 16.04LTS
 you need to do some work to get Ubuntu 16.04 LTS running on your host
 computer.
 
-## Native Operating System
+## Overview
+
+The steps involved are:
+
+1. You need to figure out if you need to install virtualization software.
+   (Most of you will need virtualization software.)
+
+2. Download and install the virtualization software.  Ubiquity Robotics only supports
+   the VirtualBox virtualization software from Oracle.
+
+3. Create a virtual machine using VirtualBox.
+
+4. Load Ubuntu 16.04 into the virtual machine.
+
+5. Install the virtual box guest extensions into the virtual machine.
+
+With no further adeau, you can get started now.
+
+## Is Virtualization Software Needed
 
 For this document, we partition native operating systems into ones
-that Linux operating systems and non-Linux operating systems
+that are base Linux operating systems and non-Linux based operating systems
 (e.g. Windows, Mac OS, Solaris, etc.).
 
 You can skip reading the rest of this section,
-If your host computer is running non-Linux native operating system.
+if your host computer is running non-Linux native operating system.
 All non-Linux native operating systems require the installation of
 virtualization software.
 
@@ -29,7 +47,7 @@ where `DDDDDD` is the distributor name (e.g. Ubuntu, Redhat, etc.)
 and `RRRRRR` is the release.
 
 * If your distributor id is `Ubuntu` and the release number is 16.04, you are
-  done an no virtualization software needs to be installed.
+  done and no virtualization software needs to be installed.
 
 * If your distributor id is not `Ubuntu` you *must*
   install the virtualization software.
@@ -55,36 +73,61 @@ and `RRRRRR` is the release.
 While there are multiple virtualization software systems out there,
 Ubiquity Robotics has selected
 [VirtualBox](https://www.virtualbox.org/)
-from Oracle.  You ware welcome
-to try one of the others virtualization software system,
-but Ubiquity Robotics can not provide with *any* support for that decision.
+from Oracle for its virtualization software.  This software is
+currently available with out further charge.  You ware welcome
+to try one of the others virtualization software system (e.g VMWare, etc.),
+but Ubiquity Robotics can not provide with *any* support anything other
+than VirtualBox.
 
 You are basically going to be working through the first few chapters of the
 [VirtualBox User Manual](https://www.virtualbox.org/manual/UserManual.html).
+To better understand what is going on, selected portions of chapters 1 through 4
+should be read.
 
 * Please preread chapter 1 up to and including the section on extension packs.
 
 * Please preread appropriate section chapter 2 that corresponds to 
-  depending upon which native operating system you are running.
+  which native operating system you are running.
 
 * Please skim through chapter 3 to see what sorts of things you need to
   configure for your virtual machine.
 
 * Please skim through chapter 4 (Guest Additions).
 
-The remaining chapters are contain useful information, but you do not need
-to preread them.
+The remaining chapters in the user manual contain useful information, but
+you do not need to preread them.
 
 Now it is time to get started:
 
-* Download VirtualBox for your 64-bit platform (either Intel64 or Amd64 is required):
+* Download VirtualBox for your 64-bit platform:
 
     https://www.virtualbox.org/wiki/Downloads
 
-* Install VirtualBox.  Instructions are at
+* Install VirtualBox.  Instructions are at:
     
     https://www.virtualbox.org/manual/ch02.html#install-linux-host
 	
+* Run VirtualBox.
+
+## Create Virtual Machine
+
+1. [new1](install_images/new1.png)
+
+2. [new2](install_images/new2.png)
+
+3. [new3](install_images/new3.png)
+
+4. [new4](install_images/new4.png)
+
+5. [new5](install_images/new5.png)
+
+6. [new6](install_images/new6.png)
+
+7. [new7](install_images/new7.png)
+
+8. [new8](install_images/new8.png)
+
+
 * Download Lubuntu 14.04 LTS.  Lubuntu is a lightweight version of Ubuntu. You will get a file with
   a suffix of .iso. (A .iso file is an image of a CD/DVD ROM.)
   You will feed this file to VirtualBox to set up your virtual machine.	
