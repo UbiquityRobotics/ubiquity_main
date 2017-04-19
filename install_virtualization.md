@@ -111,21 +111,21 @@ Now it is time to get started:
 
 ## Create Virtual Machine
 
-1. [new1](install_images/new1.png)
+1. [new1](install_images/vb_new1.png)
 
-2. [new2](install_images/new2.png)
+2. [new2](install_images/vb_new2.png)
 
-3. [new3](install_images/new3.png)
+3. [new3](install_images/vb_new3.png)
 
-4. [new4](install_images/new4.png)
+4. [new4](install_images/vb_new4.png)
 
-5. [new5](install_images/new5.png)
+5. [new5](install_images/vb_new5.png)
 
-6. [new6](install_images/new6.png)
+6. [new6](install_images/vb_new6.png)
 
-7. [new7](install_images/new7.png)
+7. [new7](install_images/vb_new7.png)
 
-8. [new8](install_images/new8.png)
+8. [new8](install_images/vb_new8.png)
 
 
 * Download Lubuntu 14.04 LTS.  Lubuntu is a lightweight version of Ubuntu. You will get a file with
