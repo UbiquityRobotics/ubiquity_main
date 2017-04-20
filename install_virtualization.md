@@ -185,22 +185,114 @@ windows can be clicked through
    ![vb_done](install_images/vb_done.png)
 
 
-### Run Virtual Machine
+## Install Ubuntu 16.04 into Virtual Machine
 
-* ![lubuntu_welcome](install_images/lubuntu_welcome.png)
-* ![lubuntu_prepare](install_images/lubuntu_prepare.png)
-* ![lubuntu_installation_type](install_images/lubuntu_installation_type.png)
-* ![lubuntu_installation_type2](install_images/lubuntu_installation_type2.png)
+Please perform the following steps to install Ubuntu 16.04 into your newly created
+virtual machine.
+
+1. Download Lubuntu 16.04
+
+   `lubuntu` is a version of ubuntu that includes LXDE.  What is LXDE?
+   LXDE the abbreviation for "Lightweight X11 Desktop Environment".
+   What is really going on here is that ubuntu supports multiple different
+   desktop graphical user interfaces.  LXDE is one of the smaller desktop
+   graphical user interfaces.  The UR team selected LXDE because it is small.
+   The bottom line is you need download the correct lubunutu file an follow
+   the remaining steps to get it installed into your virtual machine.
+
+   Using your web browser, please download the file 
+   [`lubuntu-16.04-desktop-amd64.iso`](http://cdimage.ubuntu.com/lubuntu/releases/16.04/release/lubuntu-16.04-desktop-amd64.iso)
+   and put it somewhere in your file system where you can find it.
+   It is needed for the next step.
+
+2. Start the virtual machine
+
+   To start the virtual machine, just double click on the icon that says `UR_SDE_16.04`.
+   In short order, you should see window that looks as follows:
+
+   ![lubuntu_disk_select](install_images/lubuntu_disk_select.png)
+
+   The key thing here is to use the file chooser to specify the file that
+   you just downloaded (i.e. `lubuntu-16.04-desktop-amd64.iso`)
+   in the previous step into the window.
+
+   Once you have selected the file please click on `[Start]`.
+
+3. Let lubuntu 16.04 Boot
+
+   After click on `[Start]`, the virtual machine will quickly boot `lubuntu`.
+
+   Relatively quickly, you will see the screen below:
+
+   ![lubuntu_start](install_images/lubuntu_start.png)
+
+   This screen has a 30 second time-out on it.  Just let it time-out
+   without touching your keyboard or mouse.
+
+   After the time out the next major screen you will see looks as follows:
+
+   ![lubuntu_mounted](install_images/lubuntu_mounted.png)
+
+   At this point in time, your virtual machine is running lubuntu 16.04.  However,
+   lubuntu has not yet been installed.  That step comes next.
+
+4. Start lubuntu Installation
+
+   On the virtual machine display, there are two icons at the upper left corner.
+   One is labeled `Trash` and the other is labeled `Install`.  Please double click
+   on the `Install` icon.  When you do this you will get the following screen:
+
+   ![lubuntu_welcome](install_images/lubuntu_welcome.png)
+
+   Please click on the `[Continue]` button to start the install process.
+
+5. Prepare to Install lubuntu
+
+   The next screen is the prepare screen and it looks as follows:
+
+   ![lubuntu_prepare](install_images/lubuntu_prepare.png)
+
+   Please check off `Download updates while installing Lubuntu` and
+   `Install third-party software for graphics and Wi-Fi hadware, Flash, MP3 and other media`.
+
+   Now you can click on the `[Continue]` button.
+
+6. Prepare virtual disk drive for lubuntu.
+
+   The next screen you will see looks as follows:
+
+   ![lubuntu_installation_type](install_images/lubuntu_installation_type.png)
+
+   Be sure select `Erase disk and install Lubuntu`.  Yes, the warning is scary
+   sounding, but in fact the only disk that will be effected is the virtual
+   disk associated with your virtual machine.
+
+   Please click on the `[Install Now]` button.
+
+   You will immediately get the next screen:
+
+   ![lubuntu_installation_type2](install_images/lubuntu_installation_type2.png)
+
+   Please click on the `[Continue]`.
+
+
 * ![lubuntu_time_zone](install_images/lubuntu_time_zone.png)
+
 * ![lubuntu_keyboard](install_images/lubuntu_keyboard.png)
+
 * ![lubuntu_account](install_images/lubuntu_account.png)
+
 * ![lubuntu_install](install_images/lubuntu_install.png)
+
+
 * ![lubuntu_restart](install_images/lubuntu_restart.png)
+
 * ![lubuntu_remove](install_images/lubuntu_remove.png)
 * ![lubuntu_guest](install_images/lubuntu_guest.png)
 * ![lubuntu_login](install_images/lubuntu_login.png)
 * ![lubuntu_ready](install_images/lubuntu_ready.png)
 * ![lubuntu_logout](install_images/lubuntu_logout.png)
+
 
 ## Old stuff
 
