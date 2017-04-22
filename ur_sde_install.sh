@@ -16,3 +16,21 @@ sudo apt-get install -y ros-kinetic-desktop-full
 echo "Upgrade to lastest ubunutu patches"
 sudo apt-get upgrade -y
 
+echo "Initialize/Update rosdep"
+if [ ! -d /etc/ros/rosdep/sources.list.d ]
+   then "Initializing rosdep"
+	sudo rosdep init
+fi
+rosdep update
+
+echo "Add ROS to path"
+if ! grep setup.bash ~/.bashrc
+   then echo '# Only modify $PATH if ROS not in path'      >> ~/.bashrc
+        echo 'if [ -d "/opt/ros/kinetic/bin" ] ; then '    >> ~./bashrc
+	echo '   case ":$PATH:" in'                        >> ~./bashrc
+	echo '   *:/opt/kinetic/bin:*) ;;'                 >> ~/.bashrc
+	echo '   *) source /opt/ros/kinetic/setup.bash ;;' >> ~/.bashrc
+	echo '   esac'                                     >> ~/.bashrc
+	echo 'fi'                                          >> ~/.bashrc
+fi
+source ~/.bashrc
