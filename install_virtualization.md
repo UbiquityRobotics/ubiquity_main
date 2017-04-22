@@ -65,7 +65,7 @@ and `RRRRRR` is the release.
   you are running a newer version that 16.04.  In theory, ROS Kinetic will
   run on such a system, but it is not heavily tested.  While it should work,
   Ubiquity Robotics does not support this configuration.  It is recommended
-  that you install the virtualiation software so you can run 16.04 in
+  that you install the virtualization software so you can run 16.04 in
   the virtualization software.
   
 ## Installing the VirtualBox Virtualization Software
@@ -200,7 +200,7 @@ virtual machine.
    What is really going on here is that ubuntu supports multiple different
    desktop graphical user interfaces.  LXDE is one of the smaller desktop
    graphical user interfaces.  The UR team selected LXDE because it is small.
-   The bottom line is you need download the correct lubunutu file an follow
+   The bottom line is you need download the correct lubuntu file an follow
    the remaining steps to get it installed into your virtual machine.
 
    Using your web browser, please download the file 
@@ -260,7 +260,7 @@ virtual machine.
    ![lubuntu_prepare](install_images/lubuntu_prepare.png)
 
    Please do *NOT* check off either `Download updates while installing Lubuntu` or
-   `Install third-party software for graphics and Wi-Fi hadware, Flash, MP3 and other media`.
+   `Install third-party software for graphics and WiFi hardware, Flash, MP3 and other media`.
    Leave both of these check boxes unchecked.
 
    Now you can click on the `[Continue]` button.
@@ -336,7 +336,7 @@ virtual machine.
 
 11. Restart Window
 
-    After everything is insalled you will get a restart window that looks as follows:
+    After everything is installed you will get a restart window that looks as follows:
 
     ![lubuntu_restart](install_images/lubuntu_restart.png)
 
@@ -399,7 +399,7 @@ virtual window size, etc.
 2. Insert Guest Additions CD
 
    The next step is to get the Guest Additions CD installed into your virtual
-   CD drive on your virtual mahcine.  This is done by going to the `Devices`
+   CD drive on your virtual machine.  This is done by going to the `Devices`
    pull down menu and selecting `Insert Guest Additions CD Image...` from
    the menu shown below:
 
@@ -455,15 +455,18 @@ virtual window size, etc.
 
    ![lubuntu_teriminal1](install_images/lubuntu_terminal1.png)
 
+   Again, the compute will grind away for a little while and the it will stop.
+   At this point, the guest extensions are installed.
 
 8. Log Out and Shut Down
 
-   Finally, you need to move your mouse curse to the lower right corner and
-   click on the power button icon.  This will pop a window that looks as follows:
+   Now we can logout and shutdown the virtual machine.  Do do this, you need to
+   move your mouse curse to the lower right corner and   click on the power button
+   icon.  This will pop a window that looks as follows:
 
    ![lubuntu_shutdown](install_images/lubuntu_shutdown.png)
 
-   Please select the `[Shutdown]` button to force a log out and virtal machine
+   Please select the `[Shutdown]` button to force a log out and virtual machine
    shut down.
 
 That concludes the guest additions installation.
