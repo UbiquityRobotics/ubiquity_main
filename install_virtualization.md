@@ -373,15 +373,103 @@ You have successfully install lubuntu 16.04 into your `UR_SDE_16.04` virtual mac
 
 ## Install VirtualBox Guest Additions
 
-* ![lubuntu_login](install_images/lubuntu_login.png)
-* ![lubuntu_logged_in](install_images/lubuntu_logged_in.png)
-* ![lubuntu_insert_guest_cd](install_images/lubuntu_insert_guest_cd.png)
-* ![lubuntu_guest_cd_inserted](install_images/lubuntu_guest_cd_inserted.png)
-* ![lubuntu_terminal](install_images/lubuntu_terminal.png)
-* ![lubuntu_terminal1](install_images/lubuntu_terminal1.png)
-* ![lubuntu_install](install_images/lubuntu_install.png)
-* ![lubuntu_install1](install_images/lubuntu_install1.png)
-* ![lubuntu_shutdown](install_images/lubuntu_shutdown.png)
+1. Log In to Lubuntu 16.04
+
+   Restart the virtual machine by double clicking on the `UR_SDE_16.04` icon
+   VirtualBox window.  After a small delay you should get the following
+   login window:
+
+   ![lubuntu_login](install_images/lubuntu_login.png)
+
+   Please type in the account name and password that previously supplied
+   when you installed Lubuntu 16.04.  Now you can click on the `[Login In]`
+   button to login.
+
+   After you log in, you will get the following rather plain window:
+
+   ![lubuntu_logged_in](install_images/lubuntu_logged_in.png)
+
+2. Insert Guest Additions CD
+
+   The next step is to get the Guest Additions CD installed into your virtual
+   CD drive on your virtual mahcine.  This is done by going to the `Devices`
+   pull down menu and selecting `Insert Guest Additions CD Image...` from
+   the menu shown below:
+
+   ![lubuntu_insert_guest_cd](install_images/lubuntu_insert_guest_cd.png)
+
+   After you do that, you will get a display that looks as follows:
+   
+   ![lubuntu_guest_cd_inserted](install_images/lubuntu_guest_cd_inserted.png)
+
+   Since the file manager is not needed, please click on the `[Cancel]` button
+   to make it go away.
+
+5. Bring Up A Terminal Window
+
+   The next task requires that you type a command inside a terminal window.
+   Just so you know, Linux in general and ROS in particular tends to be
+   a little heavy on terminal window use.
+
+   In order to bring up a terminal window, you first depress and hold down
+   both the `[Ctrl]` and `[Alt]` keys and then depress the letter `[T]` key.
+   This keyboard judo is abbreviated as Ctrl-Atl-T.  After you done these
+   keyboard gymnastics you will git the following screen:
+
+   ![lubuntu_terminal](install_images/lubuntu_terminal.png)
+
+   Once the terminal window comes up, move the mouse pointer inside the
+   terminal window and click the left mouse button to make sure that
+   keyboard keystrokes will be directed into the terminal window.
+
+   Now type the following command:
+
+   ```sudo apt-get install -y build-essential wget```
+
+   What this command does is install the standard Linux compiler programs
+   (collectively called `gcc`) and another program we are going to need called
+   `wget`.  `wget` stands for "web get" and is used to fetch programs from
+   the world wide web via a terminal command.
+
+   After you type the command above, you will prompted for a password.
+   Please type in the password you used to login with.
+
+   ![lubuntu_terminal1](install_images/lubuntu_terminal1.png)
+
+   This command will grind away for a little while and then stop.
+
+7. Install Guest Edition Software
+
+   Next you will install the guest edition software.  This is done with
+   two commands.  The first command is:
+
+   ```cd /media/*/*```
+
+   The `cd` command stands for `change directory` and the command above moves
+   the focus to the mounted guest extensions CD (mounted in your virtual CD drive.)
+
+   The next command is:
+
+   ```sudo VBoxLinuxAdditions.run```
+
+   It will cause the VirtualBox guest additions to be installed.  You may be asked
+   to type in a password again.
+
+   ![lubuntu_guest_install](install_images/lubuntu_guest_install.png)
+
+    
+
+8. Log Oout and Shut Down
+
+   Finally, you need to move your mouse curse to the lower right corner and
+   click on the power button icon.  This will pop a window that looks as follows:
+
+   ![lubuntu_shutdown](install_images/lubuntu_shutdown.png)
+
+   Please select the `[Shutdown]` button to force a log out and virtal machine
+   shut down.
+
+That concludes the guest additions installation.
 
 ## Conclusion
 
