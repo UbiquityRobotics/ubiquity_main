@@ -453,7 +453,7 @@ virtual window size, etc.
    It will cause the VirtualBox guest additions to be installed.  You may be asked
    to type in a password again.
 
-   ![lubuntu_guest_install](install_images/lubuntu_guest_install.png)
+   ![lubuntu_teriminal1](install_images/lubuntu_terminal1.png)
 
 
 8. Log Out and Shut Down
