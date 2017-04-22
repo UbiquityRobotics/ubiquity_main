@@ -119,18 +119,18 @@ windows can be clicked through
 
    ![vb_start.png](install_images/vb_start.png)
 
-   Please click on the `[New]` button start start creating a virtual machine.
+   Please click on the `[New]` icon/button to start creating a virtual machine.
 
 2. Name and operating system window
 
-   When you get the "Name and operating system" window below:
+   Next you will get the "Name and operating system" window as below:
 
    ![vb_name_os](install_images/vb_name_os.png)
 
    Please enter "UR_SDE_16.04" as the `Name`, select "Linux" as the `Type`,
    make sure the `Version` is set to "Ubuntu (64-bit)".
 
-   When that is done, click on `[Next>]`.
+   When that is done, click on the `[Next>]` button.
 
 3. Memory size window
 
@@ -174,8 +174,9 @@ windows can be clicked through
    ![vb_file_size](install_images/vb_file_size.png)
 
    Please leave the location set to "UR_SDE_16.04" and adjust the file size to
-   be greater than 30GB.  Please note that the slide bar is non-linear.  Afterwards,
-   please click on the `[Create]` button.  This will cause the virtual machine
+   be greater than 30GB.  Please note that the slide bar is non-linear as you
+   move left and write.  Please slide it until you get a file size of around 30GB.
+   Afterwards, please click on the `[Create]` button.  This will cause the virtual machine
    to be created.
 
 9. Virtual machine created
@@ -184,6 +185,8 @@ windows can be clicked through
 
    ![vb_done](install_images/vb_done.png)
 
+You have successfully created a new virtual machine.  The next task is to load
+a version of ubuntu 16.04 into the virtual machine.
 
 ## Install Ubuntu 16.04 into Virtual Machine
 
@@ -207,7 +210,11 @@ virtual machine.
 
 2. Start the virtual machine
 
-   To start the virtual machine, just double click on the icon that says `UR_SDE_16.04`.
+   To start the virtual machine, bring up virtual box just double click
+   on the icon that says `UR_SDE_16.04`:
+
+   ![vb_done](install_images/vb_done.png)
+
    In short order, you should see window that looks as follows:
 
    ![lubuntu_disk_select](install_images/lubuntu_disk_select.png)
@@ -220,7 +227,7 @@ virtual machine.
 
 3. Let lubuntu 16.04 Boot
 
-   After click on `[Start]`, the virtual machine will quickly boot `lubuntu`.
+   After click on `[Start]`, the virtual machine will quickly start to boot `lubuntu`.
 
    Relatively quickly, you will see the screen below:
 
@@ -234,7 +241,7 @@ virtual machine.
    ![lubuntu_mounted](install_images/lubuntu_mounted.png)
 
    At this point in time, your virtual machine is running lubuntu 16.04.  However,
-   lubuntu has not yet been installed.  That step comes next.
+   lubuntu has not yet been installed.  The actual installation steps come next.
 
 4. Start lubuntu Installation
 
@@ -252,8 +259,9 @@ virtual machine.
 
    ![lubuntu_prepare](install_images/lubuntu_prepare.png)
 
-   Please check off `Download updates while installing Lubuntu` and
+   Please do *NOT* check off either `Download updates while installing Lubuntu` or
    `Install third-party software for graphics and Wi-Fi hadware, Flash, MP3 and other media`.
+   Leave both of these check boxes unchecked.
 
    Now you can click on the `[Continue]` button.
 
@@ -275,17 +283,96 @@ virtual machine.
 
    Please click on the `[Continue]`.
 
+7. Set Time Zone
 
-* ![lubuntu_time_zone](install_images/lubuntu_time_zone.png)
+   You should get a time zone selection screen that looks as follows:
 
-* ![lubuntu_keyboard](install_images/lubuntu_keyboard.png)
+   ![lubuntu_time_zone](install_images/lubuntu_time_zone.png)
 
-* ![lubuntu_account](install_images/lubuntu_account.png)
+   Please select the time zone that make the most sense for your
+   geographic location.
 
-* ![lubuntu_install](install_images/lubuntu_install.png)
+   Please click on the `[Continue]` button.
 
 
-* ![lubuntu_restart](install_images/lubuntu_restart.png)
+8. Set Keyboard
+
+   Next, you should get a keyboard selection screen that looks as follows:
+
+   ![lubuntu_keyboard](install_images/lubuntu_keyboard.png)
+
+   Please select the keyboard that matches the keyboard you actually have.
+   If in doubt, please leave it set to `English`.
+
+   Next, please click on the `[Continue]` button.
+
+9. Initial Account
+
+   Next you should get an initial account screen that looks as follows:
+
+   ![lubuntu_account](install_images/lubuntu_account.png)
+
+   Please type in an account name of your choosing (the example shows `alice`)
+   into the `Your Name:` field.
+   In addition, please type a password into both the `Choose a password:` field.
+   Please type the same exact password into the `Confirm your password:` field.
+   Do *NOT* check out `Log in automatically`.  Instead leave
+   `Require my password to log in` checked off.  Leave the `Encrypt my home folder`
+   unchecked as well.
+
+   Please remember your account name and password, you will need them later on.
+
+   Please click on the `[Continue]` button.
+
+10. Installation Window
+
+    As lubuntu is installed you will see a screen that looks similar to
+    what is shown below.
+
+    ![lubuntu_install](install_images/lubuntu_install.png)
+
+    It will take a while to install everything, so just lean back and enjoy
+    the slide show.
+
+11. Restart Window
+
+    After everything is insalled you will get a restart window that looks as follows:
+
+    ![lubuntu_restart](install_images/lubuntu_restart.png)
+
+    Please click on the `[Restart Now]` button.
+
+    Very quickly your virtual machine should shrink its display to be small and
+    and look as follows:
+
+    ![lubuntu_restart](install_images/lubuntu_restart.png)
+
+    If this screen, does not disappear in 5 to 10 seconds, it will be necessary
+    to do a sime simple extra steps to finish shutting down the virtual machine.
+    Find the `Machine` pull down menu on the virutual machine and select it.
+    You should see a pull down menut that looks as follows:
+
+    ![lubuntu_machine_menu](install_images/lubuntu_machine_menu.png)
+
+    Select the `Close>` menu and you should see a further menu that looks as follows:
+
+    ![lubuntu_power_off_menu](install_images/lubuntu_power_off_menu.png)
+
+    Please select the `Power Off` menu.  Next, you will get a window that looks as follows:
+
+    ![lubuntu_power_off](install_images/lubuntu_power_off.png)
+
+    Please click on the `[Power Off]` button to finish powering the virtual machine.
+
+Your VirtualBox window should now look as follows
+
+![vb_done](install_images/vb_done.png)
+
+You have successfully install lubuntu 16.04 into your `UR_SDE_16.04` virtual machine.
+
+
+## Guest additions
+
 
 * ![lubuntu_remove](install_images/lubuntu_remove.png)
 * ![lubuntu_guest](install_images/lubuntu_guest.png)
