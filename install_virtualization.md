@@ -348,13 +348,16 @@ virtual machine.
     ![lubuntu_restart](install_images/lubuntu_restart.png)
 
     If this screen, does not disappear in 5 to 10 seconds, it will be necessary
-    to do a sime simple extra steps to finish shutting down the virtual machine.
-    Find the `Machine` pull down menu on the virutual machine and select it.
-    You should see a pull down menut that looks as follows:
+    to do a some simple extra steps to finish shutting down the virtual machine.
+
+    Please go to your virtual box window and find the `UR_SDI_16.04` icon.
+    With your mouse over the the icon, please right click your mouse button
+    to get the following  pull down menu:
 
     ![lubuntu_machine_menu](install_images/lubuntu_machine_menu.png)
 
-    Select the `Close>` menu and you should see a further menu that looks as follows:
+    Select the `Close>` menu and you should see a further pull right menu
+    that looks as follows:
 
     ![lubuntu_power_off_menu](install_images/lubuntu_power_off_menu.png)
 
@@ -368,10 +371,14 @@ Your VirtualBox window should now look as follows:
 
 ![vb_done](install_images/vb_done.png)
 
-You have successfully install lubuntu 16.04 into your `UR_SDE_16.04` virtual machine.
-
+Congratulations, you have just successfully installed lubuntu 16.04 into your
+`UR_SDE_16.04` virtual machine for VirtualBox.
 
 ## Install VirtualBox Guest Additions
+
+The next set of steps is required to install the VirtualBox guest extensions.
+With these extensions, you will be able to do such things are resize the
+virtual window size, etc.
 
 1. Log In to Lubuntu 16.04
 
@@ -424,12 +431,10 @@ You have successfully install lubuntu 16.04 into your `UR_SDE_16.04` virtual mac
 
    Now type the following command:
 
-   ```sudo apt-get install -y build-essential wget```
+   ```sudo apt-get install -y build-essential```
 
    What this command does is install the standard Linux compiler programs
    (collectively called `gcc`) and another program we are going to need called
-   `wget`.  `wget` stands for "web get" and is used to fetch programs from
-   the world wide web via a terminal command.
 
    After you type the command above, you will prompted for a password.
    Please type in the password you used to login with.
@@ -440,26 +445,18 @@ You have successfully install lubuntu 16.04 into your `UR_SDE_16.04` virtual mac
 
 7. Install Guest Edition Software
 
-   Next you will install the guest edition software.  This is done with
-   two commands.  The first command is:
+   Next you will install the guest edition software.  This is done with the
+   following command:
 
-   ```cd /media/*/*```
-
-   The `cd` command stands for `change directory` and the command above moves
-   the focus to the mounted guest extensions CD (mounted in your virtual CD drive.)
-
-   The next command is:
-
-   ```sudo VBoxLinuxAdditions.run```
+   ```sudo /media/*/*/VBoxLinuxExtensions.run```
 
    It will cause the VirtualBox guest additions to be installed.  You may be asked
    to type in a password again.
 
    ![lubuntu_guest_install](install_images/lubuntu_guest_install.png)
 
-    
 
-8. Log Oout and Shut Down
+8. Log Out and Shut Down
 
    Finally, you need to move your mouse curse to the lower right corner and
    click on the power button icon.  This will pop a window that looks as follows:
