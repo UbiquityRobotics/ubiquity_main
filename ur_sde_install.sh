@@ -26,8 +26,8 @@ rosdep update
 echo "Add ROS to path"
 if ! grep setup.bash ~/.bashrc
    then echo '# Only modify $PATH if ROS not in path'      >> ~/.bashrc
-        echo 'if [ -d "/opt/ros/kinetic/bin" ] ; then '    >> ~./bashrc
-	echo '   case ":$PATH:" in'                        >> ~./bashrc
+        echo 'if [ -d "/opt/ros/kinetic/bin" ] ; then '    >> ~/.bashrc
+	echo '   case ":$PATH:" in'                        >> ~/.bashrc
 	echo '   *:/opt/kinetic/bin:*) ;;'                 >> ~/.bashrc
 	echo '   *) source /opt/ros/kinetic/setup.bash ;;' >> ~/.bashrc
 	echo '   esac'                                     >> ~/.bashrc
