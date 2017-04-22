@@ -360,7 +360,7 @@ virtual machine.
 
     Please select the `Power Off` menu.  Next, you will get a window that looks as follows:
 
-    ![lubuntu_power_off](install_images/lubuntu_power_off.png)
+    ![lubuntu_power_off_window](install_images/lubuntu_power_off_window.png)
 
     Please click on the `[Power Off]` button to finish powering the virtual machine.
 
