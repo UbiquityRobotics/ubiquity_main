@@ -364,23 +364,33 @@ virtual machine.
 
     Please click on the `[Power Off]` button to finish powering the virtual machine.
 
-Your VirtualBox window should now look as follows
+Your VirtualBox window should now look as follows:
 
 ![vb_done](install_images/vb_done.png)
 
 You have successfully install lubuntu 16.04 into your `UR_SDE_16.04` virtual machine.
 
 
-## Guest additions
+## Install VirtualBox Guest Additions
 
-
-* ![lubuntu_remove](install_images/lubuntu_remove.png)
-* ![lubuntu_guest](install_images/lubuntu_guest.png)
 * ![lubuntu_login](install_images/lubuntu_login.png)
-* ![lubuntu_ready](install_images/lubuntu_ready.png)
-* ![lubuntu_logout](install_images/lubuntu_logout.png)
+* ![lubuntu_logged_in](install_images/lubuntu_logged_in.png)
+* ![lubuntu_insert_guest_cd](install_images/lubuntu_insert_guest_cd.png)
+* ![lubuntu_guest_cd_inserted](install_images/lubuntu_guest_cd_inserted.png)
+* ![lubuntu_terminal](install_images/lubuntu_terminal.png)
+* ![lubuntu_terminal1](install_images/lubuntu_terminal1.png)
+* ![lubuntu_install](install_images/lubuntu_install.png)
+* ![lubuntu_install1](install_images/lubuntu_install1.png)
+* ![lubuntu_shutdown](install_images/lubuntu_shutdown.png)
 
+## Conclusion
 
+That is all that is required to install VirtualBox, Lubuntu 16.04, and the
+VirtualBox guest extensions.
+
+The next step is to install ROS Kinetic and the rest of the UR SDE.
+
+------------------------------------
 ## Old stuff
 
 {Ignore this stuff for now}
