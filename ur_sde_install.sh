@@ -46,5 +46,5 @@ source ~/.bashrc
 # Make sure there is a catkin workspace:
 echo "Ensure there is a catkin workspace"
 mkdir -p ~/catkin_ws/src
-(cd ~/catkin_ws/src ; catkin_make )
+(cd ~/catkin_ws ; catkin_make )
 
