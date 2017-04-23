@@ -42,6 +42,16 @@ if ! grep setup.bash ~/.bashrc
 	echo '   esac'                                     >> ~/.bashrc
 	echo 'fi'                                          >> ~/.bashrc
 fi
+
+echo "Add turtlebot environment variables to ~/.bashrc"
+if ! grep TURTLEBOT_STAGE ~/.bashrc
+   then echo ''                                            >> ~/.bashrc
+	echo '# Set TURTLEBOT_STAGE environment varialbes' >> ~/.bashrc
+	echo 'export TURTLEBOT_STAGE_WORLD_FILE="/opt/ros/kinect/share/turtlebot_stage/maps/stage/maze.world"' >> ~/.bashrc
+	echo 'export TURTLEBOT_STAGE_MAP_FILE="/opt/ros/kinect/share/turtlebot_stage/maps/maze.yaml"' >> ~/.bashrc
+fi
+
+# Now slurp in ~/.bashrc
 source ~/.bashrc
 
 # Make sure there is a catkin workspace:
@@ -55,3 +65,4 @@ if [ ! -d ~/catkin_ws/src/ubquity_main ]
    then	(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_main.git )
 fi
 (cd ~/catkin_ws/src/ubiquity_main ; git pull)
+
