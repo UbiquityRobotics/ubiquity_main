@@ -28,7 +28,7 @@ rosdep update
 
 # Make sure that we some useful packages -- editors, zeroconf, chrony, etc.
 echo "Install a bunch of useful packages"
-sudo apt-get install -y vim emacs libnss-mdns chrony
+sudo apt-get install -y vim emacs libnss-mdns chrony git
 sudo apt-get install -y turtlebot-simulator
 
 echo "Add ROS to path"
