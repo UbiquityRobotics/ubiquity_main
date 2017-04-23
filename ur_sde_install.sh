@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# It is a requirement of this script file that it be "reentrant".
+# This means that it can be run multiple times without breaking anything.
+
 # Make sure that ROS kinetic is 
 if [ ! -f /etc/apt/sources.list.d/ros-latest.list ]
    then echo "Add ROS kinetic to repository list"
@@ -23,9 +26,14 @@ if [ ! -d /etc/ros/rosdep/sources.list.d ]
 fi
 rosdep update
 
+# Make sure that we some useful packages -- editors, zeroconf, chrony, etc.
+echo "Install a bunch of useful packages"
+sudo apt-get install -y vim emacs libnss-mdns chrony
+
 echo "Add ROS to path"
 if ! grep setup.bash ~/.bashrc
-   then echo '# Only modify $PATH if ROS not in path'      >> ~/.bashrc
+   then echo ''                                            >> ~/.bashrc
+	echo '# Only modify $PATH if ROS not in path'      >> ~/.bashrc
         echo 'if [ -d "/opt/ros/kinetic/bin" ] ; then '    >> ~/.bashrc
 	echo '   case ":$PATH:" in'                        >> ~/.bashrc
 	echo '   *:/opt/kinetic/bin:*) ;;'                 >> ~/.bashrc
@@ -34,3 +42,9 @@ if ! grep setup.bash ~/.bashrc
 	echo 'fi'                                          >> ~/.bashrc
 fi
 source ~/.bashrc
+
+# Make sure there is a catkin workspace:
+echo "Ensure there is a catkin workspace"
+mkdir -p ~/catkin_ws/src
+(cd ~/catkin_ws/src ; catkin_make )
+
