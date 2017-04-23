@@ -29,6 +29,7 @@ rosdep update
 # Make sure that we some useful packages -- editors, zeroconf, chrony, etc.
 echo "Install a bunch of useful packages"
 sudo apt-get install -y vim emacs libnss-mdns chrony
+sudo apt-get install -y turtlebot-simulator
 
 echo "Add ROS to path"
 if ! grep setup.bash ~/.bashrc
@@ -48,3 +49,9 @@ echo "Ensure there is a catkin workspace"
 mkdir -p ~/catkin_ws/src
 (cd ~/catkin_ws ; catkin_make )
 
+# Make sure we have a copy of ubquity_main repository:
+echo "Make sure ubiquity_main repositiory is up-to-date"
+if [ ! -d ~/catkin_ws/src/ubquity_main ]
+   then	(cd ~/catkin_ws/src ; git clone https://github.com/UbiquityRobotics/ubiquity_main.git )
+fi
+(cd ~/catkin_ws/src/ubiquity_main ; git pull)
