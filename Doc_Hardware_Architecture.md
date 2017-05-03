@@ -8,7 +8,7 @@ architecture are:
 * it must support easy replacement of the main processor boad.
 
 At this point in time, ROS only runs under a Ubuntu release
-of Linux.  The Indigo release runs will under the 14.04LTS
+of Linux.  The Kinetic release runs will under the 16.04LTS
 Ubuntu release.
 
 Only two processor architectures that support Ubuntu releases
@@ -20,9 +20,10 @@ these days, so the architecture choices are AMD64 and ARM7.
 
 For the AMD64 architecture, the standand form factors for main
 processor boards are some sort of x86 laptop, some sort
-mini/nano/pico/mobile-ITX motherboard.  For the ARM7 architecture,
-there are plenty of single board computers, like the Raspberry Pi,
-Banana Pro, Beagle Bone Black, etc.
+mini/nano/pico/mobile-ITX motherboard, and the Intel Joule.  
+For the ARM7 architecture, there are plenty of single board 
+computers, like the Raspberry Pi, Banana Pro, Beagle Bone Black, 
+Nvidia Tegra, etc.
 
 What is clear is that industry churns out a truly amazing number
 of new SBC's every year.  A consequence of the annual SBC churn
@@ -78,11 +79,11 @@ Each light blue rectangle corresponds to a hardware
 assembly.  In the diagram above, the following hardware
 assemblies exist:
 
-* Raspberry Pi 2: This is were ROS is run.  The ROSCore node
+* Raspberry Pi 3: This is were ROS is run.  The ROSCore node
   runs here.
 
 * bus_raspberry_pi: This is a module the interfaces the
-  Raspberry Pi 2 to the bus.
+  Raspberry Pi 3 to the bus.
 
 * bus_sonar_10: This module can control up to 10 HC-SR04
   sonar modules.  There are two of these modules on a Freya.
