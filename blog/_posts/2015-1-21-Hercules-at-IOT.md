@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: Hercules at the Embedded Conference
