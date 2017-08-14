@@ -4,7 +4,7 @@
 ## ROS
 
 The non-embedded parts of the Magni Robot System are implemented on
-top of the [Robot Operating System](http://wiki.ros.org/)
+top of the [Robot Operating System](http://wiki.ros.org/).
 
 A ROS system is implemented as a number of processing _nodes_, which
 run as processes on one or more connected computers.  Communication
