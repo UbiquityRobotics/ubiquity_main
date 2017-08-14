@@ -34,10 +34,11 @@ Magni's motor control is position oriented - in that it tries to achieve the pos
 it expects the process wanted. When a `/cmd_vel` message is received by the motor controller, it 
 assumes that the intent of the program is to get to a target position by the time the dead-man timer 
 expires. The target position is the position that would be achieved if the motor-controller went at
-exactly the cmd_vel message speed for the time it takes the motor controller went at the cmd_vel 
-speed. The motor controller computes this position for each wheel 10,000 times per second.
-If the motor controller is successful, the wheel will be going at the speed specified in the `/cmd_vel`]
-message. 
+exactly the cmd_vel message speed for the duration of the dead-man timer. The motor controller computes the position 
+that the wheel needs to be at (the desired position) based on a linear interpolation of the target position vs. the desired
+position when the new `cmd_vel` message was receieved. It computes the desired position for each wheel 10,000 times per
+second and drives the motors using a PID loop to achieve this position. If the motor controller is successful, the wheel
+will be going at the speed specified in the `/cmd_vel` message. 
 
 This scheme was chosen for Magni, because velocity commands alwasy require the measurement of 2
 positions in time and computing the difference between them. Because of this speed tends to be much
