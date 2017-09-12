@@ -20,7 +20,7 @@ Issues can be viewed on the ![Ubiquity Robotics Waffle](https://waffle.io/Ubiqui
 
 3. Do the work, committing and pushing to your branch as you go.
 
-4. Create a pull request between your branch and the default branch (generally kinetic-devel). In the pull request description, put 'Fixes #XX' where XX is the issue number. Add so people as requested reviewers on the PR as well, generally for code that would be Rohan or Jim, and for documentation David. Some repos will be "owned" by someone else, in which case they should be reviewers.
+4. Create a pull request between your branch and the default branch (generally kinetic-devel). In the pull request description, put 'Fixes #XX' where XX is the issue number. Add so people as requested reviewers on the PR as well, generally for code that would be @rohbotics or @jim-v, and for documentation @davecrawley. Some repos will be "owned" by someone else, in which case they should be reviewers.
 
 5. Once you have made any changes requested through review, and your PR has been approved, you can merge if the button is green. Some repositories have automatic unit testing, and if they fail, the button will be grey, so please address the failures before merging,
 
@@ -30,7 +30,7 @@ Issues can be viewed on the ![Ubiquity Robotics Waffle](https://waffle.io/Ubiqui
 Pull requests can be viewed in ![Github](https://github.com/UbiquityRobotics).
 They will looks something similar to the screen shot below.
 
-![Screen shot of PR][pr_screenshot.png]
+> ![Screen shot of PR](pr_screenshot.png)
 
 In this example, the work has been done in a branch named `update-ff`, so a
 local copy of that branch must be obtained to test the changes.
