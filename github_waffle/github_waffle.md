@@ -8,9 +8,9 @@ Issues can be viewed on the ![Ubiquity Robotics Waffle](https://waffle.io/Ubiqui
 
 ## Rationale
 
-* Changes should not be made directly to the main branch
-* All changes must be done through a Pull Request (PR) so that others can easily comment on them
-* All PRs must be approved and passing all tests before being merged
+* Changes should not be made directly to the main branch.
+* All changes must be done through a Pull Request (PR) so that others can easily comment on them.
+* All PRs must be approved and passing all tests before being merged.
 
 ## Workflow for making a code change
 
@@ -30,13 +30,13 @@ Issues can be viewed on the ![Ubiquity Robotics Waffle](https://waffle.io/Ubiqui
 Pull requests can be viewed in ![Github](https://github.com/UbiquityRobotics).
 They will looks something similar to the screen shot below.
 
-![Screen shot of PR][pr_screenshot.png]
+\![Screen shot of PR][pr_screenshot.png]
 
 In this example, the work has been done in a branch named `update-ff`, so a
 local copy of that branch must be obtained to test the changes.
 
 This should be done in a _catkin workspace_. For guidance on creating a 
-catkin workspace, refer to the ![Installing and configuring your ROS environment tutorial][http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment]
+catkin workspace, refer to the ![Installing and configuring your ROS environment tutorial](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
 
 Once you have your catkin workspace, you can clone the repo and switch to the
 branch as follows:
@@ -62,4 +62,3 @@ catkin_make
 Note that packages built from source will be in the path before packages
 installed as binaries with `apt-get`.
 
-`
