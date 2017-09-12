@@ -30,7 +30,7 @@ Issues can be viewed on the ![Ubiquity Robotics Waffle](https://waffle.io/Ubiqui
 Pull requests can be viewed in ![Github](https://github.com/UbiquityRobotics).
 They will looks something similar to the screen shot below.
 
-\![Screen shot of PR][pr_screenshot.png]
+![Screen shot of PR][pr_screenshot.png]
 
 In this example, the work has been done in a branch named `update-ff`, so a
 local copy of that branch must be obtained to test the changes.
