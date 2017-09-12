@@ -8,8 +8,8 @@ Issues can be viewed on the ![Ubiquity Robotics Waffle](https://waffle.io/Ubiqui
 
 ## Rationale
 
-* Changes should not be made directly to the main branch.
-* All changes must be done through a Pull Request (PR) so that others can easily comment on them.
+* Code changes should not be made directly to the main branch.
+* All code changes must be done through a Pull Request (PR) so that others can easily comment on them. Most documentation changes can be made by committing to the main branch.
 * All PRs must be approved and passing all tests before being merged.
 
 ## Workflow for making a code change
