@@ -12,9 +12,11 @@
 END_COMMENT
 
 # We are always going to want to do this
-sudo apt-get update && sudo apt-get upgrade
+echo "Upgrading installed packages"
+sudo apt-get update && sudo apt-get upgrade -y
 
 # Install some packages if not already installed
+echo "Installing extra packages"
 sudo apt-get install ros-kinetic-teleop-twist-keyboard
 
 # If a current move_basic is not available via debs, then build from source
@@ -24,7 +26,10 @@ if [[ ! `apt-cache policy ros-kinetic-move-basic` =~ "Installed: 0.2.2" ]]; then
       echo "Source directory exists"
       cd ~/catkin_ws/src/move_basic && git pull && git checkout kinetic-devel
    else
+      echo "Fetching source directory"
       cd ~/catkin_ws/src && git clone https://github.com/UbiquityRobotics/move_basic.git
    fi
    cd ~/catkin_ws && catkin_make   
 fi
+
+echo "Done"
