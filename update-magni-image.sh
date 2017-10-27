@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# This script updates a system updated from the ubiquity image to incoporate changes
-# made since the last release
+:<<"END_COMMENT"
+
+ This script updates a system updated from the ubiquity image to incoporate changes
+ made since the last release
+
+ Invoke with this command:
+
+ wget -O - https://raw.githubusercontent.com/UbiquityRobotics/ubiquity_main/kinetic/update-magni-image.sh | bash
+
+END_COMMENT
 
 # We are always going to want to do this
 sudo apt-get upgdate && sudo apt-get upgrade
