@@ -12,13 +12,13 @@
 END_COMMENT
 
 # We are always going to want to do this
-sudo apt-get upgdate && sudo apt-get upgrade
+sudo apt-get update && sudo apt-get upgrade
 
 # Install some packages if not already installed
 sudo apt-get install ros-kinetic-teleop-twist-keyboard
 
 # If a current move_basic is not available via debs, then build from source
-if [[ ! `apt-cache policy ros-kinetic-move-basic`  =~ "Installed: 0.2.2" ]]; then
+if [[ ! `apt-cache policy ros-kinetic-move-basic` =~ "Installed: 0.2.2" ]]; then
    echo "Installing move_basic from source"
    if [ -d ~/catkin_ws/src/move_basic ]; then
       echo "Source directory exists"
