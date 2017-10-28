@@ -11,6 +11,17 @@
 
 END_COMMENT
 
+function get_source {
+  pkg=$1
+  echo "Installing ${pkg} from source"
+  if [ -d ~/catkin_ws/src/${pkg} ]; then
+     echo "Source directory exists"
+     cd ~/catkin_ws/src/${pkg} && git pull
+  else
+    cd ~/catkin_ws/src && git clone https://github.com/UbiquityRobotics/${pkg}.git
+  fi
+}
+
 # We are always going to want to do this
 echo "Upgrading installed packages"
 sudo apt-get update && sudo apt-get upgrade -y
@@ -19,17 +30,14 @@ sudo apt-get update && sudo apt-get upgrade -y
 echo "Installing extra packages"
 sudo apt-get install ros-kinetic-teleop-twist-keyboard
 
-# If a current move_basic is not available via debs, then build from source
+# If current packages are not available via debs, then build from source
 if [[ ! `apt-cache policy ros-kinetic-move-basic` =~ "Installed: 0.2.2" ]]; then
-   echo "Installing move_basic from source"
-   if [ -d ~/catkin_ws/src/move_basic ]; then
-      echo "Source directory exists"
-      cd ~/catkin_ws/src/move_basic && git pull && git checkout kinetic-devel
-   else
-      echo "Fetching source directory"
-      cd ~/catkin_ws/src && git clone https://github.com/UbiquityRobotics/move_basic.git
-   fi
-   cd ~/catkin_ws && catkin_make   
+   get_source 'move_basic'
 fi
+
+get_source 'ubiquity_launches'
+
+echo "Bullding"
+cd ~/catkin_ws && catkin_make
 
 echo "Done"
