@@ -34,6 +34,9 @@ sudo apt-get install ros-kinetic-teleop-twist-keyboard
 if [[ ! `apt-cache policy ros-kinetic-move-basic` =~ "Installed: 0.2.2" ]]; then
    get_source 'move_basic'
 fi
+if [[ ! `apt-cache policy ros-kinetic-magni-robot` =~ "Installed: 0.2.1" ]]; then
+   get_source 'magni_robot'
+fi
 
 get_source 'ubiquity_launches'
 
