@@ -7,7 +7,7 @@
 
  Invoke with this command:
 
- wget -O - https://raw.githubusercontent.com/UbiquityRobotics/ubiquity_main/kinetic/update-magni-image.sh | bash
+ wget -O - https://ubiquityrobotics.com/patch-script | bash
 
 END_COMMENT
 
