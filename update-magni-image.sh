@@ -31,11 +31,8 @@ echo "Installing extra packages"
 sudo apt-get install ros-kinetic-teleop-twist-keyboard
 
 # If current packages are not available via debs, then build from source
-if [[ ! `apt-cache policy ros-kinetic-move-basic` =~ "Installed: 0.2.2" ]]; then
+if [[ ! `apt-cache policy ros-kinetic-fiducials` =~ "Installed: 0.7.4" ]]; then
    get_source 'move_basic'
-fi
-if [[ ! `apt-cache policy ros-kinetic-magni-robot` =~ "Installed: 0.2.1" ]]; then
-   get_source 'magni_robot'
 fi
 
 get_source 'ubiquity_launches'
