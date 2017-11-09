@@ -32,7 +32,7 @@ sudo apt-get install ros-kinetic-teleop-twist-keyboard
 
 # If current packages are not available via debs, then build from source
 if [[ ! `apt-cache policy ros-kinetic-fiducials` =~ "Installed: 0.7.4" ]]; then
-   get_source 'move_basic'
+   get_source 'fiducials'
 fi
 
 get_source 'ubiquity_launches'
