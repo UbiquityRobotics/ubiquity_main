@@ -26,18 +26,4 @@ function get_source {
 echo "Upgrading installed packages"
 sudo apt-get update && sudo apt-get upgrade -y
 
-# Install some packages if not already installed
-echo "Installing extra packages"
-sudo apt-get install ros-kinetic-teleop-twist-keyboard
-
-# If current packages are not available via debs, then build from source
-if [[ ! `apt-cache policy ros-kinetic-ubiquity-motor` =~ "Installed: 0.6.1" ]]; then
-   get_source 'ubiquity-motor'
-fi
-
-get_source 'ubiquity_launches'
-
-echo "Bullding"
-cd ~/catkin_ws && catkin_make
-
 echo "Done"
