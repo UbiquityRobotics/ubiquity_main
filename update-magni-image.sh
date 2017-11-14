@@ -26,4 +26,6 @@ function get_source {
 echo "Upgrading installed packages"
 sudo apt-get update && sudo apt-get upgrade -y
 
+get_source 'ubiquity_launches'
+
 echo "Done"
