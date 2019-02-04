@@ -110,3 +110,6 @@ where a `git add` has been performed:
 
         mgit commit -m "..."
 
+### `drive_forward.sh`
+
+Simple script to drive the robot forward forever.
