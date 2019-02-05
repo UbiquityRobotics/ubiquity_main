@@ -1,3 +1,0 @@
-setenv bootargs_sata 'set bootargs console=${console} root=/dev/sda1 ro rootfstype=ext4 rootwait fixrtc'
-
-setenv bootcmd_sata 'run bootargs_sata; sata init ; load sata 0:1 ${loadaddr} /boot/vmlinuz-4.4.1-armv7-x5; load sata 0:1 0x71ff0000 /boot/dtbs/4.4.1-armv7-x5/imx53-qsrb.dtb; echo debug: [${bootargs}] ... ;bootz 0x70010000 - 0x71ff0000'
