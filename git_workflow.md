@@ -37,15 +37,15 @@ Your done! The PR is merged or the issue is closed.
 
 ## Workflow for making a code change
 
-1. Make an issue describing what feature you are adding, or what bug you are fixing (unless an issue is already filed) in the repository you are changing. This is not strictly necessary if you are making a docs change or contributing a blog. Assign the issue to yourself to claim it.
+1. Make an issue describing what feature you are adding, or what bug you are fixing (unless an issue is already filed) in the repository you are changing. This is not strictly necessary if you are making a docs change or contributing a blog. Assign the issue to yourself to claim it. https://help.github.com/articles/creating-an-issue/
 
-2. Create a branch in the repo. If the change will only be in one repo, name the branch bugfix-#XX or feature-#XX, where XX is the issue number that you are working on. If the change is across multiple repos, or there is no issue tracking it, then name the branch something more descriptive.
+2. Create a branch in the repo. If the change will only be in one repo, name the branch bugfix-#XX or feature-#XX, where XX is the issue number that you are working on. If the change is across multiple repos, or there is no issue tracking it, then name the branch something more descriptive. (`git checkout -b NEW_BRANCH` on the command line)
 
-3. Do the work, committing and pushing to your branch as you go.
+3. Do the work, committing and pushing to your branch as you go. Keep your commit messages descriptive (avoid simply saying "changes")
 
-4. Create a pull request between your branch and the default branch (generally kinetic). In the pull request description, put 'Fixes #XX' where XX is the issue number. Add so people as requested reviewers on the PR as well, generally for code that would be @rohbotics or @jim-v, and for documentation @davecrawley. Some repos will be "owned" by someone else, in which case they should be reviewers.
+4. Create a pull request between your branch and the default branch (generally kinetic). In the pull request description, put 'Fixes #XX' where XX is the issue number. Add so people as requested reviewers on the PR as well, generally for code that would be @rohbotics or @jim-v, and for documentation @davecrawley. Some repos will be "owned" by someone else, in which case they should be reviewers. https://help.github.com/articles/creating-a-pull-request/
 
-5. Once you have made any changes requested through review, and your PR has been approved, you can merge if the button is green. Some repositories have automatic unit testing, and if they fail, these will be reported in the PR, so please address the failures before merging,
+5. Once you have made any changes requested through review, and your PR has been approved, you can merge if the button is green. Some repositories have automatic unit testing, and if they fail, these will be reported in the PR, so please address the failures before merging. https://help.github.com/articles/merging-a-pull-request/
 
 
 ## Workflow for testing a pull request
