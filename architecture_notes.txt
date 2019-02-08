@@ -1,0 +1,131 @@
+# Ubiquity Architecture Notes:
+
+## Overall Architecture
+
+* Safety Centric
+* Testable
+* ROS computer with ethernet and WiFi (RPi3+ nominal)
+* Optional 100MB Ether switch for high bandwidth devices (and bridge)
+* Bridge board talks via UDP on ethernet
+* Bridge board uses UART's to talk at lower bandwidth
+* UARTS use differential signaling
+* Discovery is extremely desirable.
+* Lots of error detection, reporting, and logging
+* Avoid finger pointing between UR and customers
+
+## Tool Chains
+
+* Single vendor for Microcontrollers (STM32 nominal)
+* Use development boards (Nucleo-64/Nucleo-144 nominal)
+* STM32Cube
+* KiCAD (5.0)
+* KiCube/KiPart
+* SnapEda for footprints
+* Digi-Key for part search
+* bom_manager for pricing/availability
+* OSHPark/SeeedStudio
+* Rapid PCB turns.  Twice a month!
+* Stencils => Bob's Pick and Place Machine
+
+## Power Management
+
+* On-off switch turns robot entirely OFF.  Zero power drain.
+* Robot does not free wheel when off
+* In-rush control must be bomb proof.
+* Motor power is pretty much directly connected to battery (through a FET)
+* Logic power is bucked down from battery (~6V)
+* Reversing battery leads is not fatal.
+* Dead short is not fatal.
+* Separate Motor and Logic power tree
+* Separate user motor/logic power tree
+* ROS Computer power supply
+* DIN rails vs. Pololu vs. ??
+* Think about battery swapping
+* Docking station (big topic)
+* E-stop
+  * Removes positive power from motor H-bridges
+  * Logic power is still present.
+  * Controlled braking during E-stop (no robot face planting)
+  * E-stop hardware disable one of side of H-bridges
+  * Multiple E-stop buttons supported
+  * Resetting E-stop is an explicit software operation.
+  * Consider E-stop bus
+* Each PCB has a 5V (for CAN/RS422/RS485) and 3.3V LDO (everything else.)
+* Current sensing is a must
+  * Must have hardware over current sensing (=> triggers E-stop)
+  * Must have software current measurement.
+  * Desirable software setable thresholds
+* Battery voltage sensing
+* Serious over voltage (240 VAC) does not destroy anything
+* Under voltage block out (can be software)
+* Prevent battery overcharging (i.e. turning off the charger)
+* Idle robot should have a low current draw
+* Need a way for customers to get to battery power.
+* Hardware over current, with latch with software clear
+* Hardware over voltage
+* Fuses?
+* Thermal management
+* Smoke detector
+* Braking shunt
+* Electrostatic Discharge
+
+## Motors/Castors
+
+* When off, the wheels do not move.  (worm drive or shorted windings)
+* Direct Drive, Hub Motor, Worm Drive
+* Conductive Wheels/Castors for ESD
+* High resolution encoders for excellent slow speed control
+* Linear Hall effect sensors? Built in encoder?
+
+## Software Stack
+
+* Test Driven Development
+* Comments in the code
+* FreeRTOS
+* gcc
+* make
+* eclipse?
+* gdb
+* openocd
+* st-link/jlink
+* PCB id's!!!
+* OTW firmware upgrade
+* Logging. Lots of logging.
+* C and Python.  Avoid C++
+* git
+* Software Testing Architecture
+* Software Unit tests
+* Test coverage
+
+## Mechanical
+
+* Select MCAD vendor
+* MTBF target
+* Design for end-user accessibility
+* Standard Payload interface
+* Standard electrical interface for payload
+* Wiring/routing through to payload
+* Define space for user payload
+* Tolerancing standard
+
+## Other Sensors
+
+* Sonar
+* Lidar
+* Bump sensors
+* Cliff sensors
+* IMU
+
+## Documentation
+
+* Documentation is not an after thought.  It is written (and debugged)
+  along with hardware/software development.
+
+## Testing
+
+* Yes. Make it happened!!!
+* Electronics hardware tests
+* Self test when possible
+* Test fixtures
+* Motors are tested in tandem pairs one drives while another brakes
+* Burn in?
