@@ -1,0 +1,236 @@
+# Ubiquity Robotics ECAD Workflow
+
+The Ubiquity Robotics ECAD Workflow uses a variety of freely available tools.
+This document describes how these disparate tools are stitched together to
+provide a comprehensive end-to-end electronics workflow.
+
+The basic tools are:
+
+* *Ubuntu Linux*: Linux is the open source operating system that all of these tools
+  run on.  Ubuntu is the Linux distribution that is used.
+
+* *stm32cube*: This program is provided by ST MicroElectronics for their STM32
+  family of ARM processors.  It is used to select chips from the STM32 ARM processor
+  family and assign which pins of the chips are used for what purposes.  In addition,
+  it supports a variety of different development boards including the inexpensive
+  Nucleo-64 and Nucleo-144 family of development boards.  Finally, this program also
+  generates initialization code for initializing and configuring all the peripherals
+  on the processor.
+
+* *kicube*: This program takes output from *stm32cube* and produces schematic library
+  sybmols suitable for *KiCad*.
+
+* *KiCad*: This is the schematic capture and printed circuit board layout program.
+  It is the center piece of the electronics workflow.
+
+* *Digi-Key*: This an electronics distributor with a really, really good parametric
+  search engine.  This is the tool that is used to figure what parts to use for *KiCad*.
+  The schematics are kept in files with a `.sch` suffix.
+
+* *SnapEDA*: We get our footprints from the *SnapEDA* web-site.
+
+* *bom_manager.py*: This is a program that does two things.
+
+  * *Footprint assignment*: There is a database that maps schematic part names into
+    *KiCad* PCB footprints.
+
+  * *Parts purchasing*: This code assembles a Bill Of Materials and figures out which
+    parts to purchase from which electronics distributors.
+
+* *gerbmerge*: This is a program that takes multiple PCB designs to a single PCB for
+  ordering PCB's.
+
+* *?simulator?*: {What simulator do people want to use?}
+
+After this electronics design workflow is over and transitions into electronics
+debugging the following additional workflow occurs:
+
+* *test_fixtures*: A test fixture is a PCB board that is designed to help debug
+  another PCB.  With careful design it is frequently possible to use the same
+  board as a test fixture for itself.
+
+* *Link Interface*: A *Link Interface* is a piece of electronics used to interface
+  to processor for firmware download and debug. The two most common ones are ST-Link
+  and JLink.
+
+* *gdb*: *gdb* stands for Gnu DeBugger and is the debugger program used to debug
+  C and assembly code on the processor.
+
+* *openocd*: OCD stands for "On Chip Debugger".  *openocd* is a freely available
+  program that interfaces between *gdb* and *Link Interface*.
+
+* *Makefile*: ...
+
+* *gcc*: ...
+
+* *Eclipse*: ...
+
+{What is missing?}
+
+## Ubuntu Linux
+
+We have standardized on using a Ubuntu Linux distribution.  For now we use LTS
+(Long Term Support) releases.  The current LTS release is 18.04LTS.  You may
+use any desktop you want -- Gnome, Mate, KDE, etc.
+
+All software installation in this document is described using command line.
+
+## STM32Cube:
+
+The STM32Cube is available from ST Microelectronics.  The top level page is at:
+
+    [https://www.st.com/en/development-tools/stm32cubemx.html](https://www.st.com/en/development-tools/stm32cubemx.html)
+
+The web site is pretty annoying and wants you to give them cookie access, your
+e-mail address, etc.
+
+My recommendation is that we stuff a binary copy of the program in a private repository
+and all of us use that one.  We can upgrade whenever we need to access a new chip
+or some new feature.
+
+The current version of this program is 5.x and it is fully supported on Linux.
+
+The overall *stm32cube* workflow is:
+
+* Download and install the *stm32cube* program:
+
+        # We need a repo for storing this program
+        mkdir -p {repo_name}
+        git clone {repo_url}
+
+* Run program:
+
+        # cd pcb directory
+	ln -s {path to stmcube}
+
+	# For the first time use:
+	./STM32CubeMX
+
+
+	# All other times specify the `.ioc` file to use :
+	./STM32CubeMX NAME.ioc
+
+* For the first time, select chip and development board.
+
+* Configure away:
+
+  * When developing for Nucleo boards, avoid using pins that the Nucleo board uses.
+    KiCube will mark these pins in the schematic with an asterisk ('*')
+
+  * All GPIO pins should have a `User Label`.
+
+* When done configuring:
+  * Do [File]=>[Save]
+  * Do [PinOut]=>[Write out with alt. functions]
+
+## KiCube
+
+*kicube* is one of Wayne's helper programs written in Python.  The intent is to
+put it up in Wayne's repository as a public program fairly soon.
+
+*kicube* takes the `.csv` file output from *stm32cube* and generates another `.csv`
+file for feeding into *kipart*
+
+*kicube* solves several issues:
+
+* *Schematic Symbol*: Hand generating useful schematic symbols is quite painful using
+  the KiCad schematic symbol editor.  *kicube* scrapes through one or more `.csv` files
+  generated by *stm32cube* and generates one or more `.csv` files for generating one or
+  more KiCad schematic `.lib` files.
+
+* *Pin Remapping*: The STM32 cube does everything in terms chip pins.  When using
+  Nucleo boards, these pins need to be remapped to Nucleo connectors and pin numbers.
+
+* *Processor Swapping*: For the higher end STM processors in the LPQF144 packages
+  (e.g. Nucleo-144), STM has committed to not moving pin number to port pin mapping.
+  Furthermore, STM has committed to not making incompatible changes for alternate
+  functions. For the lower end processors, all bets are off and it is challenging
+  to deal with designing a board that supports multiple different Nucleo-64 boards.
+  (Development in progress.)
+
+* *Daughter Boards*: For some applications, it is desirable to stack multiple
+  board on top of a single Nucleo Board.  This is supported as well.
+  (Development in progress.)
+
+## KiCad
+
+### File system
+
+We need to decide how to organize the file system:
+
+* We can put each project in its own repository, or we can have one global repository.
+  I lean towards one board per repo primarily because bitbucket has free private
+  repositories that can take up to 5 users before you have to pay.  As long as the
+  interested parties for a particular board number 5 or less, it is free.  There
+  are downsides as well.
+
+* Revisions.  Most of the industry uses revision letters.   I **STRONGLY** recommend
+  putting each revision in a separate directory.  I use `rev_a`, `rev_b`, etc.
+  After a board has been shipped off for manufacture all files are locked down
+  and the directory is *NEVER* modified again.  *EVERYTHING* is locked down --
+  `*.sch*, `*.pro*`, `*.kicad_pcb`, `*.drl`, `*.g??`, `pretty/*.kicad_mod`, `common.lib`,
+  `*.pdf`.
+
+* Orders. Over time I have painfully learned that orders are separate but intermixed
+  with board revisions.  An order specifies one or more PCBS which can be consolidated
+  as sub-panels on a smaller number of larger PCBs.  These PCBS are ordered from a single
+  vendor and are shipped together in a single package.  In addition, parts orders
+  are made at approximately the same time that the PCB's are ordered.
+
+### Schematic Capture
+
+We need to standardize on various things for KiCad.
+
+* Page Size: Wayne recommends 8.5 by 11 inches.  There should be common text in the
+  schematic sheet corner.
+
+* Font Size: Wayne recommends .05 inches for everything.
+
+* Text Orientation: I find schematics easier to read if all of the text is horizontal
+  and reads from left to right.  Honestly, it is not hard to do.
+
+* Resistors: Wayne is old school and recommends zig-zag resistors.
+
+* Comments: There is no reason not to add comments to schematics.
+
+* Hierarchical Sheets: I use them. They are kind of clunky though.
+
+* Part Naming: I use the format of "PART;FOOTPRINT" that is compatible with *bom_manager*.
+
+* Design Rule Checking: The KiCAD design rule checker is pretty reasonable and should be used.
+
+* Air Wires vs. Buses.
+
+* Holes should be explicitly entered into the schematic.
+
+More here...
+
+### Footprints
+
+* We should standardize of the reference font size.  Wayne uses 1mm x 1mm x 0.5mm.
+
+* We should decide whether we want to show the value.  Wayne says "no", do not show
+  them on the board.  They take up too much space.
+
+* Whenever possible, get our footprints from SnapEDA.  However,
+
+  * Always fix their fonts up.
+
+  * Always fix them up so that they properly centered.
+
+* Standardize on design rules.
+
+* Standardize on wire widths.
+
+### PCB layout.
+
+In general, horizontal wires are on one layer and vertical wires are on the other.
+We should be consistent.
+
+It is nice to have ground zones front and back, and to "stitch" them together.
+
+We should come up with standards for Reference placement.
+
+
+What else?
+
