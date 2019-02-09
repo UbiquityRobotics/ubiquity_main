@@ -45,7 +45,9 @@ Your done! The PR is merged or the issue is closed.
 
 4. Create a pull request between your branch and the default branch (generally kinetic). In the pull request description, put 'Fixes #XX' where XX is the issue number. Add so people as requested reviewers on the PR as well, generally for code that would be @rohbotics or @jim-v, and for documentation @davecrawley. Some repos will be "owned" by someone else, in which case they should be reviewers. https://help.github.com/articles/creating-a-pull-request/
 
-5. Once you have made any changes requested through review, and your PR has been approved, you can merge if the button is green. Some repositories have automatic unit testing, and if they fail, these will be reported in the PR, so please address the failures before merging. https://help.github.com/articles/merging-a-pull-request/
+5. Someone needs to review the code, and either approve it or request changes. https://help.github.com/articles/about-pull-request-reviews/
+
+6. Once you have made any changes requested through review, and your PR has been approved, you can merge if the button is green. Some repositories have automatic unit testing, and if they fail, these will be reported in the PR, so please address the failures before merging. https://help.github.com/articles/merging-a-pull-request/
 
 
 ## Workflow for testing a pull request
