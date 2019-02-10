@@ -1,0 +1,17 @@
+#!/usr/bin/python3
+
+import sys, subprocess, os
+arguments = sys.argv[1:]
+
+if ("--help" in arguments) or len(arguments) == 0:
+    print("clone_pr URL_OF_PR")
+    sys.exit(0)
+
+url = arguments[0].split("/pull/")[0]
+repo = arguments[0].split("/pull/")[0].split('/')[-1]
+pr_number = arguments[0].split("/pull/")[1].split("/")[0]
+
+subprocess.run(["git", "clone", url])
+os.chdir("{}/{}".format(os.getcwd(), repo))
+subprocess.run(["git", "fetch", "origin", "refs/pull/{0}/head:pr{0}".format(pr_number)])
+subprocess.run(["git", "checkout", "pr{}".format(pr_number)])
