@@ -69,3 +69,13 @@ Simple script to drive the robot forward forever.
 ### manual_deb.sh
 
 Execute from the source of the package to build a binary deb.
+
+### clone_pr
+
+Clones a git repo and checks out a pull request based on the url of the pull request.
+
+```
+./clone_pr https://github.com/UbiquityRobotics/raspicam_node/pull/71
+```
+
+This clones raspicam_node and checks outs PR 71
