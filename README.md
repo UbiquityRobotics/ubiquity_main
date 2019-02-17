@@ -1,13 +1,13 @@
 # Ubiquity_Main
 
-
 This repository serves as a starting place where documents are kept
 along with some of the shell scripts used by the Ubiquity team.
 
 This repository also constains files used by the Ubiquity team
-that have no other obvious place to be put.  For now,
-this repository contains all of the documentation and shell
-files used to the Ubiqutiy/Ubuntu/ROS Kernel image.
+that have no other obvious place to be put.
+
+## Waffle Status
+[![Waffle.io - Issues in progress](https://badge.waffle.io/UbiquityRobotics/ubiquity_main.png?label=in%20progress&title=In%20Progress)](http://waffle.io/UbiquityRobotics/ubiquity_main)
 
 ## Modifications to This README
 
