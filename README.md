@@ -7,7 +7,7 @@ This repository also constains files used by the Ubiquity team
 that have no other obvious place to be put.
 
 ## Waffle Status
-[![Waffle.io - Issues in progress](https://badge.waffle.io/UbiquityRobotics/ubiquity_main.png?label=in%20progress&title=In%20Progress)](http://waffle.io/UbiquityRobotics/ubiquity_main)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/UbiquityRobotics/ubiquity_main.svg?columns=all)](https://waffle.io/UbiquityRobotics/ubiquity_main)
 
 ## Modifications to This README
 
